@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Command">
+    <Text>Command NWL Toolbar</Text>
+    <Description>Some description for NWL Toolbar</Description>
+    <Assembly>NWL Toolbar.dll</Assembly>
+    <FullClassName>NWL_Toolbar.Command</FullClassName>
+    <ClientId>4a1032fc-b4da-449c-a619-78293358ed29</ClientId>
+    <VendorId>com.typepad.thebuildingcoder</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+  <AddIn Type="Application">
+    <Name>Application NWL Toolbar</Name>
+    <Assembly>NWL Toolbar.dll</Assembly>
+    <FullClassName>NWL_Toolbar.App</FullClassName>
+    <ClientId>1f4b6547-e5e1-4412-8b40-e7c10e3a44dc</ClientId>
+    <VendorId>com.typepad.thebuildingcoder</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+</RevitAddIns>
