@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("NWL Toolbar")]
-[assembly: AssemblyDescription("Revit Add-In Description for NWL Toolbar")]
+[assembly: AssemblyTitle("NWLToolbar")]
+[assembly: AssemblyDescription("Revit Add-In Description for NWLToolbar")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Autodesk Inc.")]
-[assembly: AssemblyProduct("NWL Toolbar Revit C# .NET Add-In")]
+[assembly: AssemblyProduct("NWLToolbar Revit C# .NET Add-In")]
 [assembly: AssemblyCopyright("Copyright (C) 2020 by Jeremy Tammik, Autodesk Inc.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

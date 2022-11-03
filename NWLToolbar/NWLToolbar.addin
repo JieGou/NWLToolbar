@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<RevitAddIns>
+  <AddIn Type="Command">
+    <Text>CapitalizeSheets</Text>
+    <Description>Some description for NWLToolbar</Description>
+    <Assembly>NWLToolbar.dll</Assembly>
+    <FullClassName>NWLToolbar.CapitalizeSheets</FullClassName>
+    <ClientId>93ddad2a-05f7-4bbd-b8ff-8023c3c8108c</ClientId>
+    <VendorId>com.typepad.thebuildingcoder</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+  <AddIn Type="Application">
+	<Text>App</Text>
+	<Name>NWLToolbar</Name>
+	<Description>Some description for NWLToolbar</Description>
+	<Assembly>NWLToolbar.dll</Assembly>
+	<FullClassName>NWLToolbar.NWLToolbar</FullClassName>
+	<ClientId>4c623494-feb6-4431-83cc-9e7e52708ad9</ClientId>
+	<VendorId>com.typepad.thebuildingcoder</VendorId>
+	<VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+  
+</RevitAddIns>

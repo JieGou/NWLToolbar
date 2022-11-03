@@ -13,8 +13,8 @@
     <ProjectGuid>{45388BA2-290B-4D3F-9DFF-8F7222767434}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NWL_Toolbar</RootNamespace>
-    <AssemblyName>NWL Toolbar</AssemblyName>
+    <RootNamespace>NWLToolbar</RootNamespace>
+    <AssemblyName>NWLToolbar</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,6 +40,7 @@
     <StartProgram>$(ProgramW6432)\Autodesk\Revit 2022\Revit.exe</StartProgram>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="RevitAPI">
       <HintPath>$(ProgramW6432)\Autodesk\Revit 2022\RevitAPI.dll</HintPath>
       <Private>False</Private>
@@ -51,12 +52,12 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App.cs" />
-    <Compile Include="Command.cs" />
+    <Compile Include="NWLToolbar.cs" />
+    <Compile Include="CapitalizeSheets.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="NWL Toolbar.addin" />
+    <Content Include="NWLToolbar.addin" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

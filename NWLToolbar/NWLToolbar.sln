@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NWL Toolbar", "NWL Toolbar\NWL Toolbar.csproj", "{45388BA2-290B-4D3F-9DFF-8F7222767434}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NWLToolbar", "NWLToolbar.csproj", "{45388BA2-290B-4D3F-9DFF-8F7222767434}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +20,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {4BC70465-140C-4873-9EFB-329FFBB6EDC5}
+		SolutionGuid = {5D47542E-3D34-4B9A-8BEA-62C37EA96AD8}
 	EndGlobalSection
 EndGlobal
