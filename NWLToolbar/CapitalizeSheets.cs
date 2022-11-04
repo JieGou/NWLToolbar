@@ -19,9 +19,6 @@ namespace NWLToolbar
     public class CapitalizeSheets : IExternalCommand
     {
         
-        
-
-
         public Result Execute(
           ExternalCommandData commandData,
           ref string message,
@@ -31,10 +28,6 @@ namespace NWLToolbar
             UIDocument uidoc = uiapp.ActiveUIDocument;
             Application app = uiapp.Application;
             Document doc = uidoc.Document;
-
-            
-
-            
 
             // Filtered Collecter 
             FilteredElementCollector sheetCollector = new FilteredElementCollector(doc);
@@ -53,11 +46,9 @@ namespace NWLToolbar
                
                i.Name = v.ToUpper();  
                 
-
             }
 
             t.Commit();
-
 
             //Success Dialog Box
             TaskDialog.Show("Success", sheetCollector.GetElementCount().ToString() + " Sheets Capitalized");
