@@ -24,10 +24,13 @@ namespace NWLToolbar
             string curAssemblyPath = System.IO.Path.GetDirectoryName(curAssembly);
 
             PushButtonData pbd1 = new PushButtonData("Sheets to Uppercase", "All Sheets" + "\r" + "To Uppercase", curAssembly, "NWLToolbar.CapitalizeSheets");
+            PushButtonData pbd2 = new PushButtonData("Teams Link", "BIM Tools" + "\r" + "& Resources", curAssembly, "NWLToolbar.TeamsLink");
 
             pbd1.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "aA.png")));
+            pbd2.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "teams.png")));
 
             PushButton pb1 = (PushButton)curPanel.AddItem(pbd1);
+            PushButton pb2 = (PushButton)curPanel.AddItem(pbd2);
 
         }
         public Result OnStartup(UIControlledApplication a)

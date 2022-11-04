@@ -19,5 +19,13 @@
 	<VendorId>com.typepad.thebuildingcoder</VendorId>
 	<VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
   </AddIn>
-  
+  <AddIn Type="Command">
+	<Text>TeamsLink</Text>
+	<Description>Some description for NWLToolbar</Description>
+	<Assembly>NWLToolbar.dll</Assembly>
+	<FullClassName>NWLToolbar.TeamsLink</FullClassName>
+	<ClientId>6a1f5410-9f93-4b8d-b41f-0c31c6df767c</ClientId>
+	<VendorId>com.typepad.thebuildingcoder</VendorId>
+	<VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
 </RevitAddIns>

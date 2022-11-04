@@ -52,6 +52,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TeamsLink.cs" />
     <Compile Include="NWLToolbar.cs" />
     <Compile Include="CapitalizeSheets.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
