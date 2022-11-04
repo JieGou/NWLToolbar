@@ -19,6 +19,7 @@ namespace NWLToolbar
             application.CreateRibbonTab(tabName1);
 
             RibbonPanel curPanel = application.CreateRibbonPanel(tabName1, "Tools");
+            RibbonPanel curPanel1 = application.CreateRibbonPanel(tabName1, "Resources");
 
             string curAssembly = System.Reflection.Assembly.GetExecutingAssembly().Location;
             string curAssemblyPath = System.IO.Path.GetDirectoryName(curAssembly);
@@ -30,8 +31,8 @@ namespace NWLToolbar
             pbd2.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "teams.png")));
 
             PushButton pb1 = (PushButton)curPanel.AddItem(pbd1);
-            PushButton pb2 = (PushButton)curPanel.AddItem(pbd2);
-
+            PushButton pb2 = (PushButton)curPanel1.AddItem(pbd2);
+            
         }
         public Result OnStartup(UIControlledApplication a)
         {
