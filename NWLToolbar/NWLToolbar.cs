@@ -25,7 +25,7 @@ namespace NWLToolbar
 
             PushButtonData pbd1 = new PushButtonData("Sheets to Uppercase", "All Sheets" + "\r" + "To Uppercase", curAssembly, "NWLToolbar.CapitalizeSheets");
 
-            pbd1.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "ben_1.jpg")));
+            pbd1.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "aA.png")));
 
             PushButton pb1 = (PushButton)curPanel.AddItem(pbd1);
 
