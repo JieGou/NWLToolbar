@@ -52,6 +52,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SelectOverriddenDimensions.cs" />
     <Compile Include="TeamsLink.cs" />
     <Compile Include="NWLToolbar.cs" />
     <Compile Include="CapitalizeSheets.cs" />

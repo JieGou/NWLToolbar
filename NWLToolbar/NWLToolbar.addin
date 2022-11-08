@@ -28,4 +28,13 @@
 	<VendorId>com.typepad.thebuildingcoder</VendorId>
 	<VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
   </AddIn>
+  <AddIn Type="Command">
+	<Text>SelectOverriddenDimensions</Text>
+	<Description>Some description for NWLToolbar</Description>
+	<Assembly>NWLToolbar.dll</Assembly>
+	<FullClassName>NWLToolbar.SelectOverriddenDimensions</FullClassName>
+	<ClientId>842ac38c-7160-4c1a-b315-d4cda816a0e1</ClientId>
+	<VendorId>com.typepad.thebuildingcoder</VendorId>
+	<VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>	
 </RevitAddIns>
