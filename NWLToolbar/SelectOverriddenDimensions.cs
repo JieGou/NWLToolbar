@@ -29,18 +29,20 @@ namespace NWLToolbar
             Application app = uiapp.Application;
             Document doc = uidoc.Document;
 
-            // Filtered Collecter 
+            // Filtered Element Collecter 
             FilteredElementCollector sheetCollector = new FilteredElementCollector(doc, doc.ActiveView.Id)
                 .OfCategory(BuiltInCategory.OST_Dimensions)
                 .WhereElementIsNotElementType();
 
 
-            //Get Sheet Name & Capitalize
+            //Transaction Start
             Transaction t = new Transaction(doc);
-            t.Start("Capitalize Sheets");
+            t.Start("Select Overriden Dimensions");
 
+            //List Of Overridden Dimensions
             IList<ElementId> selection = new List<ElementId>();
 
+            //Searching for Overriden Dimensions
             foreach (Element i in sheetCollector)
             {
                if (i is Dimension)
@@ -59,21 +61,26 @@ namespace NWLToolbar
                 }
                 
             }
-
+            //Select List Of Overriden Dimensions
             uidoc.Selection.SetElementIds(selection);
 
+            //Finish Transaction
             t.Commit();
             t.Dispose();
 
-            int count = selection.Count();
+
 
             //Success Dialog Box
+            int count = selection.Count();
+
             if (count == 1)
                 TaskDialog.Show("Success", count.ToString() + " Overriden Dimension Found In This View");
             else if (count > 1)
                 TaskDialog.Show("Success", count.ToString() + " Overriden Dimensions Found In This View");
             else
                 TaskDialog.Show("Success", "No Overriden Dimensions Found In This View");
+
+
             return Result.Succeeded;
         }
 

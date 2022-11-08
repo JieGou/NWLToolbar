@@ -34,10 +34,11 @@ namespace NWLToolbar
             sheetCollector.OfCategory(BuiltInCategory.OST_Sheets);
             sheetCollector.WhereElementIsNotElementType();
             
-            //Get Sheet Name & Capitalize
+            //Transaction Start
             Transaction t = new Transaction(doc);
             t.Start("Capitalize Sheets");
 
+            //Search For Sheets & Capitalize
             foreach (Element i in sheetCollector)
             {
                Parameter e = i.get_Parameter(BuiltInParameter.SHEET_NAME);
@@ -48,10 +49,12 @@ namespace NWLToolbar
                 
             }
 
+            //Finish Transaction
             t.Commit();
+            t.Dispose();
 
             //Success Dialog Box
-            TaskDialog.Show("Success", sheetCollector.GetElementCount().ToString() + " Sheets Capitalized");
+            TaskDialog.Show("Success", "All Sheets Capitalized");
 
             return Result.Succeeded;
         }
