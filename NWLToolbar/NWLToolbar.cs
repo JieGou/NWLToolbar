@@ -19,9 +19,10 @@ namespace NWLToolbar
             application.CreateRibbonTab(tabName1);
 
             //Ribbon Sections
-            RibbonPanel curPanel1 = application.CreateRibbonPanel(tabName1, "Tools");            
-            RibbonPanel curPanel3 = application.CreateRibbonPanel(tabName1, "Dimensions");
-            RibbonPanel curPanel2 = application.CreateRibbonPanel(tabName1, "Resources");
+            RibbonPanel toolsPanel = application.CreateRibbonPanel(tabName1, "Tools");            
+            RibbonPanel dimensionsPanel = application.CreateRibbonPanel(tabName1, "Dimensions");
+            RibbonPanel resourcesPanel = application.CreateRibbonPanel(tabName1, "Resources");
+            
 
             string curAssembly = System.Reflection.Assembly.GetExecutingAssembly().Location;
             string curAssemblyPath = System.IO.Path.GetDirectoryName(curAssembly);
@@ -30,23 +31,29 @@ namespace NWLToolbar
             PushButtonData pbd1 = new PushButtonData("Sheets to Uppercase", "Sheets Names" + "\r" + "To Uppercase", curAssembly, "NWLToolbar.CapitalizeSheets");
             PushButtonData pbd2 = new PushButtonData("Teams Link", "BIM Tools" + "\r" + "& Resources", curAssembly, "NWLToolbar.TeamsLink");
             PushButtonData pbd3 = new PushButtonData("Overridden Dims", "Select Overridden" + "\r" + "Dimensions", curAssembly, "NWLToolbar.SelectOverriddenDimensions");
+            PushButtonData pbd4 = new PushButtonData("Element History", "Element History", curAssembly, "NWLToolbar.ElementHistory");
+            PushButtonData pbd5 = new PushButtonData("Align Notes", "Align Notes", curAssembly, "NWLToolbar.AlignNotes");
 
             //Images
             pbd1.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "aA.png")));
             pbd2.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "teams.png")));
             pbd3.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "overridden dimensions.png")));
+            pbd4.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "overridden dimensions.png")));
 
             //IList<PushButtonData> list = new List<PushButtonData>();
             //list.Add(pbd3);
 
             //Tools Section
-            PushButton pb1 = (PushButton)curPanel1.AddItem(pbd1);            
-            
+            PushButton pb1 = (PushButton)toolsPanel.AddItem(pbd1);
+            PushButton pb5 = (PushButton)toolsPanel.AddItem(pbd5);
+
             //Dimensions Section
-            PushButton pb3 = (PushButton)curPanel3.AddItem(pbd3);
+            PushButton pb3 = (PushButton)dimensionsPanel.AddItem(pbd3);
 
             //Resources Section
-            PushButton pb2 = (PushButton)curPanel2.AddItem(pbd2);
+            PushButton pb4 = (PushButton)resourcesPanel.AddItem(pbd4);
+            PushButton pb2 = (PushButton)resourcesPanel.AddItem(pbd2);
+            
 
 
         }

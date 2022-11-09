@@ -16,7 +16,7 @@ using Autodesk.Revit.UI.Selection;
 namespace NWLToolbar
 {
     [Transaction(TransactionMode.Manual)]
-    public class CapitalizeSheets : IExternalCommand
+    public class ElementHistory : IExternalCommand
     {
         
         public Result Execute(
@@ -29,37 +29,28 @@ namespace NWLToolbar
             Application app = uiapp.Application;
             Document doc = uidoc.Document;
 
-            // Filtered Collecter 
-            FilteredElementCollector sheetCollector = new FilteredElementCollector(doc)
-                .OfCategory(BuiltInCategory.OST_Sheets)
+            //Filtered Eelement Collector (Collect Active Selection)
+            FilteredElementCollector collector = new FilteredElementCollector(doc, uidoc.Selection.GetElementIds())
                 .WhereElementIsNotElementType();
             
-            //Transaction Start
-            Transaction t = new Transaction(doc);
-            t.Start("Capitalize Sheets");
+            //Variables
+            string creator = "";
+            string lastChanged = "";
 
-            //Search For Sheets & Capitalize
-            foreach (Element i in sheetCollector)
+            //get Element Info
+            foreach (Element e in collector)
             {
-               Parameter e = i.get_Parameter(BuiltInParameter.SHEET_NAME);
-               
-               string v = e.AsValueString();
-               
-               i.Name = v.ToUpper();  
-                
+                ElementId id = e.Id;
+                creator = WorksharingUtils.GetWorksharingTooltipInfo(doc, id).Creator.ToString();
+                lastChanged = WorksharingUtils.GetWorksharingTooltipInfo(doc, id).LastChangedBy.ToString();
             }
 
-            //Finish Transaction
-            t.Commit();
-            t.Dispose();
-
-            //Success Dialog Box
-            TaskDialog.Show("Success", "All Sheets Capitalized");
+            //Info Report
+            TaskDialog.Show("Element History", "Creator:" + "\n" + creator + "\n \n" + "Last Changed By:" + "\n" + lastChanged);
 
             return Result.Succeeded;
         }
-
-       
+        
     }
 
 }
