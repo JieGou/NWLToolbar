@@ -31,7 +31,7 @@ namespace NWLToolbar
             PushButtonData pbd1 = new PushButtonData("Sheets to Uppercase", "Sheets Names" + "\r" + "To Uppercase", curAssembly, "NWLToolbar.CapitalizeSheets");
             PushButtonData pbd2 = new PushButtonData("Teams Link", "BIM Tools" + "\r" + "& Resources", curAssembly, "NWLToolbar.TeamsLink");
             PushButtonData pbd3 = new PushButtonData("Overridden Dims", "Select Overridden" + "\r" + "Dimensions", curAssembly, "NWLToolbar.SelectOverriddenDimensions");
-            PushButtonData pbd4 = new PushButtonData("Element History", "Element History", curAssembly, "NWLToolbar.ElementHistory");
+            PushButtonData pbd4 = new PushButtonData("Element History", "Element" + "\r" + "History", curAssembly, "NWLToolbar.ElementHistory");
             PushButtonData pbd5 = new PushButtonData("Align Notes", "Align Notes" + "\r" + "W/ Detail Line", curAssembly, "NWLToolbar.AlignNotes");
 
             //Images

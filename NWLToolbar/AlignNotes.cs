@@ -50,11 +50,17 @@ namespace NWLToolbar
             XYZ lineX = new XYZ(0, 0, 0);
             IList<ElementId> deleteId = new List<ElementId>();
             int numOfLines = 0;
+
+            string orientation = doc.ActiveView.ViewDirection.ToString();
+            TaskDialog.Show("Orientation", orientation);
+
             
+
             //Get ViewScale Offset
             double viewScale = doc.ActiveView.Scale;
             double calcOffset = 0.0068359375*viewScale;
             XYZ textOffset = new XYZ(calcOffset, 0, 0);
+            XYZ textOffsetEast = new XYZ(0, calcOffset, 0);
 
             //Transaction Start
             Transaction t = new Transaction(doc);
@@ -77,42 +83,41 @@ namespace NWLToolbar
                 goto Failed;
             }
 
+            //Check view orientation
+            if (orientation == "(0.000000000, 0.000000000, 1.000000000)")
+                goto PlanOrDetail;
+            else if (orientation == "(1.000000000, 0.000000000, 0.000000000)" || orientation == "(-1.000000000, 0.000000000, 0.000000000)")
+                goto EastWest;
+            else if (orientation == "(0.000000000, 1.000000000, 0.000000000)" || orientation == "(0.000000000, -1.000000000, 0.000000000)")
+                goto NorthSouth;
+            else
+                goto Failed;
+
             //Grab Line Origin and Set X Coordinate
+        PlanOrDetail:
             foreach (DetailLine dl in lines)
             {
-
                 Line line = dl.GeometryCurve as Line;
-
                 lineX = new XYZ(line.Origin.X, 0, 0);
-
                 deleteId.Add(dl.Id);
-
-            }
-            
+            }       
+        
             doc.Delete(deleteId);
 
             //Grab each text note and set new location
             foreach (IndependentTag e in keyNotes)
             {
-
                 XYZ origLocation = e.TagHeadPosition as XYZ;
-
-                XYZ newLocation = new XYZ(lineX.X, origLocation.Y, 0);
-
+                XYZ newLocation = new XYZ(lineX.X, origLocation.Y, origLocation.Z);
                 XYZ offset = (origLocation - newLocation);
-
                 ElementTransformUtils.MoveElement(doc, e.Id, -offset);
-
             }
 
             //Grab each text note and set new location
             foreach (TextNote e in textNotes)
             {                
-
-                XYZ origLocation = e.Coord as XYZ;               
-                                
-                XYZ newLocation = new XYZ(lineX.X, origLocation.Y, 0);
-
+                XYZ origLocation = e.Coord as XYZ;                                
+                XYZ newLocation = new XYZ(lineX.X, origLocation.Y, origLocation.Z);
                 string justification = e.HorizontalAlignment.ToString();
                 
                 if (justification == "Left")
@@ -124,12 +129,127 @@ namespace NWLToolbar
                 {
                     XYZ offset = (origLocation - newLocation) + textOffset;
                     ElementTransformUtils.MoveElement(doc, e.Id, -offset);
-                }                               
-                
-            }          
-           
+                }                
+            }
+            goto Failed;
 
-            Failed:
+
+
+        //Grab Line Origin and Set X Coordinate
+        EastWest:
+            foreach (DetailLine dl in lines)
+            {
+                Line line = dl.GeometryCurve as Line;
+                lineX = new XYZ(0, line.Origin.Y, 0);
+                deleteId.Add(dl.Id);
+            }
+
+            doc.Delete(deleteId);
+
+            //Grab each text note and set new location
+            foreach (IndependentTag e in keyNotes)
+            {
+                XYZ origLocation = e.TagHeadPosition as XYZ;
+                XYZ newLocation = new XYZ(origLocation.X, lineX.Y, origLocation.Z);
+                XYZ offset = (origLocation - newLocation);
+                ElementTransformUtils.MoveElement(doc, e.Id, -offset);
+            }
+
+            //Grab each text note and set new location
+            foreach (TextNote e in textNotes)
+            {
+                XYZ origLocation = e.Coord as XYZ;
+                XYZ newLocation = new XYZ(origLocation.X, lineX.Y, origLocation.Z);
+                string justification = e.HorizontalAlignment.ToString();
+
+                if (orientation == "(1.000000000, 0.000000000, 0.000000000)")
+                {
+                    if (justification == "Left")
+                    {
+                        XYZ offset = (origLocation - newLocation) - textOffsetEast;
+                        ElementTransformUtils.MoveElement(doc, e.Id, -offset);
+                    }
+                    else if (justification == "Right")
+                    {
+                        XYZ offset = (origLocation - newLocation) + textOffsetEast;
+                        ElementTransformUtils.MoveElement(doc, e.Id, -offset);
+                    }
+                }
+                else
+                {
+                    if (justification == "Left")
+                    {
+                        XYZ offset = (origLocation - newLocation) + textOffsetEast;
+                        ElementTransformUtils.MoveElement(doc, e.Id, -offset);
+                    }
+                    else if (justification == "Right")
+                    {
+                        XYZ offset = (origLocation - newLocation) - textOffsetEast;
+                        ElementTransformUtils.MoveElement(doc, e.Id, -offset);
+                    }
+                }
+
+            }
+            goto Failed;
+
+        NorthSouth:
+            foreach (DetailLine dl in lines)
+            {
+                Line line = dl.GeometryCurve as Line;
+                lineX = new XYZ(line.Origin.X, 0, 0);
+                deleteId.Add(dl.Id);
+            }
+
+            doc.Delete(deleteId);
+
+            //Grab each text note and set new location
+            foreach (IndependentTag e in keyNotes)
+            {
+                XYZ origLocation = e.TagHeadPosition as XYZ;
+                XYZ newLocation = new XYZ(lineX.X, origLocation.Y, origLocation.Z);
+                XYZ offset = (origLocation - newLocation);
+                ElementTransformUtils.MoveElement(doc, e.Id, -offset);
+            }
+
+            //Grab each text note and set new location
+            foreach (TextNote e in textNotes)
+            {
+                XYZ origLocation = e.Coord as XYZ;
+                XYZ newLocation = new XYZ(lineX.X, origLocation.Y, origLocation.Z);
+                string justification = e.HorizontalAlignment.ToString();
+
+                if (orientation == "(0.000000000, -1.000000000, 0.000000000)")
+                {
+                    if (justification == "Left")
+                    {
+                        XYZ offset = (origLocation - newLocation) - textOffset;
+                        ElementTransformUtils.MoveElement(doc, e.Id, -offset);
+                    }
+                    else if (justification == "Right")
+                    {
+                        XYZ offset = (origLocation - newLocation) + textOffset;
+                        ElementTransformUtils.MoveElement(doc, e.Id, -offset);
+                    }
+                }
+                else
+                {
+                    if (justification == "Left")
+                    {
+                        XYZ offset = (origLocation - newLocation) + textOffset;
+                        ElementTransformUtils.MoveElement(doc, e.Id, -offset);
+                    }
+                    else if (justification == "Right")
+                    {
+                        XYZ offset = (origLocation - newLocation) - textOffset;
+                        ElementTransformUtils.MoveElement(doc, e.Id, -offset);
+                    }
+                }
+
+            }
+            goto Failed;
+
+
+        Failed:
 
             //Finish Transaction
             t.Commit();
