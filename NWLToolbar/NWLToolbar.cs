@@ -32,13 +32,14 @@ namespace NWLToolbar
             PushButtonData pbd2 = new PushButtonData("Teams Link", "BIM Tools" + "\r" + "& Resources", curAssembly, "NWLToolbar.TeamsLink");
             PushButtonData pbd3 = new PushButtonData("Overridden Dims", "Select Overridden" + "\r" + "Dimensions", curAssembly, "NWLToolbar.SelectOverriddenDimensions");
             PushButtonData pbd4 = new PushButtonData("Element History", "Element History", curAssembly, "NWLToolbar.ElementHistory");
-            PushButtonData pbd5 = new PushButtonData("Align Notes", "Align Notes", curAssembly, "NWLToolbar.AlignNotes");
+            PushButtonData pbd5 = new PushButtonData("Align Notes", "Align Notes" + "\r" + "W/ Detail Line", curAssembly, "NWLToolbar.AlignNotes");
 
             //Images
             pbd1.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "aA.png")));
             pbd2.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "teams.png")));
             pbd3.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "overridden dimensions.png")));
-            pbd4.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "overridden dimensions.png")));
+            pbd4.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "element history.png")));
+            pbd5.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "align notes.png")));
 
             //IList<PushButtonData> list = new List<PushButtonData>();
             //list.Add(pbd3);
