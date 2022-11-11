@@ -50,11 +50,7 @@ namespace NWLToolbar
             XYZ lineX = new XYZ(0, 0, 0);
             IList<ElementId> deleteId = new List<ElementId>();
             int numOfLines = 0;
-
-            string orientation = doc.ActiveView.ViewDirection.ToString();
-            TaskDialog.Show("Orientation", orientation);
-
-            
+            string orientation = doc.ActiveView.ViewDirection.ToString();            
 
             //Get ViewScale Offset
             double viewScale = doc.ActiveView.Scale;
