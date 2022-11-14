@@ -44,7 +44,21 @@ namespace NWLToolbar
             FilteredElementCollector lines = new FilteredElementCollector(doc, uidoc.Selection.GetElementIds())
                 .OfClass(typeof(CurveElement))
                 .OfCategory(BuiltInCategory.OST_Lines)
-                .WhereElementIsNotElementType(); 
+                .WhereElementIsNotElementType();
+
+            //Ask to Resize Text
+
+            TaskDialog td = new TaskDialog("Resize Text");
+            td.MainContent = "Would You Like To Resize Your Text Notes?";
+            td.AllowCancellation = true;
+            td.CommonButtons = TaskDialogCommonButtons.Yes | TaskDialogCommonButtons.No;
+            TaskDialogResult result = td.Show();
+            bool resizeText = false;
+
+            if (result == TaskDialogResult.Yes)
+            {
+                resizeText = true;
+            }
 
             //Variables
             XYZ lineX = new XYZ(0, 0, 0);
@@ -54,7 +68,8 @@ namespace NWLToolbar
 
             //Get ViewScale Offset
             double viewScale = doc.ActiveView.Scale;
-            double calcOffset = 0.0068359375*viewScale;
+            double calcOffset = 0.00520833333333333 * viewScale;
+            double calcWidth = 0.145833323078992;
             XYZ textOffset = new XYZ(calcOffset, 0, 0);
             XYZ textOffsetEast = new XYZ(0, calcOffset, 0);
 
@@ -89,6 +104,8 @@ namespace NWLToolbar
             else
                 goto Failed;
 
+
+
             //Grab Line Origin and Set X Coordinate
         PlanOrDetail:
             foreach (DetailLine dl in lines)
@@ -111,11 +128,16 @@ namespace NWLToolbar
 
             //Grab each text note and set new location
             foreach (TextNote e in textNotes)
-            {                
-                XYZ origLocation = e.Coord as XYZ;                                
+            {
+                XYZ origLocation = e.Coord as XYZ;
                 XYZ newLocation = new XYZ(lineX.X, origLocation.Y, origLocation.Z);
                 string justification = e.HorizontalAlignment.ToString();
-                
+                if (resizeText == true)
+                {
+                e.Width = calcWidth;
+                }
+
+
                 if (justification == "Left")
                 {
                     XYZ offset = (origLocation - newLocation) - textOffset;
@@ -157,6 +179,10 @@ namespace NWLToolbar
                 XYZ origLocation = e.Coord as XYZ;
                 XYZ newLocation = new XYZ(origLocation.X, lineX.Y, origLocation.Z);
                 string justification = e.HorizontalAlignment.ToString();
+                if (resizeText == true)
+                {
+                    e.Width = calcWidth;
+                }
 
                 if (orientation == "(1.000000000, 0.000000000, 0.000000000)")
                 {
@@ -213,6 +239,10 @@ namespace NWLToolbar
                 XYZ origLocation = e.Coord as XYZ;
                 XYZ newLocation = new XYZ(lineX.X, origLocation.Y, origLocation.Z);
                 string justification = e.HorizontalAlignment.ToString();
+                if (resizeText == true)
+                {
+                    e.Width = calcWidth;
+                }
 
                 if (orientation == "(0.000000000, -1.000000000, 0.000000000)")
                 {
