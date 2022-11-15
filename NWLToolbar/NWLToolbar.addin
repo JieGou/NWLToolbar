@@ -55,4 +55,22 @@
 	<VendorId>com.typepad.thebuildingcoder</VendorId>
 	<VendorDescription>Ben Campbell, http://thebuildingcoder.typepad.com</VendorDescription>
   </AddIn>
+  <AddIn Type="Command">
+	<Text>RenumberViewsOnSheet</Text>
+	<Description>Some description for NWLToolbar</Description>
+	<Assembly>NWLToolbar.dll</Assembly>
+	<FullClassName>NWLToolbar.RenumberViewsOnSheet</FullClassName>
+	<ClientId>6e96510e-7778-65b1-ba7b-9ec6b05f65c5</ClientId>
+	<VendorId>com.typepad.thebuildingcoder</VendorId>
+	<VendorDescription>Ben Campbell, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+  <AddIn Type="Command">
+	<Text>AlignNotesAndResize</Text>
+	<Description>Some description for NWLToolbar</Description>
+	<Assembly>NWLToolbar.dll</Assembly>
+	<FullClassName>NWLToolbar.AlignNotesAndResize</FullClassName>
+	<ClientId>6e23110e-7778-40b1-ba7b-9ec6b05f65c5</ClientId>
+	<VendorId>com.typepad.thebuildingcoder</VendorId>
+	<VendorDescription>Ben Campbell, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
 </RevitAddIns>

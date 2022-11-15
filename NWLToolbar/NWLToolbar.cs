@@ -27,12 +27,19 @@ namespace NWLToolbar
             string curAssembly = System.Reflection.Assembly.GetExecutingAssembly().Location;
             string curAssemblyPath = System.IO.Path.GetDirectoryName(curAssembly);
 
-            //Tools
+            //Push Buttons
             PushButtonData pbd1 = new PushButtonData("Sheets to Uppercase", "Sheets Names" + "\r" + "To Uppercase", curAssembly, "NWLToolbar.CapitalizeSheets");
             PushButtonData pbd2 = new PushButtonData("Teams Link", "BIM Tools" + "\r" + "& Resources", curAssembly, "NWLToolbar.TeamsLink");
             PushButtonData pbd3 = new PushButtonData("Overridden Dims", "Select Overridden" + "\r" + "Dimensions", curAssembly, "NWLToolbar.SelectOverriddenDimensions");
             PushButtonData pbd4 = new PushButtonData("Element History", "Element" + "\r" + "History", curAssembly, "NWLToolbar.ElementHistory");
-            PushButtonData pbd5 = new PushButtonData("Align Notes", "Align Notes" + "\r" + "W/ Detail Line", curAssembly, "NWLToolbar.AlignNotes");
+            PushButtonData pbd5 = new PushButtonData("Align Notes", "Align Notes W/ Detail Line", curAssembly, "NWLToolbar.AlignNotes");
+            PushButtonData pbd6 = new PushButtonData("Renumber Views on Sheet", "Renumber Views" + "\r" + "On Sheet", curAssembly, "NWLToolbar.RenumberViewsOnSheet");
+            PushButtonData pbd7 = new PushButtonData("Align Notes & Resize Text", "Align Notes W/ Detail Line & Resize", curAssembly, "NWLToolbar.AlignNotesAndResize");
+
+            //Pulldown Buttons
+            PulldownButtonData pdbd1 = new PulldownButtonData("Align Notes Drop Down", "Align Notes");
+            
+            
 
             //Images
             pbd1.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "aA.png")));
@@ -40,13 +47,29 @@ namespace NWLToolbar
             pbd3.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "overridden dimensions.png")));
             pbd4.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "element history.png")));
             pbd5.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "align notes.png")));
+            pbd6.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "view number.png")));
+            pbd7.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "align notes.png")));
+            pdbd1.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "align notes.png")));
 
-            //IList<PushButtonData> list = new List<PushButtonData>();
-            //list.Add(pbd3);
+            //ToolTips
+            pbd1.ToolTip = "Changes all sheet names to uppercase.";
+            pbd2.ToolTip = "Opens up the \"BIM Tools & Resources\" page on the Microsoft Teams Application.";
+            pbd3.ToolTip = "Selects all overridden dimensions in an active view.";
+            pbd4.ToolTip = "Shows who created an element & who last changed it.";
+            pbd5.ToolTip = "Aligns Text Notes and Keynotes to a detail line. \nAt least one detail line and one note need to be selected. Deletes detail line When Completete.";
+            pbd6.ToolTip = "Renumbers all views on sheets based on the \"NWL_30x42\" title block.";
+            pbd7.ToolTip = "Aligns Text Notes and Keynotes to a detail line & resize texts notes to match keynote width. \nAt least one detail line and one note need to be selected. Deletes detail line When Completete.";
+
+            IList<PushButtonData> alignNotesList = new List<PushButtonData>();
+            alignNotesList.Add(pbd5);
+            alignNotesList.Add(pbd7);
 
             //Tools Section
             PushButton pb1 = (PushButton)toolsPanel.AddItem(pbd1);
-            PushButton pb5 = (PushButton)toolsPanel.AddItem(pbd5);
+            PulldownButton pdb1 = (PulldownButton)toolsPanel.AddItem(pdbd1);
+                pdb1.AddPushButton(pbd5);
+                pdb1.AddPushButton(pbd7);            
+            PushButton pb6 = (PushButton)toolsPanel.AddItem(pbd6);
 
             //Dimensions Section
             PushButton pb3 = (PushButton)dimensionsPanel.AddItem(pbd3);

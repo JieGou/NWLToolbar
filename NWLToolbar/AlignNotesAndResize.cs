@@ -19,7 +19,7 @@ using Autodesk.Revit.UI.Selection;
 namespace NWLToolbar
 {
     [Transaction(TransactionMode.Manual)]
-    public class AlignNotes : IExternalCommand
+    public class AlignNotesAndResize : IExternalCommand
     {
         
         public Result Execute(
@@ -45,7 +45,7 @@ namespace NWLToolbar
                 .OfClass(typeof(CurveElement))
                 .OfCategory(BuiltInCategory.OST_Lines)
                 .WhereElementIsNotElementType();
-            
+
 
             //Variables
             XYZ lineX = new XYZ(0, 0, 0);
@@ -56,7 +56,7 @@ namespace NWLToolbar
             //Get ViewScale Offset
             double viewScale = doc.ActiveView.Scale;
             double calcOffset = 0.00520833333333333 * viewScale;
-            
+            double calcWidth = 0.145833323078992;
             XYZ textOffset = new XYZ(calcOffset, 0, 0);
             XYZ textOffsetEast = new XYZ(0, calcOffset, 0);
 
@@ -118,8 +118,10 @@ namespace NWLToolbar
             {
                 XYZ origLocation = e.Coord as XYZ;
                 XYZ newLocation = new XYZ(lineX.X, origLocation.Y, origLocation.Z);
-                string justification = e.HorizontalAlignment.ToString();
-                
+                string justification = e.HorizontalAlignment.ToString();                
+                e.Width = calcWidth;              
+
+
                 if (justification == "Left")
                 {
                     XYZ offset = (origLocation - newLocation) - textOffset;
@@ -160,8 +162,10 @@ namespace NWLToolbar
             {
                 XYZ origLocation = e.Coord as XYZ;
                 XYZ newLocation = new XYZ(origLocation.X, lineX.Y, origLocation.Z);
-                string justification = e.HorizontalAlignment.ToString();
-               
+                string justification = e.HorizontalAlignment.ToString();                
+                e.Width = calcWidth;
+                
+
                 if (orientation == "(1.000000000, 0.000000000, 0.000000000)")
                 {
                     if (justification == "Left")
@@ -216,8 +220,10 @@ namespace NWLToolbar
             {
                 XYZ origLocation = e.Coord as XYZ;
                 XYZ newLocation = new XYZ(lineX.X, origLocation.Y, origLocation.Z);
-                string justification = e.HorizontalAlignment.ToString();
-              
+                string justification = e.HorizontalAlignment.ToString();                
+                e.Width = calcWidth;
+                
+
                 if (orientation == "(0.000000000, -1.000000000, 0.000000000)")
                 {
                     if (justification == "Left")
