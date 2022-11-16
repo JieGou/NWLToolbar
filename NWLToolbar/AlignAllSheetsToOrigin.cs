@@ -30,9 +30,9 @@ namespace NWLToolbar
             Document doc = uidoc.Document;
 
             FilteredElementCollector tbCollector = new FilteredElementCollector(doc)
-                .OfClass(typeof(FamilySymbol))
+                //.OfClass(typeof(FamilySymbol))
                 .OfCategory(BuiltInCategory.OST_TitleBlocks)
-                .WhereElementIsElementType();
+                .WhereElementIsNotElementType();
             
 
 
