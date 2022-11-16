@@ -30,11 +30,11 @@ namespace NWLToolbar
             Document doc = uidoc.Document;
 
             //Get Title Blocks & Viewports
-            FilteredElementCollector tbCollector = new FilteredElementCollector(doc.ActiveView.Document)
+            FilteredElementCollector tbCollector = new FilteredElementCollector(doc, doc.ActiveView.Id)
                 .OfCategory(BuiltInCategory.OST_TitleBlocks)
                 .WhereElementIsNotElementType();
 
-            FilteredElementCollector viewportCollector = new FilteredElementCollector(doc.ActiveView.Document)
+            FilteredElementCollector viewportCollector = new FilteredElementCollector(doc, doc.ActiveView.Id)
                 .OfCategory(BuiltInCategory.OST_Viewports)
                 .WhereElementIsNotElementType();
 
@@ -42,13 +42,13 @@ namespace NWLToolbar
             //Variables
             int arbitrarySet = 1000;
            
-            XYZ boxOrigin = new XYZ(0.517281824146976, 0.148269356955402, 0);
-            XYZ boxHeight = new XYZ(0.517281824146976, 0.627436023622063, 0) - boxOrigin;
-            XYZ boxWidth = new XYZ(1.03811515748031, 0.148269356955402, 0) - boxOrigin;
+            XYZ boxOrigin = new XYZ(0.146874999999995, 0.0531250000000337, 0);
+            XYZ boxHeight = new XYZ(0.146874999999995, 0.5322916666667, 0) - boxOrigin;
+            XYZ boxWidth = new XYZ(0.667708333333328, 0.0531250000000337, 0) - boxOrigin;
 
             //Transaction 1 Start
             Transaction t = new Transaction(doc);
-            t.Start("Set Sheet to Origin");
+            t.Start("Set Detail Numbers");
 
                 //Reset Sheet Origin
                 foreach (Element tb in tbCollector)
@@ -56,12 +56,7 @@ namespace NWLToolbar
                     LocationPoint inverse = tb.Location as LocationPoint;
                     tb.Location.Move(new XYZ(-inverse.Point.X, -inverse.Point.Y, -inverse.Point.Z));
                 }
-                t.Commit();
-                t.Dispose();
-
-            //Transaction 2 Start
-            Transaction t2 = new Transaction(doc);
-            t2.Start("Reset Detail Numbers");
+                                           
 
                 //Set Detail Numbers to Arbitrary Number
                 foreach (Element vp in viewportCollector)
@@ -70,13 +65,8 @@ namespace NWLToolbar
                     Parameter number = vp.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER);
                     number.Set(arbitrarySet.ToString());
                 }
-                arbitrarySet = 1000;
-                t2.Commit();
-                t2.Dispose();
-
-            //Transaction 2 Start
-            Transaction t3 = new Transaction(doc);
-            t3.Start("Set Detail Numbers");
+                arbitrarySet = 1000;                
+                            
 
                 //Variables
                 string horNumber = "";
@@ -87,43 +77,47 @@ namespace NWLToolbar
                 //Set Detail Numbers to Number Based On Location
                 foreach (Viewport vp in viewportCollector)
                 {
+                    
+                    
                     //Find ViewTitleHead Location
                     XYZ max = vp.GetLabelOutline().MaximumPoint;
                     XYZ min = vp.GetLabelOutline().MinimumPoint;
-                    XYZ headLocation = new XYZ(min.X, max.Y, 0);                            
+                    XYZ headLocation = new XYZ(min.X, min.Y, 0)-boxOrigin;    
+                    double xLocation = (headLocation.X/boxWidth.X);
+                    double yLocation = (headLocation.Y/boxHeight.Y);
                         
                         //Set Number
-                        if (headLocation.X / boxWidth.X >= 6)
+                        if (xLocation >= 5)
                             horNumber = "6";
-                        else if (headLocation.X / boxWidth.X >= 5.0)
+                        else if (xLocation >= 4.0)
                             horNumber = "5";
-                        else if (headLocation.X / boxWidth.X >= 4.0)
+                        else if (xLocation >= 3.0)
                             horNumber = "4";
-                        else if (headLocation.X / boxWidth.X >= 3.0)
+                        else if (xLocation >= 2.0)
                             horNumber = "3";
-                        else if (headLocation.X / boxWidth.X >= 2.0)
+                        else if (xLocation >= 1.0)
                             horNumber = "2";
-                        else if (headLocation.X / boxWidth.X >= 1.0)
+                        else if (xLocation >= 0.0)
                             horNumber = "1";
                         else
                             horNumber = "Null";
 
                         //Set Letter
-                        if (Math.Abs(headLocation.Y) / boxHeight.Y >= 4.0)
+                        if (yLocation >= 4.0)
                             vertLetter = "E";
-                        else if (Math.Abs(headLocation.Y) / boxHeight.Y >= 3.0)
+                        else if (yLocation >= 3.0)
                             vertLetter = "D";
-                        else if (Math.Abs(headLocation.Y) / boxHeight.Y >= 2.0)
+                        else if (yLocation >= 2.0)
                             vertLetter = "C";
-                        else if (Math.Abs(headLocation.Y) / boxHeight.Y >= 1.0)
+                        else if (yLocation >= 1.0)
                             vertLetter = "B";
-                        else if (Math.Abs(headLocation.Y) / boxHeight.Y >= 0)
+                        else if (yLocation >= 0)
                             vertLetter = "A";
                         else
                             vertLetter = "Null";
 
                     //Get Updated Detail Numbers
-                    FilteredElementCollector updatedViewportCollector = new FilteredElementCollector(doc.ActiveView.Document)
+                    FilteredElementCollector updatedViewportCollector = new FilteredElementCollector(doc, doc.ActiveView.Id)
                     .OfCategory(BuiltInCategory.OST_Viewports)
                     .WhereElementIsNotElementType();
 
@@ -170,8 +164,8 @@ namespace NWLToolbar
                 }
                 failedAttempts = 0;
             
-            t3.Commit();
-            t3.Dispose();
+            t.Commit();
+            t.Dispose();
 
             return Result.Succeeded;
         }

@@ -35,6 +35,7 @@ namespace NWLToolbar
             PushButtonData pbd5 = new PushButtonData("Align Notes", "Align Notes W/ Detail Line", curAssembly, "NWLToolbar.AlignNotes");
             PushButtonData pbd6 = new PushButtonData("Renumber Views on Sheet", "Renumber Views" + "\r" + "On Sheet", curAssembly, "NWLToolbar.RenumberViewsOnSheet");
             PushButtonData pbd7 = new PushButtonData("Align Notes & Resize Text", "Align Notes W/ Detail Line & Resize", curAssembly, "NWLToolbar.AlignNotesAndResize");
+            PushButtonData pbd8 = new PushButtonData("Align All Sheets To Origin", "Align All Sheets" + "\r" + "To Origin", curAssembly, "NWLToolbar.AlignAllSheetsToOrigin");
 
             //Pulldown Buttons
             PulldownButtonData pdbd1 = new PulldownButtonData("Align Notes Drop Down", "Align Notes");
@@ -49,6 +50,9 @@ namespace NWLToolbar
             pbd5.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "align notes.png")));
             pbd6.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "view number.png")));
             pbd7.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "align notes.png")));
+            pbd8.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "view number.png")));
+
+
             pdbd1.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "align notes.png")));
 
             //ToolTips
@@ -59,6 +63,7 @@ namespace NWLToolbar
             pbd5.ToolTip = "Aligns Text Notes and Keynotes to a detail line. \nAt least one detail line and one note need to be selected. Deletes detail line When Completete.";
             pbd6.ToolTip = "Renumbers all views on sheets based on the \"NWL_30x42\" title block.";
             pbd7.ToolTip = "Aligns Text Notes and Keynotes to a detail line & resize texts notes to match keynote width. \nAt least one detail line and one note need to be selected. Deletes detail line When Completete.";
+            pbd8.ToolTip = "Takes all sheets and sets their origin back to (0,0,0)";
 
             IList<PushButtonData> alignNotesList = new List<PushButtonData>();
             alignNotesList.Add(pbd5);
@@ -70,6 +75,7 @@ namespace NWLToolbar
                 pdb1.AddPushButton(pbd5);
                 pdb1.AddPushButton(pbd7);            
             PushButton pb6 = (PushButton)toolsPanel.AddItem(pbd6);
+            PushButton pb8 = (PushButton)toolsPanel.AddItem(pbd8);
 
             //Dimensions Section
             PushButton pb3 = (PushButton)dimensionsPanel.AddItem(pbd3);
