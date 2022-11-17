@@ -31,7 +31,8 @@ namespace NWLToolbar
 
             //Get ViewSheets
             FilteredElementCollector sheetCollector = new FilteredElementCollector(doc)
-                .OfCategory(BuiltInCategory.OST_Sheets);
+                .OfCategory(BuiltInCategory.OST_Sheets)
+                .WhereElementIsNotElementType();
             
             //Define Subcategories to move
             IList<Type> typeList = new List<Type>();
@@ -45,7 +46,7 @@ namespace NWLToolbar
 
             //Start Transaction
             Transaction t = new Transaction(doc);
-            t.Start("Set Sheet to Origin");           
+            t.Start("Set All Sheet Origin");           
 
             //Get View Sheets from Collector
             foreach (ViewSheet e in sheetCollector)

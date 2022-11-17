@@ -52,6 +52,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlignSheetToOrigin .cs" />
     <Compile Include="AlignNotesAndResize.cs" />
     <Compile Include="AlignNotes.cs" />
     <Compile Include="SelectOverriddenDimensions.cs" />

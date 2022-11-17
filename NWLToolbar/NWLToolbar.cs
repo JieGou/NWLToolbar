@@ -36,9 +36,12 @@ namespace NWLToolbar
             PushButtonData pbd6 = new PushButtonData("Renumber Views on Sheet", "Renumber Views" + "\r" + "On Sheet", curAssembly, "NWLToolbar.RenumberViewsOnSheet");
             PushButtonData pbd7 = new PushButtonData("Align Notes & Resize Text", "Align Notes W/ Detail Line & Resize", curAssembly, "NWLToolbar.AlignNotesAndResize");
             PushButtonData pbd8 = new PushButtonData("Align All Sheets To Origin", "Align All Sheets" + "\r" + "To Origin", curAssembly, "NWLToolbar.AlignAllSheetsToOrigin");
+            PushButtonData pbd9 = new PushButtonData("Align Sheet To Origin", "Align Sheet" + "\r" + "To Origin", curAssembly, "NWLToolbar.AlignSheetToOrigin");
 
             //Pulldown Buttons
             PulldownButtonData pdbd1 = new PulldownButtonData("Align Notes Drop Down", "Align Notes");
+            PulldownButtonData pdbd2 = new PulldownButtonData("Align Sheets Drop Down", "Align Sheets");
+            
             
             
 
@@ -51,9 +54,11 @@ namespace NWLToolbar
             pbd6.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "view number.png")));
             pbd7.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "align notes.png")));
             pbd8.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "view number.png")));
+            pbd9.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "view number.png")));
 
 
             pdbd1.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "align notes.png")));
+            pdbd2.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "view number.png")));
 
             //ToolTips
             pbd1.ToolTip = "Changes all sheet names to uppercase.";
@@ -69,13 +74,20 @@ namespace NWLToolbar
             alignNotesList.Add(pbd5);
             alignNotesList.Add(pbd7);
 
+            IList<PushButtonData> alignSheetsList = new List<PushButtonData>();
+            alignSheetsList.Add(pbd9);
+            alignSheetsList.Add(pbd8);
+
             //Tools Section
             PushButton pb1 = (PushButton)toolsPanel.AddItem(pbd1);
             PulldownButton pdb1 = (PulldownButton)toolsPanel.AddItem(pdbd1);
                 pdb1.AddPushButton(pbd5);
                 pdb1.AddPushButton(pbd7);            
             PushButton pb6 = (PushButton)toolsPanel.AddItem(pbd6);
-            PushButton pb8 = (PushButton)toolsPanel.AddItem(pbd8);
+            PulldownButton pdb2 = (PulldownButton)toolsPanel.AddItem(pdbd2);
+            foreach (PushButtonData pbd in alignSheetsList)
+                pdb2.AddPushButton(pbd);
+            
 
             //Dimensions Section
             PushButton pb3 = (PushButton)dimensionsPanel.AddItem(pbd3);
