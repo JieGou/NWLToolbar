@@ -36,11 +36,12 @@ namespace NWLToolbar
             //Define Subcategories to move
             IList<Type> typeList = new List<Type>();
             typeList.Add(typeof(Viewport));
-            typeList.Add(typeof(FamilyInstance));
-            typeList.Add(typeof(Dimension));
+            typeList.Add(typeof(FamilyInstance));            
             typeList.Add(typeof(RevisionCloud));              
             typeList.Add(typeof(TextNote));
-            ElementMulticlassFilter dependentFilter = new ElementMulticlassFilter(typeList);           
+            ElementMulticlassFilter dependentFilter = new ElementMulticlassFilter(typeList);
+
+            ElementClassFilter iTags = new ElementClassFilter(typeof(IndependentTag));
 
             //Start Transaction
             Transaction t = new Transaction(doc);
@@ -51,8 +52,12 @@ namespace NWLToolbar
             {
                 //Variables
                 IList<ElementId> elementIds = e.GetDependentElements(dependentFilter);
-                IList<Element> dependentElement = new List<Element>();
+                IList<Element> dependentElement = new List<Element>();                
+                IList<Element> dependentTagElement = new List<Element>();
+                
+                
                 XYZ tempOffset = new XYZ();
+                XYZ zeroOffset = new XYZ();
 
                 //Get Dependent Elements
                 foreach (ElementId eId in elementIds)
@@ -61,7 +66,7 @@ namespace NWLToolbar
                     Element tb = doc.GetElement(eId);
                     dependentElement.Add(tb);
                     string tbName = tb.Category.Name;
-
+                    
 
                     //Set Offset Based On Title Block Positioning
                     if (tbName == "Title Blocks")
@@ -70,13 +75,28 @@ namespace NWLToolbar
                         XYZ offset = new XYZ(-inverse.Point.X, -inverse.Point.Y, -inverse.Point.Z);
                         tempOffset = offset;
                     } 
-
+                    /* else if (tbName == "Revision Clouds")
+                    {
+                        IList<ElementId> dependentTag = tb.GetDependentElements(iTags);
+                        
+                        foreach (ElementId id in dependentTag)
+                        {
+                            Element tag = doc.GetElement(id);
+                            string tagName = tag.Category.Name;
+                            if (tagName == "Revision Cloud Tags")
+                                dependentTagElement.Add(tag);
+                        }
+                       
+                    }*/
                 }
 
                 //Move All Elements
                 foreach (Element moveElements in dependentElement)                
-                    moveElements.Location.Move(tempOffset);                
-
+                    moveElements.Location.Move(tempOffset);
+                //foreach (IndependentTag moveElements in dependentTagElement)
+                //{
+                //    XYZ moveElements.TagHeadPosition
+                //}
             }
             
             t.Commit();
