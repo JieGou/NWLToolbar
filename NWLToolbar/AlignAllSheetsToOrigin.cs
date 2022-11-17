@@ -29,22 +29,56 @@ namespace NWLToolbar
             Application app = uiapp.Application;
             Document doc = uidoc.Document;
 
-            FilteredElementCollector tbCollector = new FilteredElementCollector(doc)
-                //.OfClass(typeof(FamilySymbol))
-                .OfCategory(BuiltInCategory.OST_TitleBlocks)
-                .WhereElementIsNotElementType();
+            //Get ViewSheets
+            FilteredElementCollector sheetCollector = new FilteredElementCollector(doc)
+                .OfCategory(BuiltInCategory.OST_Sheets);
             
+            //Define Subcategories to move
+            IList<Type> typeList = new List<Type>();
+            typeList.Add(typeof(Viewport));
+            typeList.Add(typeof(FamilyInstance));
+            typeList.Add(typeof(Dimension));
+            typeList.Add(typeof(RevisionCloud));              
+            typeList.Add(typeof(TextNote));
+            ElementMulticlassFilter dependentFilter = new ElementMulticlassFilter(typeList);           
 
-
+            //Start Transaction
             Transaction t = new Transaction(doc);
-            t.Start("Set Sheet to Origin");
+            t.Start("Set Sheet to Origin");           
 
-            //Reset Sheet Origin
-            foreach (Element tb in tbCollector)
+            //Get View Sheets from Collector
+            foreach (ViewSheet e in sheetCollector)
             {
-                LocationPoint inverse = tb.Location as LocationPoint;                
-                tb.Location.Move(new XYZ(-inverse.Point.X, -inverse.Point.Y, -inverse.Point.Z));
+                //Variables
+                IList<ElementId> elementIds = e.GetDependentElements(dependentFilter);
+                IList<Element> dependentElement = new List<Element>();
+                XYZ tempOffset = new XYZ();
+
+                //Get Dependent Elements
+                foreach (ElementId eId in elementIds)
+                {
+                    
+                    Element tb = doc.GetElement(eId);
+                    dependentElement.Add(tb);
+                    string tbName = tb.Category.Name;
+
+
+                    //Set Offset Based On Title Block Positioning
+                    if (tbName == "Title Blocks")
+                    {
+                        LocationPoint inverse = tb.Location as LocationPoint;
+                        XYZ offset = new XYZ(-inverse.Point.X, -inverse.Point.Y, -inverse.Point.Z);
+                        tempOffset = offset;
+                    } 
+
+                }
+
+                //Move All Elements
+                foreach (Element moveElements in dependentElement)                
+                    moveElements.Location.Move(tempOffset);                
+
             }
+            
             t.Commit();
             t.Dispose();
 
