@@ -32,15 +32,12 @@ namespace NWLToolbar
             //Get ViewSheets
             FilteredElementCollector sheetCollector = new FilteredElementCollector(doc, doc.ActiveView.Id)                           
                 .WhereElementIsNotElementType();
-            
-            
 
             //Start Transaction
             Transaction t = new Transaction(doc);
             t.Start("Set Sheet Origin"); 
             
-            IList<Element> dependentElement = new List<Element>();
-                
+            IList<Element> dependentElement = new List<Element>();                
             XYZ tempOffset = new XYZ();
 
             //Get Dependent Elements
@@ -59,7 +56,6 @@ namespace NWLToolbar
                   } 
                   else if (tbName != "Schedule Graphics")
                        dependentElement.Add(e);
-
 
              }
 
