@@ -50,15 +50,32 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlignSheetToOrigin .cs" />
     <Compile Include="AlignNotesAndResize.cs" />
     <Compile Include="AlignNotes.cs" />
+    <Compile Include="FrmAlignPlans.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmAlignPlans.Designer.cs">
+      <DependentUpon>FrmAlignPlans.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SelectOverriddenDimensions.cs" />
     <Compile Include="ElementHistory.cs" />
     <Compile Include="RenumberViewsOnSheet.cs" />
     <Compile Include="AlignAllSheetsToOrigin.cs" />
+    <Compile Include="AlignPlans.cs" />
+    <Compile Include="SheetsToSelect.cs" />
     <Compile Include="TeamsLink.cs" />
     <Compile Include="NWLToolbar.cs" />
     <Compile Include="CapitalizeSheets.cs" />
@@ -66,6 +83,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="NWLToolbar.addin" />
+    <None Include="Resources\pop-up background.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="FrmAlignPlans.resx">
+      <DependentUpon>FrmAlignPlans.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

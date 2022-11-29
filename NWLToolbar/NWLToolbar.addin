@@ -91,4 +91,13 @@
 	<VendorId>com.typepad.thebuildingcoder</VendorId>
 	<VendorDescription>Ben Campbell, http://thebuildingcoder.typepad.com</VendorDescription>
  </AddIn>
+ <AddIn Type="Command">
+	<Text>AlignPlans</Text>
+	<Description>Some description for NWLToolbar</Description>
+	<Assembly>NWLToolbar.dll</Assembly>
+	<FullClassName>NWLToolbar.AlignPlans</FullClassName>
+	<ClientId>3e23110e-7268-40b1-ba1b-9ec6b05f29c5</ClientId>
+	<VendorId>com.typepad.thebuildingcoder</VendorId>
+	<VendorDescription>Ben Campbell, http://thebuildingcoder.typepad.com</VendorDescription>
+ </AddIn>
 </RevitAddIns>

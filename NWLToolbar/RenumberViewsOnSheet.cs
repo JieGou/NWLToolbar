@@ -30,7 +30,7 @@ namespace NWLToolbar
             Document doc = uidoc.Document;
 
             //Get Title Blocks & Viewports
-            FilteredElementCollector tbCollector = new FilteredElementCollector(doc, doc.ActiveView.Id)
+            FilteredElementCollector tbCollector = new FilteredElementCollector( doc, doc.ActiveView.Id)
                 .OfCategory(BuiltInCategory.OST_TitleBlocks)
                 .WhereElementIsNotElementType();
 
