@@ -57,7 +57,7 @@ namespace NWLToolbar
                 LocationPoint point = r.Location as LocationPoint;
                 XYZ xyz = point.Point;
                 Level roomLevel = r.Level;
-                string roomName = r.Name;
+                string roomName = r.get_Parameter(BuiltInParameter.ROOM_NAME).AsValueString().ToString();
                 string roomNumber = r.Number;
 
                 //Creates elevation body
@@ -66,25 +66,14 @@ namespace NWLToolbar
                 //Creates each elevation view
                 for (int i = 0; i < 4; i++)
                 {
-                    //Gets room boundry segments
-                    IList<IList<BoundarySegment>> roomBoundry = r.GetBoundarySegments(sEBO);
-                    IList<BoundarySegment> filteredBoundaries = roomBoundry.ElementAt(0);                    
+                    //Gets room boundry segments                    
+                    var filteredBoundaries = r.GetBoundarySegments(sEBO).ElementAt(0);                    
                     ViewSection elevationView = marker.CreateElevation(doc, uidoc.ActiveView.Id, i);
 
                     //custom method to get far clipping
                     double farClipOffset = GetViewDepth(filteredBoundaries, i, xyz);
 
-                    string letter = null;
-                    if (i == 0)
-                        letter = "a";
-                    else if (i == 1)
-                        letter = "b";
-                    else if (i == 2)
-                        letter = "c";
-                    else if (i == 3)
-                        letter = "d";                    
-
-                    string elevationName = roomNumber + " - " + roomName + " - " + letter;
+                    string elevationName = roomNumber + " - " + roomName + " - " + Char.ConvertFromUtf32('a'+i);
 
                     //Set elevation parameters
                     elevationView.get_Parameter(BuiltInParameter.VIEWER_BOUND_OFFSET_FAR).Set(farClipOffset);
@@ -99,54 +88,28 @@ namespace NWLToolbar
         }
 
         private double GetViewDepth(IList<BoundarySegment> roomBoundry, double v1, XYZ roomCenter)
-        {
-            double depth = 1;
+        {            
             if (v1 == 0)
-            {
-                double depth1 = roomBoundry.First().GetCurve().GetEndPoint(0).X;
-                foreach (BoundarySegment r in roomBoundry)
-                {
-                    double endPoint = r.GetCurve().GetEndPoint(0).X;
-                    if (endPoint < depth1)
-                        depth1 = endPoint;
-                }
-                depth = Math.Abs(roomCenter.X - depth1);
+            {                
+                double depth = roomBoundry.Min(x => x.GetCurve().GetEndPoint(0).X);                
+                return Math.Abs(roomCenter.X - depth);
             }
-            else if (v1 == 1)
+            if (v1 == 1)
             {
-                double depth1 = roomBoundry.First().GetCurve().GetEndPoint(0).Y;
-                foreach (BoundarySegment r in roomBoundry)
-                {
-                    double endPoint = r.GetCurve().GetEndPoint(0).Y;
-                    if (endPoint > depth1)
-                        depth1 = endPoint;
-                }
-                depth = Math.Abs(depth1 - roomCenter.Y);
+                double depth = roomBoundry.Max(x => x.GetCurve().GetEndPoint(0).Y);                
+                return Math.Abs(depth - roomCenter.Y);
             }
-            if (v1 == 2)
+            else if (v1 == 2)
             {
-                double depth1 = roomBoundry.First().GetCurve().GetEndPoint(0).X;
-                foreach (BoundarySegment r in roomBoundry)
-                {
-                    double endPoint = r.GetCurve().GetEndPoint(0).X;
-                    if (endPoint > depth1)
-                        depth1 = endPoint;
-                }
-                depth = Math.Abs(depth1 - roomCenter.X);
+                double depth = roomBoundry.Max(x => x.GetCurve().GetEndPoint(0).X);
+                return Math.Abs(roomCenter.X - depth);
             }
-            if (v1 == 3)
+            //(v1 == 3)
             {
-                double depth1 = roomBoundry.First().GetCurve().GetEndPoint(0).Y;
-                foreach (BoundarySegment r in roomBoundry)
-                {
-                    double endPoint = r.GetCurve().GetEndPoint(0).Y;
-                    if (endPoint < depth1)
-                        depth1 = endPoint;
-                }
-                depth = Math.Abs(roomCenter.Y - depth1);
-            }            
-            return depth;
+                double depth = roomBoundry.Min(x => x.GetCurve().GetEndPoint(0).Y);
+                return Math.Abs(depth - roomCenter.Y);
+            } 
+            
         }
     }
-
 }
