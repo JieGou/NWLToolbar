@@ -76,6 +76,7 @@
     <Compile Include="AlignAllSheetsToOrigin.cs" />
     <Compile Include="AlignPlans.cs" />
     <Compile Include="SheetsToSelect.cs" />
+    <Compile Include="CreateInteriorElevations.cs" />
     <Compile Include="TeamsLink.cs" />
     <Compile Include="NWLToolbar.cs" />
     <Compile Include="CapitalizeSheets.cs" />

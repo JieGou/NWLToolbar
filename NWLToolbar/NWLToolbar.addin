@@ -100,4 +100,13 @@
 	<VendorId>com.typepad.thebuildingcoder</VendorId>
 	<VendorDescription>Ben Campbell, http://thebuildingcoder.typepad.com</VendorDescription>
  </AddIn>
+ <AddIn Type="Command">
+	<Text>CreateInteriorElevations</Text>
+	<Description>Some description for NWLToolbar</Description>
+	<Assembly>NWLToolbar.dll</Assembly>
+	<FullClassName>NWLToolbar.CreateInteriorElevations</FullClassName>
+	<ClientId>d57a7fac-82df-4df8-a2d3-cf5ce18aa430</ClientId>
+	<VendorId>com.typepad.thebuildingcoder</VendorId>
+	<VendorDescription>Ben Campbell, http://thebuildingcoder.typepad.com</VendorDescription>
+ </AddIn>
 </RevitAddIns>

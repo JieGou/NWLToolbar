@@ -19,7 +19,8 @@ namespace NWLToolbar
             application.CreateRibbonTab(tabName1);
 
             //Ribbon Sections
-            RibbonPanel toolsPanel = application.CreateRibbonPanel(tabName1, "Tools");            
+            RibbonPanel toolsPanel = application.CreateRibbonPanel(tabName1, "Modeling");
+            RibbonPanel documentationPanel = application.CreateRibbonPanel(tabName1, "Documentation");
             RibbonPanel dimensionsPanel = application.CreateRibbonPanel(tabName1, "Dimensions");
             RibbonPanel resourcesPanel = application.CreateRibbonPanel(tabName1, "Resources");
             
@@ -38,6 +39,7 @@ namespace NWLToolbar
             PushButtonData pbd8 = new PushButtonData("Align All Sheets To Origin", "Align All Sheets" + "\r" + "To Origin", curAssembly, "NWLToolbar.AlignAllSheetsToOrigin");
             PushButtonData pbd9 = new PushButtonData("Align Sheet To Origin", "Align Sheet" + "\r" + "To Origin", curAssembly, "NWLToolbar.AlignSheetToOrigin");
             PushButtonData pbd10 = new PushButtonData("AlignPlans", "Align Plans", curAssembly, "NWLToolbar.AlignPlans");
+            PushButtonData pbd11 = new PushButtonData("Create Interior Elevation", "Create Interior Elevations", curAssembly, "NWLToolbar.CreateInteriorElevations");
 
             //Pulldown Buttons
             PulldownButtonData pdbd1 = new PulldownButtonData("Align Notes Drop Down", "Align Notes");
@@ -56,6 +58,7 @@ namespace NWLToolbar
             pbd8.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "align sheets.png")));
             pbd9.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "align sheets.png")));
             pbd10.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "align plans.png")));
+            pbd11.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "align plans.png")));
 
             pdbd1.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "align notes.png")));
             pdbd2.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "align sheets.png")));
@@ -71,6 +74,7 @@ namespace NWLToolbar
             pbd8.ToolTip = "Takes all sheets and sets their origin back to (0,0,0)";
 
             pbd10.ToolTip = "Aligns plans accross multiple sheets. Select the plan to follow and then select the sheets you want to affect";
+            pbd11.ToolTip = "Creates interior elevations for all rooms in the project";
 
             IList<PushButtonData> alignNotesList = new List<PushButtonData>();
             alignNotesList.Add(pbd5);
@@ -90,6 +94,9 @@ namespace NWLToolbar
             foreach (PushButtonData pbd in alignSheetsList)
                 pdb2.AddPushButton(pbd);
             PushButton pb10 = (PushButton)toolsPanel.AddItem(pbd10);
+
+            //Documentation Section
+            PushButton pb11 = (PushButton)documentationPanel.AddItem(pbd11);
             
 
             //Dimensions Section
