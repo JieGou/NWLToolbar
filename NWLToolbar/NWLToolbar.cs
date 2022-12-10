@@ -39,7 +39,8 @@ namespace NWLToolbar
             PushButtonData pbd8 = new PushButtonData("Align All Sheets To Origin", "Align All Sheets" + "\r" + "To Origin", curAssembly, "NWLToolbar.AlignAllSheetsToOrigin");
             PushButtonData pbd9 = new PushButtonData("Align Sheet To Origin", "Align Sheet" + "\r" + "To Origin", curAssembly, "NWLToolbar.AlignSheetToOrigin");
             PushButtonData pbd10 = new PushButtonData("AlignPlans", "Align Plans", curAssembly, "NWLToolbar.AlignPlans");
-            PushButtonData pbd11 = new PushButtonData("Create Interior Elevation", "Create Interior Elevations", curAssembly, "NWLToolbar.CreateInteriorElevations");
+            PushButtonData pbd11 = new PushButtonData("Create Interior Elevation", "Create" + "\r" + "Interior Elevations", curAssembly, "NWLToolbar.CreateInteriorElevations");
+            PushButtonData pbd12 = new PushButtonData("Place Elevations On Sheets", "Place Elevations" + "\r" + "On Sheets", curAssembly, "NWLToolbar.PlaceElevationsOnSheets");
 
             //Pulldown Buttons
             PulldownButtonData pdbd1 = new PulldownButtonData("Align Notes Drop Down", "Align Notes");
@@ -58,8 +59,9 @@ namespace NWLToolbar
             pbd8.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "align sheets.png")));
             pbd9.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "align sheets.png")));
             pbd10.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "align plans.png")));
-            pbd11.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "align plans.png")));
-
+            pbd11.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "interior elevations.png")));
+            pbd12.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "int elevations on sheets.png")));
+            
             pdbd1.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "align notes.png")));
             pdbd2.LargeImage = new BitmapImage(new Uri(System.IO.Path.Combine(curAssemblyPath, "align sheets.png")));
 
@@ -75,6 +77,7 @@ namespace NWLToolbar
 
             pbd10.ToolTip = "Aligns plans accross multiple sheets. Select the plan to follow and then select the sheets you want to affect";
             pbd11.ToolTip = "Creates interior elevations for all rooms in the project";
+            pbd12.ToolTip = "Places interior elevations on sheets based on rooms selected";
 
             IList<PushButtonData> alignNotesList = new List<PushButtonData>();
             alignNotesList.Add(pbd5);
@@ -97,7 +100,8 @@ namespace NWLToolbar
 
             //Documentation Section
             PushButton pb11 = (PushButton)documentationPanel.AddItem(pbd11);
-            
+            PushButton pb12 = (PushButton)documentationPanel.AddItem(pbd12);
+
 
             //Dimensions Section
             PushButton pb3 = (PushButton)dimensionsPanel.AddItem(pbd3);

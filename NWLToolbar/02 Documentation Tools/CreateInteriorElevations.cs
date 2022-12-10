@@ -31,9 +31,45 @@ namespace NWLToolbar
             Document doc = uidoc.Document;
 
             //Get all rooms
-            FilteredElementCollector roomCollector = new FilteredElementCollector(doc)                
+            FilteredElementCollector roomCollector = new FilteredElementCollector(doc)
                 .OfCategory(BuiltInCategory.OST_Rooms)
                 .WhereElementIsNotElementType();
+
+            List<Room> roomList = new List<Room>();
+            List<string> roomListName = new List<string>();
+            List<Room> selectedRoomList = new List<Room>();
+
+            foreach (Room e in roomCollector)
+            {                
+                bool isPlaced = e.Location != null;
+                if (isPlaced == true)
+                {
+                    roomList.Add(e);
+                    roomListName.Add(e.Number + " - " + getRoomName(e));
+                }
+            }
+            //Dialog Box Settings
+            FrmCreateInteriorElevations curForm = new FrmCreateInteriorElevations(roomListName);
+            curForm.Width = 700;
+            curForm.Height = 900;
+            curForm.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+           
+            //Open Dialog Box & Add Selection to list
+            if (curForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                List<string> selectedViews = curForm.GetSelectedRooms();
+
+                foreach (string s in selectedViews)
+                {
+                    foreach (Room i in roomList)
+                    {
+                        if (s == i.Number + " - " + getRoomName(i))
+                        {
+                            selectedRoomList.Add(i);
+                        }
+                    }
+                }
+            }            
             
             //Get interior elevation type
             ViewFamilyType vft = new FilteredElementCollector(doc)
@@ -51,13 +87,13 @@ namespace NWLToolbar
             t.Start("Create Interior Elevations");
 
             //Create interior elevations per room
-            foreach (Room r in roomCollector)
+            foreach (Room r in selectedRoomList)
             {
                 //Room information
                 LocationPoint point = r.Location as LocationPoint;
                 XYZ xyz = point.Point;
                 Level roomLevel = r.Level;
-                string roomName = r.get_Parameter(BuiltInParameter.ROOM_NAME).AsValueString().ToString();
+                string roomName = getRoomName(r);
                 string roomNumber = r.Number;
 
                 //Creates elevation body
@@ -78,13 +114,19 @@ namespace NWLToolbar
                     //Set elevation parameters
                     elevationView.get_Parameter(BuiltInParameter.VIEWER_BOUND_OFFSET_FAR).Set(farClipOffset);
                     elevationView.get_Parameter(BuiltInParameter.VIEW_NAME).Set(elevationName);
+                    elevationView.Scale = 48;
                 }                                
-            }
+            }           
 
             t.Commit();
             t.Dispose();
 
             return Result.Succeeded;
+        }
+
+        private string getRoomName(Room i)
+        {
+            return i.get_Parameter(BuiltInParameter.ROOM_NAME).AsValueString().ToString();
         }
 
         private double GetViewDepth(IList<BoundarySegment> roomBoundry, double v1, XYZ roomCenter)

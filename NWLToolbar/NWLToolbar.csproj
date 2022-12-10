@@ -56,44 +56,56 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlignSheetToOrigin .cs" />
-    <Compile Include="AlignNotesAndResize.cs" />
-    <Compile Include="AlignNotes.cs" />
-    <Compile Include="FrmAlignPlans.cs">
+    <Compile Include="02 Documentation Tools\AlignSheetToOrigin .cs" />
+    <Compile Include="02 Documentation Tools\AlignNotesAndResize.cs" />
+    <Compile Include="02 Documentation Tools\AlignNotes.cs" />
+    <Compile Include="02 Documentation Tools\Forms\FrmCreateInteriorElevations.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmAlignPlans.Designer.cs">
+    <Compile Include="02 Documentation Tools\Forms\FrmCreateInteriorElevations.Designer.cs">
+      <DependentUpon>FrmCreateInteriorElevations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="02 Documentation Tools\Forms\FrmAlignPlans.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="02 Documentation Tools\Forms\FrmAlignPlans.Designer.cs">
       <DependentUpon>FrmAlignPlans.cs</DependentUpon>
     </Compile>
+    <Compile Include="02 Documentation Tools\PlaceElevationsOnSheets.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SelectOverriddenDimensions.cs" />
-    <Compile Include="ElementHistory.cs" />
-    <Compile Include="RenumberViewsOnSheet.cs" />
-    <Compile Include="AlignAllSheetsToOrigin.cs" />
-    <Compile Include="AlignPlans.cs" />
-    <Compile Include="SheetsToSelect.cs" />
-    <Compile Include="CreateInteriorElevations.cs" />
-    <Compile Include="TeamsLink.cs" />
+    <Compile Include="03 Resource Tools\SelectOverriddenDimensions.cs" />
+    <Compile Include="03 Resource Tools\ElementHistory.cs" />
+    <Compile Include="02 Documentation Tools\RenumberViewsOnSheet.cs" />
+    <Compile Include="02 Documentation Tools\AlignAllSheetsToOrigin.cs" />
+    <Compile Include="02 Documentation Tools\AlignPlans.cs" />
+    <Compile Include="02 Documentation Tools\CreateInteriorElevations.cs" />
+    <Compile Include="03 Resource Tools\TeamsLink.cs" />
     <Compile Include="NWLToolbar.cs" />
-    <Compile Include="CapitalizeSheets.cs" />
+    <Compile Include="02 Documentation Tools\CapitalizeSheets.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="NWLToolbar.addin" />
-    <None Include="Resources\pop-up background.jpg" />
+    <Content Include="Resources\pop-up background.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="FrmAlignPlans.resx">
+    <EmbeddedResource Include="02 Documentation Tools\Forms\FrmCreateInteriorElevations.resx">
+      <DependentUpon>FrmCreateInteriorElevations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="02 Documentation Tools\Forms\FrmAlignPlans.resx">
       <DependentUpon>FrmAlignPlans.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="01 Modeling Tools\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

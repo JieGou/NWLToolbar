@@ -109,4 +109,13 @@
 	<VendorId>com.typepad.thebuildingcoder</VendorId>
 	<VendorDescription>Ben Campbell, http://thebuildingcoder.typepad.com</VendorDescription>
  </AddIn>
+ <AddIn Type="Command">
+	<Text>PlaceElevationsOnSheets</Text>
+	<Description>Some description for NWLToolbar</Description>
+	<Assembly>NWLToolbar.dll</Assembly>
+	<FullClassName>NWLToolbar.PlaceElevationsOnSheets</FullClassName>
+	<ClientId>d57a7fac-82df-4df8-a2d3-cf5ce18aa169</ClientId>
+	<VendorId>com.typepad.thebuildingcoder</VendorId>
+	<VendorDescription>Ben Campbell, http://thebuildingcoder.typepad.com</VendorDescription>
+ </AddIn>
 </RevitAddIns>
