@@ -35,9 +35,14 @@ namespace NWLToolbar
                 .OfCategory(BuiltInCategory.OST_Rooms)
                 .WhereElementIsNotElementType();
 
+            FilteredElementCollector tbCollector = new FilteredElementCollector(doc)
+                .OfCategory(BuiltInCategory.OST_TitleBlocks)
+                .WhereElementIsElementType();
+
             List<Room> roomList = new List<Room>();
             List<string> roomListName = new List<string>();
-            List<Room> selectedRoomList = new List<Room>();            
+            List<Room> selectedRoomList = new List<Room>();          
+            List<FamilySymbol> tbList = new List<FamilySymbol>();
 
             foreach (Room e in roomCollector)
             {
@@ -48,17 +53,29 @@ namespace NWLToolbar
                     roomListName.Add(e.Number + " - " + getRoomName(e));
                 }
             }
+            foreach(FamilySymbol tb in tbCollector)
+            {
+                tbList.Add(tb);
+            }
+
             //Dialog Box Settings
-            FrmCreateInteriorElevations curForm = new FrmCreateInteriorElevations(roomListName);
+            FrmPlaceElevationsOnSheets curForm = new FrmPlaceElevationsOnSheets(roomListName, tbList);
             curForm.Width = 700;
             curForm.Height = 900;
             curForm.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 
+            ElementId tbId = null;
             //Open Dialog Box & Add Selection to list
             if (curForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 List<string> selectedViews = curForm.GetSelectedRooms();
-
+                
+                foreach (FamilySymbol fs in tbCollector)
+                {
+                    if (fs.FamilyName + ": " + fs.Name == curForm.GetSelectedTitleBlock())
+                        tbId = fs.Id;
+                }
+                
                 foreach (string s in selectedViews)
                 {
                     foreach (Room i in roomList)
@@ -90,12 +107,6 @@ namespace NWLToolbar
                     elevationViews.Add(e);                   
                 }
             }
-
-            ElementId tblock = new FilteredElementCollector(doc)
-                    .OfCategory(BuiltInCategory.OST_TitleBlocks)
-                    .WhereElementIsElementType()
-                    .FirstElement().Id;
-
             Transaction t = new Transaction(doc);
             t.Start("Place Elevations On Sheets");
 
@@ -154,7 +165,7 @@ namespace NWLToolbar
                 curElevations = subList0.Concat(subList1).Concat(subList2).Concat(subList3).ToList();               
 
                 int curViewPlaced = 0;
-                ViewSheet curSheet = ViewSheet.Create(doc, tblock);
+                ViewSheet curSheet = ViewSheet.Create(doc, tbId);
                 curSheet.Name = "INTERIOR ELEVATIONS";
 
                 foreach (View v in curElevations)

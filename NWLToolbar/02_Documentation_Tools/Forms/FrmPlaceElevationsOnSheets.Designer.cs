@@ -1,6 +1,6 @@
 ﻿namespace NWLToolbar
 {
-    partial class FrmCreateInteriorElevations
+    partial class FrmPlaceElevationsOnSheets
     {
         /// <summary>
         /// Required designer variable.
@@ -28,15 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmCreateInteriorElevations));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPlaceElevationsOnSheets));
             this.label1 = new System.Windows.Forms.Label();
             this.Cancel = new System.Windows.Forms.Button();
             this.OK = new System.Windows.Forms.Button();
             this.RoomList = new System.Windows.Forms.CheckedListBox();
             this.NWLWebsite = new System.Windows.Forms.Button();
             this.SelectAll = new System.Windows.Forms.Button();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // label1
@@ -123,30 +123,30 @@
             this.SelectAll.UseVisualStyleBackColor = false;
             this.SelectAll.Click += new System.EventHandler(this.SelectAll_Click);
             // 
-            // comboBox1
-            // 
-            this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(274, 752);
-            this.comboBox1.MaxDropDownItems = 50;
-            this.comboBox1.MaxLength = 150;
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(391, 28);
-            this.comboBox1.TabIndex = 7;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.SystemColors.ControlLight;
             this.label2.Font = new System.Drawing.Font("Arial", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(12, 753);
+            this.label2.Location = new System.Drawing.Point(12, 744);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(216, 22);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "Select Elevation Type:";
+            this.label2.Size = new System.Drawing.Size(228, 22);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Select Title Block Type:";
             // 
-            // FrmCreateInteriorElevations
+            // comboBox1
+            // 
+            this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(274, 743);
+            this.comboBox1.MaxDropDownItems = 50;
+            this.comboBox1.MaxLength = 150;
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(391, 28);
+            this.comboBox1.TabIndex = 5;
+            // 
+            // FrmPlaceElevationsOnSheets
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -154,17 +154,17 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(684, 861);
             this.Controls.Add(this.comboBox1);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.SelectAll);
             this.Controls.Add(this.NWLWebsite);
             this.Controls.Add(this.OK);
             this.Controls.Add(this.Cancel);
             this.Controls.Add(this.RoomList);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(500, 450);
-            this.Name = "FrmCreateInteriorElevations";
-            this.Text = "Create Interior Elevations";
+            this.Name = "FrmPlaceElevationsOnSheets";
+            this.Text = "Place Interior Elevations By Room";
             this.Load += new System.EventHandler(this.FrmAlignPlans_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -179,7 +179,7 @@
         private System.Windows.Forms.CheckedListBox RoomList;
         private System.Windows.Forms.Button NWLWebsite;
         private System.Windows.Forms.Button SelectAll;
-        private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }

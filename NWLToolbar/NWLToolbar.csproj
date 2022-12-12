@@ -59,6 +59,12 @@
     <Compile Include="02_Documentation_Tools\AlignSheetToOrigin .cs" />
     <Compile Include="02_Documentation_Tools\AlignNotesAndResize.cs" />
     <Compile Include="02_Documentation_Tools\AlignNotes.cs" />
+    <Compile Include="02_Documentation_Tools\Forms\FrmPlaceElevationsOnSheets.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="02_Documentation_Tools\Forms\FrmPlaceElevationsOnSheets.Designer.cs">
+      <DependentUpon>FrmPlaceElevationsOnSheets.cs</DependentUpon>
+    </Compile>
     <Compile Include="02_Documentation_Tools\Forms\FrmCreateInteriorElevations.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,6 +99,9 @@
     <Content Include="Resources\pop-up background.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="02_Documentation_Tools\Forms\FrmPlaceElevationsOnSheets.resx">
+      <DependentUpon>FrmPlaceElevationsOnSheets.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="02_Documentation_Tools\Forms\FrmCreateInteriorElevations.resx">
       <DependentUpon>FrmCreateInteriorElevations.cs</DependentUpon>
     </EmbeddedResource>

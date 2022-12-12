@@ -35,9 +35,17 @@ namespace NWLToolbar
                 .OfCategory(BuiltInCategory.OST_Rooms)
                 .WhereElementIsNotElementType();
 
+            FilteredElementCollector vftCollector = new FilteredElementCollector(doc)
+                .OfClass(typeof(ViewFamilyType))
+                //.OfCategory(BuiltInCategory.OST_ElevationMarks)
+                .WhereElementIsElementType();
+                
+
             List<Room> roomList = new List<Room>();
             List<string> roomListName = new List<string>();
             List<Room> selectedRoomList = new List<Room>();
+            List<ViewFamilyType> vftList = new List<ViewFamilyType>(); 
+            ElementId markerId = null;
 
             foreach (Room e in roomCollector)
             {                
@@ -48,8 +56,12 @@ namespace NWLToolbar
                     roomListName.Add(e.Number + " - " + getRoomName(e));
                 }
             }
+            foreach (ViewFamilyType vft in vftCollector)
+            {
+                vftList.Add(vft);
+            }
             //Dialog Box Settings
-            FrmCreateInteriorElevations curForm = new FrmCreateInteriorElevations(roomListName);
+            FrmCreateInteriorElevations curForm = new FrmCreateInteriorElevations(roomListName, vftList);
             curForm.Width = 700;
             curForm.Height = 900;
             curForm.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -58,6 +70,11 @@ namespace NWLToolbar
             if (curForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 List<string> selectedViews = curForm.GetSelectedRooms();
+                foreach (ViewFamilyType vf in vftList)
+                {
+                    if (vf.FamilyName + ": " + vf.Name == curForm.GetSelectedElevationType())
+                        markerId = vf.Id;
+                }
 
                 foreach (string s in selectedViews)
                 {
@@ -69,14 +86,7 @@ namespace NWLToolbar
                         }
                     }
                 }
-            }            
-            
-            //Get interior elevation type
-            ViewFamilyType vft = new FilteredElementCollector(doc)
-                .OfClass(typeof(ViewFamilyType))
-                .Cast<ViewFamilyType>()
-                .FirstOrDefault<ViewFamilyType>(x =>
-                ViewFamily.Elevation == x.ViewFamily);
+            }
 
             //Needed to grab room boundry
             SpatialElementBoundaryOptions sEBO = new SpatialElementBoundaryOptions();
@@ -97,7 +107,7 @@ namespace NWLToolbar
                 string roomNumber = r.Number;
 
                 //Creates elevation body
-                ElevationMarker marker = ElevationMarker.CreateElevationMarker(doc, vft.Id, xyz, 1);
+                ElevationMarker marker = ElevationMarker.CreateElevationMarker(doc, markerId, xyz, 1);
 
                 //Creates each elevation view
                 for (int i = 0; i < 4; i++)
