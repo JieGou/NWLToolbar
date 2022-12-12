@@ -102,89 +102,65 @@ namespace NWLToolbar
             for (int i = 0; i < SheetsToCreate; i++)
             {
                 IList<View> curElevations = new List<View>();
+                IList<View> subList0 = new List<View>();
+                IList<View> subList1 = new List<View>();
+                IList<View> subList2 = new List<View>();
+                IList<View> subList3 = new List<View>();
 
-               
                 int sPoint = i * 4;
-                    
-                Room curRoom = selectedRoomList[sPoint];
+                int curIndex = selectedRoomList.Count - sPoint;
 
+                Room curRoom0 = selectedRoomList[sPoint];
+                Room curRoom1 = null;
                 Room curRoom2 = null;
                 Room curRoom3 = null;
-                Room curRoom4 = null;                    
 
-                try
-                {
-                    curRoom2 = selectedRoomList[sPoint + 1];
-                }
-                catch
-                { }
-                    
-                try
-                {
-                    curRoom3 = selectedRoomList[sPoint + 2];
-                }
-                catch
-                { }   
-                    
-                try
-                {
-                    curRoom4 = selectedRoomList[sPoint + 3];
-                }
-                catch
-                { }
-                    
+                if (selectedRoomList.Count - sPoint > 1)                
+                    curRoom1 = selectedRoomList[sPoint + 1];                
+                if (selectedRoomList.Count - sPoint > 2)
+                    curRoom2 = selectedRoomList[sPoint + 2];                
+                if (selectedRoomList.Count - sPoint > 3)                
+                    curRoom3 = selectedRoomList[sPoint + 3];                
+
                 foreach (View e in elevationViews)
                 {
-                    bool test = e.Name.Contains(curRoom.Number + " - " + getRoomName(curRoom));
-                    if (test)
+                    if (e.Name.Contains(curRoom0.Number + " - " + getRoomName(curRoom0)))
                     {
-                        curElevations.Add(e);
+                        subList0.Add(e);
+                    }
+                    if (curIndex > 1)
+                    {
+                        if (e.Name.Contains(curRoom1.Number + " - " + getRoomName(curRoom1)))
+                        {
+                            subList1.Add(e);
+                        }                        
+                    }
+                    if (curIndex > 2)
+                    {
+                        if (e.Name.Contains(curRoom2.Number + " - " + getRoomName(curRoom2)))
+                        {
+                            subList2.Add(e);
+                        }                        
+                    }
+                    if (curIndex > 3)
+                    {
+                        if (e.Name.Contains(curRoom3.Number + " - " + getRoomName(curRoom3)))
+                        {
+                            subList3.Add(e);
+                        }                        
                     }
                 }
-                foreach (View e in elevationViews)
-                {
-                    if (curRoom2 != null)
-                    {
-                        bool test = e.Name.Contains(curRoom2.Number + " - " + getRoomName(curRoom2));
-                        if (test)
-                        {
-                            curElevations.Add(e);
-                        }
-                    }
-                }
-                foreach (View e in elevationViews)
-                {
-                    if (curRoom3 != null)
-                    {
-                        bool test = e.Name.Contains(curRoom3.Number + " - " + getRoomName(curRoom3));
-                        if (test)
-                        {
-                            curElevations.Add(e);
-                        }
-                    }
-                }
-                foreach (View e in elevationViews)
-                {
-                    if (curRoom4 != null)
-                    {
-                        bool test = e.Name.Contains(curRoom4.Number + " - " + getRoomName(curRoom4));
-                        if (test)
-                        {
-                            curElevations.Add(e);
-                        }
-                    }                        
-                }                        
-                
+
+                curElevations = subList0.Concat(subList1).Concat(subList2).Concat(subList3).ToList();               
+
                 int curViewPlaced = 0;
                 ViewSheet curSheet = ViewSheet.Create(doc, tblock);
                 curSheet.Name = "INTERIOR ELEVATIONS";
+
                 foreach (View v in curElevations)
-                {
-                    
+                {                    
                     XYZ curPoint = new XYZ();
                     Viewport curViewport = Viewport.Create(doc, curSheet.Id, curElevations[curViewPlaced].Id, curPoint);
-
-                    
 
                     BoundingBoxXYZ curViewportbb = curViewport.get_BoundingBox(curSheet);
                     XYZ min = curViewportbb.Min;
@@ -195,8 +171,6 @@ namespace NWLToolbar
                     curViewport.SetBoxCenter(newCenter);
                     curViewPlaced++;
                 }
-                    
-
             }            
 
             t.Commit();
@@ -212,45 +186,10 @@ namespace NWLToolbar
             XYZ boxSize = boxTopRight - boxBottomLeft;
             double sizeX = boxSize.X / 4;
             double sizeY = boxSize.Y / 4;
+            double remainder = curViewPlaced % 4;
+            double whole = Math.Floor(Convert.ToDouble(curViewPlaced)/4);
 
-
-            if (curViewPlaced == 0)
-                return boxBottomLeft;
-            else if (curViewPlaced == 1)
-                return new XYZ(boxBottomLeft.X + sizeX, boxBottomLeft.Y, 0);
-            else if (curViewPlaced == 2)
-                return new XYZ(boxBottomLeft.X + sizeX * 2, boxBottomLeft.Y, 0);
-            else if (curViewPlaced == 3)
-                return new XYZ(boxBottomLeft.X + sizeX * 3, boxBottomLeft.Y, 0);
-
-            else if (curViewPlaced == 4)
-                return new XYZ(boxBottomLeft.X, boxBottomLeft.Y + sizeY, 0);
-            else if (curViewPlaced == 5)
-                return new XYZ(boxBottomLeft.X + sizeX, boxBottomLeft.Y + sizeY, 0);
-            else if (curViewPlaced == 6)
-                return new XYZ(boxBottomLeft.X + sizeX * 2, boxBottomLeft.Y + sizeY, 0);
-            else if (curViewPlaced == 7)
-                return new XYZ(boxBottomLeft.X + sizeX * 3, boxBottomLeft.Y + sizeY, 0);
-
-            else if (curViewPlaced == 8)
-                return new XYZ(boxBottomLeft.X, boxBottomLeft.Y + sizeY * 2, 0);
-            else if (curViewPlaced == 9)
-                return new XYZ(boxBottomLeft.X + sizeX, boxBottomLeft.Y + sizeY * 2, 0);
-            else if (curViewPlaced == 10)
-                return new XYZ(boxBottomLeft.X + sizeX * 2, boxBottomLeft.Y + sizeY * 2, 0);
-            else if (curViewPlaced == 11)
-                return new XYZ(boxBottomLeft.X + sizeX * 3, boxBottomLeft.Y + sizeY * 2, 0);
-
-            else if (curViewPlaced == 12)
-                return new XYZ(boxBottomLeft.X, boxBottomLeft.Y + sizeY * 3, 0);
-            else if (curViewPlaced == 13)
-                return new XYZ(boxBottomLeft.X + sizeX, boxBottomLeft.Y + sizeY * 3, 0);
-            else if (curViewPlaced == 14)
-                return new XYZ(boxBottomLeft.X + sizeX * 2, boxBottomLeft.Y + sizeY * 3, 0);
-            else if (curViewPlaced == 15)
-                return new XYZ(boxBottomLeft.X + sizeX * 3, boxBottomLeft.Y + sizeY * 3, 0);
-            else
-                return new XYZ();
+            return new XYZ(boxBottomLeft.X + sizeX * remainder, boxBottomLeft.Y + sizeY * whole, 0);            
         }
 
         private string getRoomName(Room i)
