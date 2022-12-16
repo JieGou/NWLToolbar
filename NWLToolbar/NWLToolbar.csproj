@@ -41,6 +41,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="RevitAPI">
       <HintPath>$(ProgramW6432)\Autodesk\Revit 2022\RevitAPI.dll</HintPath>
       <Private>False</Private>
@@ -54,11 +55,19 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="02_Documentation_Tools\AlignSheetToOrigin .cs" />
     <Compile Include="02_Documentation_Tools\AlignNotesAndResize.cs" />
     <Compile Include="02_Documentation_Tools\AlignNotes.cs" />
+    <Compile Include="02_Documentation_Tools\CreateTiltUpElevations.cs" />
+    <Compile Include="02_Documentation_Tools\Forms\FrmCreateTiltUpElevations.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="02_Documentation_Tools\Forms\FrmCreateTiltUpElevations.Designer.cs">
+      <DependentUpon>FrmCreateTiltUpElevations.cs</DependentUpon>
+    </Compile>
     <Compile Include="02_Documentation_Tools\Forms\FrmPlaceElevationsOnSheets.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -96,9 +105,23 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="NWLToolbar.addin" />
+    <None Include="Resources\teams.png" />
+    <EmbeddedResource Include="Resources\view number.png" />
+    <EmbeddedResource Include="Resources\tilt up elevations.png" />
+    <EmbeddedResource Include="Resources\aA.png" />
+    <EmbeddedResource Include="Resources\align notes.png" />
+    <EmbeddedResource Include="Resources\align plans.png" />
+    <EmbeddedResource Include="Resources\align sheets.png" />
+    <EmbeddedResource Include="Resources\element history.png" />
+    <EmbeddedResource Include="Resources\int elevations on sheets.png" />
+    <EmbeddedResource Include="Resources\interior elevations.png" />
+    <EmbeddedResource Include="Resources\overridden dimensions.png" />
     <Content Include="Resources\pop-up background.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="02_Documentation_Tools\Forms\FrmCreateTiltUpElevations.resx">
+      <DependentUpon>FrmCreateTiltUpElevations.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="02_Documentation_Tools\Forms\FrmPlaceElevationsOnSheets.resx">
       <DependentUpon>FrmPlaceElevationsOnSheets.cs</DependentUpon>
     </EmbeddedResource>
