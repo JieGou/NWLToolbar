@@ -7,7 +7,7 @@
 	<Assembly>NWLToolbar.dll</Assembly>
 	<FullClassName>NWLToolbar.NWLToolbar</FullClassName>
 	<ClientId>4c623494-feb6-4431-83cc-9e7e52708ad9</ClientId>
-	<VendorId>com.typepad.thebuildingcoder</VendorId>
-	<VendorDescription>Ben Campbell, http://thebuildingcoder.typepad.com</VendorDescription>
+	<VendorId>com.nwlarchitects</VendorId>
+	<VendorDescription>Ben Campbell, ben@nwlarchitects.com</VendorDescription>
   </AddIn>	
 </RevitAddIns>

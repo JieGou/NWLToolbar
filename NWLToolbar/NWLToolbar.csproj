@@ -61,7 +61,21 @@
     <Compile Include="02_Documentation_Tools\AlignSheetToOrigin .cs" />
     <Compile Include="02_Documentation_Tools\AlignNotesAndResize.cs" />
     <Compile Include="02_Documentation_Tools\AlignNotes.cs" />
+    <Compile Include="02_Documentation_Tools\ElevationCropThickness.cs" />
+    <Compile Include="02_Documentation_Tools\CreateTiltUpElevationsByWalls.cs" />
     <Compile Include="02_Documentation_Tools\CreateTiltUpElevations.cs" />
+    <Compile Include="02_Documentation_Tools\Forms\FrmElevationCropThickness.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="02_Documentation_Tools\Forms\FrmElevationCropThickness.Designer.cs">
+      <DependentUpon>FrmElevationCropThickness.cs</DependentUpon>
+    </Compile>
+    <Compile Include="02_Documentation_Tools\Forms\FrmSelectElevationType.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="02_Documentation_Tools\Forms\FrmSelectElevationType.Designer.cs">
+      <DependentUpon>FrmSelectElevationType.cs</DependentUpon>
+    </Compile>
     <Compile Include="02_Documentation_Tools\Forms\FrmCreateTiltUpElevations.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -87,11 +101,7 @@
       <DependentUpon>FrmAlignPlans.cs</DependentUpon>
     </Compile>
     <Compile Include="02_Documentation_Tools\PlaceElevationsOnSheets.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
+    <Compile Include="03_Resource_Tools\PurgeRooms.cs" />
     <Compile Include="03_Resource_Tools\SelectOverriddenDimensions.cs" />
     <Compile Include="03_Resource_Tools\ElementHistory.cs" />
     <Compile Include="02_Documentation_Tools\RenumberViewsOnSheet.cs" />
@@ -102,21 +112,51 @@
     <Compile Include="NWLToolbar.cs" />
     <Compile Include="02_Documentation_Tools\CapitalizeSheets.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\RevitUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="NWLToolbar.addin" />
-    <None Include="Resources\teams.png" />
-    <EmbeddedResource Include="Resources\view number.png" />
-    <EmbeddedResource Include="Resources\tilt up elevations.png" />
-    <EmbeddedResource Include="Resources\aA.png" />
-    <EmbeddedResource Include="Resources\align notes.png" />
-    <EmbeddedResource Include="Resources\align plans.png" />
-    <EmbeddedResource Include="Resources\align sheets.png" />
-    <EmbeddedResource Include="Resources\element history.png" />
-    <EmbeddedResource Include="Resources\int elevations on sheets.png" />
-    <EmbeddedResource Include="Resources\interior elevations.png" />
-    <EmbeddedResource Include="Resources\overridden dimensions.png" />
-    <Content Include="Resources\pop-up background.jpg" />
+    <EmbeddedResource Include="Resources\32x32\aA_32x32.png" />
+    <EmbeddedResource Include="Resources\32x32\Align_Notes_32x32.png" />
+    <EmbeddedResource Include="Resources\32x32\Align_Sheets_32x32.png" />
+    <EmbeddedResource Include="Resources\32x32\Model_Clean-Up_32x32.png" />
+    <EmbeddedResource Include="Resources\32x32\Create_Interior_Elevations_32x32.png" />
+    <EmbeddedResource Include="Resources\32x32\Curtain_Wall_Elevations_32x32.png" />
+    <EmbeddedResource Include="Resources\32x32\Dimension_32x32.png" />
+    <EmbeddedResource Include="Resources\32x32\Renumber_Views_32x32.png" />
+    <EmbeddedResource Include="Resources\32x32\Purge_Unplaced_Rooms_32x32.png" />
+    <EmbeddedResource Include="Resources\32x32\Interior_Elevations_On_Sheets_32x32.png" />
+    <EmbeddedResource Include="Resources\32x32\Stack_Sheets_32x32.png" />
+    <EmbeddedResource Include="Resources\32x32\Teams_icon_32x32.png" />
+    <EmbeddedResource Include="Resources\32x32\Thicken_Elevations_Crop_32x32.png" />
+    <EmbeddedResource Include="Resources\32x32\Tilt-Up_Elevations_32x32.png" />
+    <EmbeddedResource Include="Resources\32x32\Element_History_32x32.png" />
+    <EmbeddedResource Include="Resources\16x16\Element_History_16x16.png" />
+    <EmbeddedResource Include="Resources\16x16\Tilt-Up_Elevations_16x16.png" />
+    <EmbeddedResource Include="Resources\16x16\Thicken_Elevations_Crop_16x16.png" />
+    <EmbeddedResource Include="Resources\16x16\Teams_Icon_16x16.png" />
+    <EmbeddedResource Include="Resources\16x16\Stack_Sheets_16x16.png" />
+    <EmbeddedResource Include="Resources\16x16\Purge_Unplaced_Rooms_16x16.png" />
+    <EmbeddedResource Include="Resources\16x16\Interior_Elevations_On_Sheets_16x16.png" />
+    <EmbeddedResource Include="Resources\16x16\Renumber_Views_16x16.png" />
+    <EmbeddedResource Include="Resources\16x16\Dimension_16x16.png" />
+    <EmbeddedResource Include="Resources\16x16\Curtain_Wall_Elevations_16x16.png" />
+    <EmbeddedResource Include="Resources\16x16\Create_Interior_Elevations_16x16.png" />
+    <EmbeddedResource Include="Resources\16x16\Model_Clean-Up_16x16.png" />
+    <EmbeddedResource Include="Resources\16x16\Align_Sheets_16x16.png" />
+    <EmbeddedResource Include="Resources\16x16\Align_Notes_16x16.png" />
+    <EmbeddedResource Include="Resources\16x16\aA_16x16.png" />
+    <EmbeddedResource Include="02_Documentation_Tools\Forms\FrmElevationCropThickness.resx">
+      <DependentUpon>FrmElevationCropThickness.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="02_Documentation_Tools\Forms\FrmSelectElevationType.resx">
+      <DependentUpon>FrmSelectElevationType.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="02_Documentation_Tools\Forms\FrmCreateTiltUpElevations.resx">

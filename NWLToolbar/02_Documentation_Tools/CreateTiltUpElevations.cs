@@ -12,6 +12,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Architecture;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
+using NWLToolbar.Utils;
 
 #endregion
 
@@ -32,34 +33,21 @@ namespace NWLToolbar
             Document doc = uidoc.Document;
 
             //Element Collectors
-            FilteredElementCollector wallTypeCollector = new FilteredElementCollector(doc)
+            List<WallType> wallTypeList = new FilteredElementCollector(doc)
                 .OfClass(typeof(WallType))
-                .WhereElementIsElementType();
+                .WhereElementIsElementType().Cast<WallType>().ToList();
 
-            FilteredElementCollector vftCollector = new FilteredElementCollector(doc)
+            List<ViewFamilyType> vftList = new FilteredElementCollector(doc)
                 .OfClass(typeof(ViewFamilyType))                
-                .WhereElementIsElementType();
+                .WhereElementIsElementType().Cast<ViewFamilyType>().ToList();
 
             FilteredElementCollector allWallsCollector = new FilteredElementCollector(doc)
                 .OfCategory(BuiltInCategory.OST_Walls)
                 .WhereElementIsNotElementType();
 
             //Variables
-            List<WallType> wallTypeList = new List<WallType>();            
             List<WallType> selectedWallTypeList = new List<WallType>();
-            List<ViewFamilyType> vftList = new List<ViewFamilyType>(); 
             ElementId markerId = null;
-
-            //Options to pass into the form (Dialog Box)
-            foreach (WallType e in wallTypeCollector)
-            {                
-                wallTypeList.Add(e);                    
-                
-            }
-            foreach (ViewFamilyType vft in vftCollector)
-            {
-                vftList.Add(vft);
-            }
 
             //Dialog Box Settings
             FrmCreateTiltUpElevations curForm = new FrmCreateTiltUpElevations(wallTypeList, vftList);
@@ -73,19 +61,18 @@ namespace NWLToolbar
                 List<string> selectedWallTypes = curForm.GetSelectedWallTypes();
                 foreach (ViewFamilyType vf in vftList)
                 {
-                    if (vf.FamilyName + ": " + vf.Name == curForm.GetSelectedElevationType())
+                    if (vf.GetName() == curForm.GetSelectedElevationType())
                         markerId = vf.Id;
                 }
 
+                Dictionary<string, WallType> map = wallTypeList.ToDictionary(x => x.GetName());
+
                 foreach (string s in selectedWallTypes)
-                {
-                    foreach (WallType i in wallTypeList)
+                {                    
+                    if (map.ContainsKey(s))
                     {
-                        if (s == GetWallTypeName(i))
-                        {
-                            selectedWallTypeList.Add(i);
-                        }
-                    }
+                        selectedWallTypeList.Add(map[s]);                        
+                    }                    
                 }
             }            
 
@@ -96,114 +83,49 @@ namespace NWLToolbar
             //Create interior elevations per room
             foreach (WallType wt in selectedWallTypeList)
             {
-                List<Wall> curWalls = new List<Wall>();
-                
-                foreach (Wall w in allWallsCollector)
-                    if (w.WallType.Name == wt.Name)
-                        curWalls.Add(w);
-
+                List<Wall> curWalls = allWallsCollector.Cast<Wall>().Where(x => x.WallType.Name == wt.Name).ToList();
+               
                 foreach (Wall cw in curWalls)
                 {
                     //Determines which way wall is flipped
                     XYZ wallOrientation = cw.Orientation;
                     if (cw.Flipped)
                         wallOrientation = new XYZ(-cw.Orientation.X, -cw.Orientation.Y, cw.Orientation.Z);
-                    Curve wallCurve = (cw.Location as LocationCurve).Curve;
-                    
+
+                    Curve wallCurve = (cw.Location as LocationCurve).Curve;                    
                     XYZ wallStart = wallCurve.GetEndPoint(0);
-                    XYZ wallEnd = wallCurve.GetEndPoint(1);
-                    Line axis = Line.CreateBound(wallStart, wallEnd);
-                    XYZ wallCenter = null;
+                    XYZ wallEnd = wallCurve.GetEndPoint(1);                    
+                    XYZ wallCenter = new XYZ((wallStart.X + wallEnd.X) / 2, (wallStart.Y + wallEnd.Y) / 2, wallStart.Z);
                     XYZ elevOffset = new XYZ();
                     int wallDirection = 0;
-                    bool notPerp = false; 
+                    bool notPerp = false;
+                    int viewOffset = 4;                    
 
                     //Sets values based on orientation
-                    if (wallOrientation.X == 1)
-                    {
-                        wallCenter = new XYZ(wallStart.X, (wallStart.Y + wallEnd.Y)/2, wallStart.Z);
-                        elevOffset = new XYZ(4, 0, 0);
-                        wallDirection = 0;
+                    if (Math.Abs(wallOrientation.X) == 1)
+                    {                        
+                        elevOffset = new XYZ(wallOrientation.X * viewOffset, 0, 0);
+                        wallDirection = wallOrientation.X == 1 ? 0 : 2;
                     }
-                    else if (wallOrientation.X == -1)
-                    {
-                        wallCenter = new XYZ(wallStart.X, (wallStart.Y + wallEnd.Y)/2, wallStart.Z);
-                        elevOffset = new XYZ(-4, 0, 0);
-                        wallDirection = 2;
-                    }
-                    else if (wallOrientation.Y == 1)
-                    {
-                        wallCenter = new XYZ((wallStart.X + wallEnd.X)/2, wallStart.Y, wallStart.Z);
-                        elevOffset = new XYZ(0, 4, 0);
-                        wallDirection = 3;
-                    }
-                    else if (wallOrientation.Y == -1)
-                    {                     
-                        wallCenter = new XYZ((wallStart.X + wallEnd.X)/2, wallStart.Y, wallStart.Z);
-                        elevOffset = new XYZ(0, -4, 0);
-                        wallDirection = 1;
+                    else if (Math.Abs(wallOrientation.Y) == 1)
+                    {                       
+                        elevOffset = new XYZ(0, wallOrientation.Y * viewOffset, 0);
+                        wallDirection = wallOrientation.Y == 1 ? 3 : 1;                    
                     }
                     else
-                    {
-                        wallCenter = new XYZ((wallStart.X + wallEnd.X) / 2, (wallStart.Y + wallEnd.Y) / 2, wallStart.Z);
-
-                        if (wallOrientation.X < 0 && wallOrientation.Y < 0)
-                        {
-                            if (cw.Flipped)
-                            {
-                                elevOffset = new XYZ(4, 4, 0);
-                                wallDirection = 0;
-                            }
-                            else
-                            {
-                                elevOffset = new XYZ(-4, -4, 0);
-                                wallDirection = 2;
-                            }                           
-                        }
-                        else if (wallOrientation.X > 0 && wallOrientation.Y < 0)
-                        {
-                            if (cw.Flipped)
-                            {
-                                elevOffset = new XYZ(-4, 4, 0);
-                                wallDirection = 2;
-                            }
-                            else
-                            {
-                                elevOffset = new XYZ(4, -4, 0);
-                                wallDirection = 0;
-                            }                            
-                        }
-                        else if (wallOrientation.X < 0 && wallOrientation.Y > 0)
-                        {
-                            if (cw.Flipped)
-                            {
-                                elevOffset = new XYZ(4, -4, 0);
-                                wallDirection = 0;
-                            }
-                            else
-                            {
-                                elevOffset = new XYZ(-4, 4, 0);
-                                wallDirection = 2;
-                            }                            
-                        }
-                        else if (wallOrientation.X > 0 && wallOrientation.Y > 0)
-                        {
-                            if(cw.Flipped)
-                            {
-                                elevOffset = new XYZ(-4, -4, 0);
-                                wallDirection = 2;
-                            }
-                            else
-                            {
-                                elevOffset = new XYZ(4, 4, 0);
-                                wallDirection = 0;
-                            }                            
-                        }   
+                    {                        
                         notPerp = true;
+                        int xFlag = wallOrientation.X < 0 ? -1 : 1;
+                        int yFlag = wallOrientation.Y < 0 ? -1 : 1;
+
+                        wallDirection = wallOrientation.X > 0 ? 0 : 2;                        
+                        elevOffset = new XYZ(viewOffset*xFlag, viewOffset*yFlag, 0);                
                     }
+
+                    //Z Axis for rotating elevations in plan
                     XYZ start = new XYZ(wallCenter.X + elevOffset.X, wallCenter.Y + elevOffset.Y, wallCenter.Z);
                     XYZ end = new XYZ(wallCenter.X + elevOffset.X, wallCenter.Y + elevOffset.Y, wallCenter.Z + 1);
-                    Line axis2 = Line.CreateBound(start, end);
+                    Line axis = Line.CreateBound(start, end);
 
                     //Create elevation marker
                     ElevationMarker marker = ElevationMarker.CreateElevationMarker(doc, markerId, wallCenter + elevOffset, 1);
@@ -212,9 +134,12 @@ namespace NWLToolbar
                     ViewSection elevationView = marker.CreateElevation(doc, uidoc.ActiveView.Id, wallDirection);
                     elevationView.Name = cw.Name + " - " + cw.Id;
                     double viewdepth = 5;
+
                     if (notPerp)
-                        ElementTransformUtils.RotateElement(doc, marker.Id, axis2, -Math.Atan((wallStart.X - wallEnd.X) / (wallStart.Y - wallEnd.Y)));
-                    viewdepth = 7;
+                    {
+                        ElementTransformUtils.RotateElement(doc, marker.Id, axis, -Math.Atan((wallStart.X - wallEnd.X) / (wallStart.Y - wallEnd.Y)));
+                        viewdepth = 7;
+                    }
 
                     //Get Wall Exterior Face
                     IList<Reference> sideFaces = HostObjectUtils.GetSideFaces(cw, ShellLayerType.Exterior);
@@ -224,7 +149,7 @@ namespace NWLToolbar
                     //Set view crop and other parameters for view
                     elevationView.get_Parameter(BuiltInParameter.VIEWER_BOUND_OFFSET_FAR).Set(viewdepth);
                     elevationView.CropBoxActive = true;
-                    elevationView.GetCropRegionShapeManager().SetCropShape(cwBoundary[0]);
+                    elevationView.GetCropRegionShapeManager().SetCropShape(cwBoundary[0]);                    
                 }         
             }           
 
@@ -233,10 +158,5 @@ namespace NWLToolbar
 
             return Result.Succeeded;
         }
-
-        private string GetWallTypeName(WallType i)
-        {
-            return i.FamilyName + ": " + i.Name;
-        }        
     }
 }

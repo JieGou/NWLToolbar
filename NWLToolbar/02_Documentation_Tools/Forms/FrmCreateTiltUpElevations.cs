@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autodesk.Revit.DB;
+using NWLToolbar.Utils;
 
 namespace NWLToolbar
 {
@@ -21,12 +22,12 @@ namespace NWLToolbar
 
             foreach (WallType s in wallTypeName)
             {
-                this.WallTypeList.Items.Add(getWallTypeName(s));
+                this.WallTypeList.Items.Add(s.GetName());
             }
             foreach (ViewFamilyType vft in vftList)
             {
                 if (vft.FamilyName == "Elevation")
-                    this.comboBox1.Items.Add(vft.FamilyName + ": " + vft.Name);
+                    this.comboBox1.Items.Add(vft.GetName());
             }
             this.comboBox1.SelectedIndex = 0;
         }
@@ -76,10 +77,6 @@ namespace NWLToolbar
             {
                 this.WallTypeList.SetItemChecked(i,true);
             }
-        }
-        private string getWallTypeName(WallType i)
-        {
-            return i.FamilyName + ": " + i.Name;
-        }
+        }       
     }
 }

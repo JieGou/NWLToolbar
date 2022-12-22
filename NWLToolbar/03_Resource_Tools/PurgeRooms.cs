@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Architecture;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 
@@ -16,7 +17,7 @@ using Autodesk.Revit.UI.Selection;
 namespace NWLToolbar
 {
     [Transaction(TransactionMode.Manual)]
-    public class ElementHistory : IExternalCommand
+    public class PurgeRooms : IExternalCommand
     {
         
         public Result Execute(
@@ -30,18 +31,26 @@ namespace NWLToolbar
             Document doc = uidoc.Document;
 
             //Filtered Eelement Collector (Collect Active Selection)            
-            ElementId eid = uidoc.Selection.PickObject(ObjectType.Element).ElementId;            
-            
+            FilteredElementCollector allRooms = new FilteredElementCollector(doc)
+                .OfCategory(BuiltInCategory.OST_Rooms);
+                
+
             //Variables
-            string creator = WorksharingUtils.GetWorksharingTooltipInfo(doc, eid).Creator.ToString();
-            string lastChanged = WorksharingUtils.GetWorksharingTooltipInfo(doc, eid).LastChangedBy.ToString();
-            
-            //Info Report
-            TaskDialog.Show("Element History", "Creator:" + "\n" + creator + "\n \n" + "Last Changed By:" + "\n" + lastChanged);
+            Transaction t = new Transaction(doc);
+            t.Start("Purge Rooms");
+
+            foreach (Room r in allRooms)
+            {
+                if (r.Location == null)
+                    doc.Delete(r.Id);
+            }
+
+            t.Commit();
+            t.Dispose();            
 
             return Result.Succeeded;
         }
-        
+       
     }
 
 }

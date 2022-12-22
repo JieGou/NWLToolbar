@@ -46,28 +46,60 @@ namespace NWLToolbar
             PushButtonData pbd11 = new PushButtonData("Create Interior Elevation", "Create" + "\r" + "Interior Elevations", curAssembly, "NWLToolbar.CreateInteriorElevations");
             PushButtonData pbd12 = new PushButtonData("Place Elevations On Sheets", "Place Elevations" + "\r" + "On Sheets", curAssembly, "NWLToolbar.PlaceElevationsOnSheets");
             PushButtonData pbd13 = new PushButtonData("Create Tilt Up Elevation", "Create Tilt-Up" + "\r" + "Elevations", curAssembly, "NWLToolbar.CreateTiltUpElevations");
+            PushButtonData pbd14 = new PushButtonData("Create Tilt Up Elevation By Selection", "Create Tilt-Up" + "\r" + "Elevations by Selection", curAssembly, "NWLToolbar.CreateTiltUpElevationsByWalls");
+            PushButtonData pbd15 = new PushButtonData("Thicken Elevation Crop", "Thicken\rElevation Crop", curAssembly, "NWLToolbar.ElevationCropThickness");
+            PushButtonData pbd16 = new PushButtonData("Purge Rooms", "Purge Rooms", curAssembly, "NWLToolbar.PurgeRooms");
 
             //Pulldown Buttons
             PulldownButtonData pdbd1 = new PulldownButtonData("Align Notes Drop Down", "Align Notes");
             PulldownButtonData pdbd2 = new PulldownButtonData("Align Sheets Drop Down", "Align Sheets");
+            PulldownButtonData pdbd3 = new PulldownButtonData("Create Tilt Up Elevations Drop Down", "Create Tilt-Up\rElevations");
+            PulldownButtonData pdbd4 = new PulldownButtonData("File Clean up Dropdown", "File\rClean-Up");
 
             //Images
-            pbd1.LargeImage = BitMapToImageSource(Resources.aA);
-            pbd2.LargeImage = BitMapToImageSource(Resources.teams);
-            pbd3.LargeImage = BitMapToImageSource(Resources.overridden_dimensions);
-            pbd4.LargeImage = BitMapToImageSource(Resources.element_history);
-            pbd5.LargeImage = BitMapToImageSource(Resources.align_notes);
-            pbd6.LargeImage = BitMapToImageSource(Resources.view_number);
-            pbd7.LargeImage = BitMapToImageSource(Resources.align_notes);
-            pbd8.LargeImage = BitMapToImageSource(Resources.align_sheets);
-            pbd9.LargeImage = BitMapToImageSource(Resources.align_sheets);
-            pbd10.LargeImage = BitMapToImageSource(Resources.align_plans);
-            pbd11.LargeImage = BitMapToImageSource(Resources.interior_elevations);
-            pbd12.LargeImage = BitMapToImageSource(Resources.int_elevations_on_sheets);
-            pbd13.LargeImage = BitMapToImageSource(Resources.tilt_up_elevations);
+            pbd1.LargeImage = BitMapToImageSource(Resources.aA_32x32);
+            pbd1.Image = BitMapToImageSource(Resources.aA_16x16);
+            pbd2.LargeImage = BitMapToImageSource(Resources.Teams_icon_32x32);
+            pbd2.Image = BitMapToImageSource(Resources.Teams_Icon_16x16);
+            pbd3.LargeImage = BitMapToImageSource(Resources.Dimension_32x32);
+            pbd3.Image = BitMapToImageSource(Resources.Dimension_16x16);
+            pbd4.LargeImage = BitMapToImageSource(Resources.Element_History_32x32);
+            pbd4.Image = BitMapToImageSource(Resources.Element_History_16x16);
+            pbd5.LargeImage = BitMapToImageSource(Resources.Align_Notes_32x32);
+            pbd5.Image = BitMapToImageSource(Resources.Align_Notes_16x16);
+            pbd6.LargeImage = BitMapToImageSource(Resources.Renumber_Views_32x32);
+            pbd6.Image = BitMapToImageSource(Resources.Renumber_Views_16x16);
+            pbd7.LargeImage = BitMapToImageSource(Resources.Align_Notes_32x32);
+            pbd7.Image = BitMapToImageSource(Resources.Align_Notes_16x16);
+            pbd8.LargeImage = BitMapToImageSource(Resources.Align_Sheets_32x32);
+            pbd8.Image = BitMapToImageSource(Resources.Align_Sheets_16x16);
+            pbd9.LargeImage = BitMapToImageSource(Resources.Align_Sheets_32x32);
+            pbd9.Image = BitMapToImageSource(Resources.Align_Sheets_16x16);
+            pbd10.LargeImage = BitMapToImageSource(Resources.Stack_Sheets_32x32);
+            pbd10.Image = BitMapToImageSource(Resources.Stack_Sheets_16x16);
 
-            pdbd1.LargeImage = BitMapToImageSource(Resources.align_notes);
-            pdbd2.LargeImage = BitMapToImageSource(Resources.align_sheets);
+            pbd11.LargeImage = BitMapToImageSource(Resources.Create_Interior_Elevations_32x32);
+            pbd11.Image = BitMapToImageSource(Resources.Create_Interior_Elevations_16x16);
+            pbd12.LargeImage = BitMapToImageSource(Resources.Interior_Elevations_On_Sheets_32x32);
+            pbd12.Image = BitMapToImageSource(Resources.Interior_Elevations_On_Sheets_16x16);
+            pbd13.LargeImage = BitMapToImageSource(Resources.Tilt_Up_Elevations_32x32);
+            pbd13.Image = BitMapToImageSource(Resources.Tilt_Up_Elevations_16x16);
+            pbd14.LargeImage = BitMapToImageSource(Resources.Tilt_Up_Elevations_32x32);
+            pbd14.Image = BitMapToImageSource(Resources.Tilt_Up_Elevations_16x16);
+            pbd15.LargeImage = BitMapToImageSource(Resources.Thicken_Elevations_Crop_32x32);
+            pbd15.Image = BitMapToImageSource(Resources.Thicken_Elevations_Crop_16x16);
+            pbd16.LargeImage = BitMapToImageSource(Resources.Purge_Unplaced_Rooms_32x32);
+            pbd16.Image = BitMapToImageSource(Resources.Purge_Unplaced_Rooms_16x16);
+            
+
+            pdbd1.LargeImage = BitMapToImageSource(Resources.Align_Notes_32x32);
+            pdbd1.Image = BitMapToImageSource(Resources.Align_Notes_16x16);
+            pdbd2.LargeImage = BitMapToImageSource(Resources.Align_Sheets_32x32);
+            pdbd2.Image = BitMapToImageSource(Resources.Align_Sheets_16x16);
+            pdbd3.LargeImage = BitMapToImageSource(Resources.Tilt_Up_Elevations_32x32);
+            pdbd3.Image = BitMapToImageSource(Resources.Tilt_Up_Elevations_16x16);
+            pdbd4.LargeImage = BitMapToImageSource(Resources.Model_Clean_Up_32x32);
+            pdbd4.Image = BitMapToImageSource(Resources.Model_Clean_Up_16x16);
 
             //ToolTips
             pbd1.ToolTip = "Changes all sheet names to uppercase.";
@@ -78,11 +110,16 @@ namespace NWLToolbar
             pbd6.ToolTip = "Renumbers all views on sheets based on the \"NWL_30x42\" title block.";
             pbd7.ToolTip = "Aligns Text Notes and Keynotes to a detail line & resize texts notes to match keynote width. \nAt least one detail line and one note need to be selected. Deletes detail line When Completete.";
             pbd8.ToolTip = "Takes all sheets and sets their origin back to (0,0,0)";
-
+            pbd9.ToolTip = "Sets current sheet's origin back to (0,0,0)";
             pbd10.ToolTip = "Aligns plans accross multiple sheets. Select the plan to follow and then select the sheets you want to affect";
             pbd11.ToolTip = "Creates interior elevations for all rooms in the project";
             pbd12.ToolTip = "Places interior elevations on sheets based on rooms selected";
             pbd13.ToolTip = "Creates Tilt-Up Elevations based on the exterior side of the wall";
+            pbd14.ToolTip = "Creates Tilt-Up Elevations based on a selection of walls";
+            pbd15.ToolTip = "Thickens the Crop Region of selected elevation type";
+            pbd16.ToolTip = "Purges un-placed rooms from the project";
+
+            pdbd4.ToolTip = "Varying tools to assist in cleaning the file";
 
             IList<PushButtonData> alignNotesList = new List<PushButtonData>();
             alignNotesList.Add(pbd5);
@@ -92,27 +129,40 @@ namespace NWLToolbar
             alignSheetsList.Add(pbd9);
             alignSheetsList.Add(pbd8);
 
+            IList<PushButtonData> tiltList = new List<PushButtonData>();
+            tiltList.Add(pbd13);
+            tiltList.Add(pbd14);
+
+            IList<PushButtonData> cleanUpList = new List<PushButtonData>();
+            cleanUpList.Add(pbd16);
+
             //Tools Section
             PushButton pb1 = (PushButton)toolsPanel.AddItem(pbd1);
             PulldownButton pdb1 = (PulldownButton)toolsPanel.AddItem(pdbd1);
-                pdb1.AddPushButton(pbd5);
-                pdb1.AddPushButton(pbd7);            
+                foreach (PushButtonData pbd in alignSheetsList)
+                    pdb1.AddPushButton(pbd);
             PushButton pb6 = (PushButton)toolsPanel.AddItem(pbd6);
             PulldownButton pdb2 = (PulldownButton)toolsPanel.AddItem(pdbd2);
-            foreach (PushButtonData pbd in alignSheetsList)
-                pdb2.AddPushButton(pbd);
+                foreach (PushButtonData pbd in alignSheetsList)
+                    pdb2.AddPushButton(pbd);
             PushButton pb10 = (PushButton)toolsPanel.AddItem(pbd10);
 
             //Documentation Section
             PushButton pb11 = (PushButton)documentationPanel.AddItem(pbd11);
-            PushButton pb12 = (PushButton)documentationPanel.AddItem(pbd12);
-            PushButton pb13 = (PushButton)documentationPanel.AddItem(pbd13);
+            PushButton pb12 = (PushButton)documentationPanel.AddItem(pbd12);            
+            PulldownButton pdb3 = (PulldownButton)documentationPanel.AddItem(pdbd3);
+                foreach (PushButtonData pbd in tiltList)
+                    pdb3.AddPushButton(pbd);
+            PushButton pb15 = (PushButton)documentationPanel.AddItem(pbd15);
 
 
             //Dimensions Section
             PushButton pb3 = (PushButton)dimensionsPanel.AddItem(pbd3);
 
             //Resources Section
+            PulldownButton pdb4 = (PulldownButton)documentationPanel.AddItem(pdbd4);
+                foreach (PushButtonData pbd in cleanUpList)
+                    pdb4.AddPushButton(pbd);
             PushButton pb4 = (PushButton)resourcesPanel.AddItem(pbd4);
             PushButton pb2 = (PushButton)resourcesPanel.AddItem(pbd2); 
 

@@ -5,6 +5,8 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Windows.Forms.VisualStyles;
+using System.Xml;
 using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
@@ -30,38 +32,49 @@ namespace NWLToolbar
             Document doc = uidoc.Document;
 
             //Get ViewSheets
-            FilteredElementCollector sheetCollector = new FilteredElementCollector(doc, doc.ActiveView.Id)                           
-                .WhereElementIsNotElementType();
+            IList<Element> sheetCollector = new FilteredElementCollector(doc, doc.ActiveView.Id)
+                .WhereElementIsNotElementType().Where(x => x.Name != "<Revision Schedule>").ToList();
 
             //Start Transaction
             Transaction t = new Transaction(doc);
-            t.Start("Set Sheet Origin"); 
+            t.Start("Set Sheet Origin");
             
-            IList<Element> dependentElement = new List<Element>();                
-            XYZ tempOffset = new XYZ();
+            //Find offset
+            XYZ offset = new XYZ();
 
             //Get Dependent Elements
             foreach (Element e in sheetCollector)
-            { 
-
-                  string tbName = e.Category.Name;                    
-
-                  //Set Offset Based On Title Block Positioning
-                  if (tbName == "Title Blocks")
-                  {
-                      LocationPoint inverse = e.Location as LocationPoint;
-                      XYZ offset = new XYZ(-inverse.Point.X, -inverse.Point.Y, -inverse.Point.Z);
-                      tempOffset = offset;
-                      dependentElement.Add(e);
-                  } 
-                  else if (tbName != "Schedule Graphics")
-                       dependentElement.Add(e);
-
-             }
+            {                   
+                //Set Offset Based On Title Block Positioning
+                if (e.Category.Name == "Title Blocks")
+                {
+                    LocationPoint tbOrigin = e.Location as LocationPoint; 
+                    offset = new XYZ(-tbOrigin.Point.X, -tbOrigin.Point.Y, 0);                    
+                    break;
+                } 
+            }
 
             //Move All Elements
-            foreach (Element moveElements in dependentElement)                
-                  moveElements.Location.Move(tempOffset);
+            foreach (Element e in sheetCollector)
+            {
+                string sdfas = e.Category.Name;
+                LocationPoint newLocation = e.Location as LocationPoint;
+                if (newLocation != null)
+                {
+                    if (e.Category.Name == "Title Blocks" )
+                        newLocation.Point = new XYZ();
+                    
+                }
+                else if (e.Category.Name == "Revision Cloud Tags")
+                {
+                    (e as IndependentTag).TagHeadPosition.Add(offset);
+                }
+                else
+                {
+                    e.Location.Move(offset);
+                }
+            }
+                  
             
             t.Commit();
             t.Dispose();

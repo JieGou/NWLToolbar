@@ -63,9 +63,9 @@ namespace NWLToolbar.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap aA {
+        internal static System.Drawing.Bitmap aA_16x16 {
             get {
-                object obj = ResourceManager.GetObject("aA", resourceCulture);
+                object obj = ResourceManager.GetObject("aA_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace NWLToolbar.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap align_notes {
+        internal static System.Drawing.Bitmap aA_32x32 {
             get {
-                object obj = ResourceManager.GetObject("align_notes", resourceCulture);
+                object obj = ResourceManager.GetObject("aA_32x32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace NWLToolbar.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap align_plans {
+        internal static System.Drawing.Bitmap Align_Notes_16x16 {
             get {
-                object obj = ResourceManager.GetObject("align_plans", resourceCulture);
+                object obj = ResourceManager.GetObject("Align_Notes_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,9 +93,9 @@ namespace NWLToolbar.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap align_sheets {
+        internal static System.Drawing.Bitmap Align_Notes_32x32 {
             get {
-                object obj = ResourceManager.GetObject("align_sheets", resourceCulture);
+                object obj = ResourceManager.GetObject("Align_Notes_32x32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +103,9 @@ namespace NWLToolbar.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap element_history {
+        internal static System.Drawing.Bitmap Align_Sheets_16x16 {
             get {
-                object obj = ResourceManager.GetObject("element_history", resourceCulture);
+                object obj = ResourceManager.GetObject("Align_Sheets_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -113,9 +113,9 @@ namespace NWLToolbar.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap int_elevations_on_sheets {
+        internal static System.Drawing.Bitmap Align_Sheets_32x32 {
             get {
-                object obj = ResourceManager.GetObject("int_elevations_on_sheets", resourceCulture);
+                object obj = ResourceManager.GetObject("Align_Sheets_32x32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -123,9 +123,9 @@ namespace NWLToolbar.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap interior_elevations {
+        internal static System.Drawing.Bitmap Create_Interior_Elevations_16x16 {
             get {
-                object obj = ResourceManager.GetObject("interior_elevations", resourceCulture);
+                object obj = ResourceManager.GetObject("Create_Interior_Elevations_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -133,9 +133,9 @@ namespace NWLToolbar.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap overridden_dimensions {
+        internal static System.Drawing.Bitmap Create_Interior_Elevations_32x32 {
             get {
-                object obj = ResourceManager.GetObject("overridden_dimensions", resourceCulture);
+                object obj = ResourceManager.GetObject("Create_Interior_Elevations_32x32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -143,9 +143,9 @@ namespace NWLToolbar.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap teams {
+        internal static System.Drawing.Bitmap Curtain_Wall_Elevations_16x16 {
             get {
-                object obj = ResourceManager.GetObject("teams", resourceCulture);
+                object obj = ResourceManager.GetObject("Curtain_Wall_Elevations_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -153,9 +153,9 @@ namespace NWLToolbar.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap tilt_up_elevations {
+        internal static System.Drawing.Bitmap Curtain_Wall_Elevations_32x32 {
             get {
-                object obj = ResourceManager.GetObject("tilt_up_elevations", resourceCulture);
+                object obj = ResourceManager.GetObject("Curtain_Wall_Elevations_32x32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -163,9 +163,199 @@ namespace NWLToolbar.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap view_number {
+        internal static System.Drawing.Bitmap Dimension_16x16 {
             get {
-                object obj = ResourceManager.GetObject("view_number", resourceCulture);
+                object obj = ResourceManager.GetObject("Dimension_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Dimension_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Dimension_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Element_History_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Element_History_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Element_History_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Element_History_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Interior_Elevations_On_Sheets_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Interior_Elevations_On_Sheets_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Interior_Elevations_On_Sheets_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Interior_Elevations_On_Sheets_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Model_Clean_Up_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Model_Clean_Up_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Model_Clean_Up_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Model_Clean_Up_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Purge_Unplaced_Rooms_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Purge_Unplaced_Rooms_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Purge_Unplaced_Rooms_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Purge_Unplaced_Rooms_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Renumber_Views_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Renumber_Views_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Renumber_Views_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Renumber_Views_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Stack_Sheets_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Stack_Sheets_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Stack_Sheets_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Stack_Sheets_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Teams_Icon_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Teams_Icon_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Teams_icon_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Teams_icon_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Thicken_Elevations_Crop_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Thicken_Elevations_Crop_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Thicken_Elevations_Crop_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Thicken_Elevations_Crop_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Tilt_Up_Elevations_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Tilt_Up_Elevations_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Tilt_Up_Elevations_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Tilt_Up_Elevations_32x32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
