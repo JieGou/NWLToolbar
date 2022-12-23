@@ -44,6 +44,7 @@ namespace NWLToolbar
                 .OfCategory(BuiltInCategory.OST_Rooms)                
                 .WhereElementIsNotElementType()
                 .Cast<Room>()
+                .Where(x => x.Area > 0)
                 .OrderBy(x => x.Number).ToList();
 
             vftList = new FilteredElementCollector(doc)
@@ -108,8 +109,7 @@ namespace NWLToolbar
                         }
                     }
                 }
-            }
-            
+            }            
 
             //Needed to grab room boundry
             SpatialElementBoundaryOptions sEBO = new SpatialElementBoundaryOptions();
@@ -118,8 +118,7 @@ namespace NWLToolbar
             Options cOptions = new Options();
             cOptions.DetailLevel = ViewDetailLevel.Fine;
             cOptions.IncludeNonVisibleObjects = true;
-            cOptions.ComputeReferences = true;
-            
+            cOptions.ComputeReferences = true;            
 
             ElementCategoryFilter elFil = new ElementCategoryFilter(BuiltInCategory.OST_Viewers);
             List<string> errorRooms = new List<string>();
@@ -143,8 +142,7 @@ namespace NWLToolbar
                 bool clgFound = false;
 
                 foreach (Ceiling c in ceilingCollector)
-                {
-                    
+                {                    
                     XYZ cXYZ = (c.get_Geometry(cOptions).GetBoundingBox().Max + c.get_Geometry(cOptions).GetBoundingBox().Min)/2;                    
                     if (r.IsPointInRoom(cXYZ))
                     {
@@ -152,9 +150,7 @@ namespace NWLToolbar
                         clgFound = true;
                         break;
                     }                    
-                }
-                if (!clgFound)
-                    errorRooms.Add($"{r.Number} - {r.GetName()}");
+                }                
 
                 planId = filteredPlans.Where(x => x.GenLevel.Id == roomLevelId).First().Id;
 
@@ -166,22 +162,22 @@ namespace NWLToolbar
                 {
                     //Gets room boundry segments                    
                     var filteredBoundaries = r.GetBoundarySegments(sEBO).ElementAt(0);                    
-                    ViewSection elevationView = marker.CreateElevation(doc, planId, i);
+                    ViewSection elevView = marker.CreateElevation(doc, planId, i);
 
                     //custom method to get far clipping
                     double farClipOffset = GetViewDepth(filteredBoundaries, i, xyz);
 
                     //Set elevation name
-                    string elevationName = roomNumber + " - " + roomName + " - " + Char.ConvertFromUtf32('a'+i);
+                    string elevationName = roomNumber + " - " + roomName + " - " + Char.ConvertFromUtf32('a' + i);
 
                     //Set elevation parameters
-                    elevationView.get_Parameter(BuiltInParameter.VIEWER_BOUND_OFFSET_FAR).Set(farClipOffset);
-                    elevationView.get_Parameter(BuiltInParameter.VIEW_NAME).Set(elevationName);                    
-                    elevationView.Scale = 48;
+                    elevView.get_Parameter(BuiltInParameter.VIEWER_BOUND_OFFSET_FAR).Set(farClipOffset);
+                    elevView.get_Parameter(BuiltInParameter.VIEW_NAME).Set(elevationName);
+                    elevView.Scale = 48;
 
                     doc.Regenerate();
 
-                    BoundingBoxXYZ curbb = elevationView.CropBox;
+                    BoundingBoxXYZ curbb = elevView.CropBox;
                     XYZ curMax = curbb.Max;
                     XYZ curMin = curbb.Min;
                     curMin = new XYZ(curMin.X, roomLevelHeight, curMin.Z);
@@ -192,8 +188,42 @@ namespace NWLToolbar
                     XYZ newMax = new XYZ(curMax.X, curMin.Y + roomHeight, curMax.Z); 
                     curbb.Max = newMax;
 
-                    elevationView.CropBox = curbb;
-                }                                
+                    elevView.CropBox = curbb;
+
+                    if (!clgFound)
+                    {
+                        Ceiling selectedClg = null;
+                        try
+                        {
+                            selectedClg = new FilteredElementCollector(doc, elevView.Id)
+                             .OfClass(typeof(Ceiling))
+                             .WhereElementIsNotElementType()
+                             .Cast<Ceiling>()
+                             .OrderByDescending(x => x.GetHeight())
+                             .First();
+                        }
+                        catch
+                        {
+                            
+                        }
+                        if (selectedClg != null)
+                        {
+                            roomHeight = selectedClg.GetHeight();
+                            clgFound = true;
+                            curMin = new XYZ(curMin.X, roomLevelHeight, curMin.Z);
+                            curbb.Min = curMin;
+
+                            doc.Regenerate();
+
+                            newMax = new XYZ(curMax.X, curMin.Y + roomHeight, curMax.Z);
+                            curbb.Max = newMax;
+
+                            elevView.CropBox = curbb;
+                        }
+                    }
+                }
+                if (!clgFound)
+                    errorRooms.Add($"{r.Number} - {r.GetName()}");
             }           
 
             t.Commit();
