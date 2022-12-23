@@ -12,7 +12,9 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Architecture;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
+using NWLToolbar.Utils;
 using Application = Autodesk.Revit.ApplicationServices.Application;
+using View = Autodesk.Revit.DB.View;
 
 #endregion
 
@@ -21,6 +23,11 @@ namespace NWLToolbar
     [Transaction(TransactionMode.Manual)]
     public class CreateInteriorElevations : IExternalCommand
     {
+        private List<Room> roomCollector;
+        private List<ViewFamilyType> vftList;
+        private List<ViewPlan> filteredPlans;
+        private List<Ceiling> ceilingCollector;
+
 
         public Result Execute(
           ExternalCommandData commandData,
@@ -33,31 +40,36 @@ namespace NWLToolbar
             Document doc = uidoc.Document;
 
             //Get all rooms
-            FilteredElementCollector roomCollector = new FilteredElementCollector(doc)
-                .OfCategory(BuiltInCategory.OST_Rooms)
-                .WhereElementIsNotElementType();
+            roomCollector = new FilteredElementCollector(doc)
+                .OfCategory(BuiltInCategory.OST_Rooms)                
+                .WhereElementIsNotElementType()
+                .Cast<Room>()
+                .OrderBy(x => x.Number).ToList();
 
-            FilteredElementCollector vftCollector = new FilteredElementCollector(doc)
+            vftList = new FilteredElementCollector(doc)
                 .OfClass(typeof(ViewFamilyType))                
-                .WhereElementIsElementType();
+                .WhereElementIsElementType()
+                .Cast<ViewFamilyType>()                
+                .ToList();
 
+            filteredPlans = new FilteredElementCollector(doc)
+                .OfClass(typeof(ViewPlan))
+                .WhereElementIsNotElementType()
+                .Cast<ViewPlan>()
+                .Where(x => x.ViewType.ToString() == "FloorPlan" && x.GenLevel != null)
+                .DistinctBy(x => x.GenLevel.Id.IntegerValue)
+                .ToList();
 
-            FilteredElementCollector planCollector = new FilteredElementCollector(doc)
-                .OfClass(typeof(ViewPlan));
-            IList<ViewPlan> filteredPlans = new List<ViewPlan>();
-
-            foreach (ViewPlan vp in planCollector)
-            {
-                if (vp.ViewType.ToString() == "FloorPlan" && vp.GenLevel != null)
-                {                      
-                    filteredPlans.Add(vp);
-                }
-            }
+            ceilingCollector = new FilteredElementCollector(doc)
+                .OfCategory(BuiltInCategory.OST_Ceilings)
+                .WhereElementIsNotElementType()
+                .Cast<Ceiling>()
+                .OrderByDescending(x => x.GetHeight())
+                .ToList();
 
             List<Room> roomList = new List<Room>();
             List<string> roomListName = new List<string>();
-            List<Room> selectedRoomList = new List<Room>();
-            List<ViewFamilyType> vftList = new List<ViewFamilyType>(); 
+            List<Room> selectedRoomList = new List<Room>();           
             ElementId markerId = null;
 
             foreach (Room e in roomCollector)
@@ -66,13 +78,10 @@ namespace NWLToolbar
                 if (isPlaced == true)
                 {
                     roomList.Add(e);
-                    roomListName.Add(e.Number + " - " + getRoomName(e));
+                    roomListName.Add(e.Number + " - " + e.GetName());
                 }
             }
-            foreach (ViewFamilyType vft in vftCollector)
-            {
-                vftList.Add(vft);
-            }
+            
             //Dialog Box Settings
             FrmCreateInteriorElevations curForm = new FrmCreateInteriorElevations(roomListName, vftList);
             curForm.Width = 700;
@@ -93,16 +102,14 @@ namespace NWLToolbar
                 {
                     foreach (Room i in roomList)
                     {
-                        if (s == i.Number + " - " + getRoomName(i))
+                        if (s == i.Number + " - " + i.GetName())
                         {
                             selectedRoomList.Add(i);
                         }
                     }
                 }
             }
-            FilteredElementCollector ceilingCollector = new FilteredElementCollector(doc)
-                .OfCategory(BuiltInCategory.OST_Ceilings)
-                .WhereElementIsNotElementType();
+            
 
             //Needed to grab room boundry
             SpatialElementBoundaryOptions sEBO = new SpatialElementBoundaryOptions();
@@ -110,7 +117,12 @@ namespace NWLToolbar
 
             Options cOptions = new Options();
             cOptions.DetailLevel = ViewDetailLevel.Fine;
-            cOptions.ComputeReferences = true;            
+            cOptions.IncludeNonVisibleObjects = true;
+            cOptions.ComputeReferences = true;
+            
+
+            ElementCategoryFilter elFil = new ElementCategoryFilter(BuiltInCategory.OST_Viewers);
+            List<string> errorRooms = new List<string>();
 
             //Transaction start
             Transaction t = new Transaction(doc);
@@ -122,33 +134,32 @@ namespace NWLToolbar
                 //Room information
                 LocationPoint point = r.Location as LocationPoint;
                 XYZ xyz = point.Point;
-                ElementId roomLevel = r.Level.Id;
-                string roomName = getRoomName(r);
-                string roomNumber = r.Number;
+                ElementId roomLevelId = r.Level.Id;
                 ElementId planId = null;
-                double roomHeight = r.UnboundedHeight;
-                
+                string roomName = r.GetName();
+                string roomNumber = r.Number;
+                double roomHeight = r.get_Parameter(BuiltInParameter.ROOM_HEIGHT).AsDouble();
+                double roomLevelHeight = (doc.GetElement(roomLevelId) as Level).ProjectElevation;
+                bool clgFound = false;
 
                 foreach (Ceiling c in ceilingCollector)
                 {
-                    XYZ cXYZ = c.get_Geometry(cOptions).GetBoundingBox().Min;
+                    
+                    XYZ cXYZ = (c.get_Geometry(cOptions).GetBoundingBox().Max + c.get_Geometry(cOptions).GetBoundingBox().Min)/2;                    
                     if (r.IsPointInRoom(cXYZ))
                     {
-                        roomHeight = c.get_Parameter(BuiltInParameter.CEILING_HEIGHTABOVELEVEL_PARAM).AsDouble();
-                    }
-                }
-
-                foreach (ViewPlan vp in filteredPlans)
-                {
-                    if (vp.GenLevel.Id == roomLevel)
-                    {
-                        planId = vp.Id;
+                        roomHeight = c.GetHeight();                        
+                        clgFound = true;
                         break;
-                    }
+                    }                    
                 }
+                if (!clgFound)
+                    errorRooms.Add($"{r.Number} - {r.GetName()}");
+
+                planId = filteredPlans.Where(x => x.GenLevel.Id == roomLevelId).First().Id;
+
                 //Creates elevation body
-                ElevationMarker marker = ElevationMarker.CreateElevationMarker(doc, markerId, xyz, 1);
-                
+                ElevationMarker marker = ElevationMarker.CreateElevationMarker(doc, markerId, xyz, 1);                
 
                 //Creates each elevation view
                 for (int i = 0; i < 4; i++)
@@ -160,28 +171,39 @@ namespace NWLToolbar
                     //custom method to get far clipping
                     double farClipOffset = GetViewDepth(filteredBoundaries, i, xyz);
 
+                    //Set elevation name
                     string elevationName = roomNumber + " - " + roomName + " - " + Char.ConvertFromUtf32('a'+i);
 
                     //Set elevation parameters
                     elevationView.get_Parameter(BuiltInParameter.VIEWER_BOUND_OFFSET_FAR).Set(farClipOffset);
                     elevationView.get_Parameter(BuiltInParameter.VIEW_NAME).Set(elevationName);                    
                     elevationView.Scale = 48;
-                    XYZ currentMax = elevationView.CropBox.Max;
-                    XYZ newMax = new XYZ(currentMax.X, currentMax.Y, roomHeight);
-                    elevationView.get_BoundingBox(elevationView).Max = newMax;
+
+                    doc.Regenerate();
+
+                    BoundingBoxXYZ curbb = elevationView.CropBox;
+                    XYZ curMax = curbb.Max;
+                    XYZ curMin = curbb.Min;
+                    curMin = new XYZ(curMin.X, roomLevelHeight, curMin.Z);
+                    curbb.Min = curMin;
+
+                    doc.Regenerate();
+                    
+                    XYZ newMax = new XYZ(curMax.X, curMin.Y + roomHeight, curMax.Z); 
+                    curbb.Max = newMax;
+
+                    elevationView.CropBox = curbb;
                 }                                
             }           
 
             t.Commit();
             t.Dispose();
 
-            return Result.Succeeded;
-        }
+            if (errorRooms.Count > 0)
+                TaskDialog.Show("Error", $"The following rooms could not be cropped to the ceiling. Please manually adjust them.\n\n    {string.Join("\n    ", errorRooms)} ");
 
-        private string getRoomName(Room i)
-        {
-            return i.get_Parameter(BuiltInParameter.ROOM_NAME).AsValueString().ToString();
-        }
+            return Result.Succeeded;
+        }        
 
         private double GetViewDepth(IList<BoundarySegment> roomBoundry, double v1, XYZ roomCenter)
         {            
@@ -204,8 +226,7 @@ namespace NWLToolbar
             {
                 double depth = roomBoundry.Min(x => x.GetCurve().GetEndPoint(0).Y);
                 return Math.Abs(depth - roomCenter.Y);
-            } 
-            
+            }             
         }
     }
 }

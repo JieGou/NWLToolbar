@@ -133,12 +133,12 @@ namespace NWLToolbar
                     //Create elevation view and apply name
                     ViewSection elevationView = marker.CreateElevation(doc, uidoc.ActiveView.Id, wallDirection);
                     elevationView.Name = cw.Name + " - " + cw.Id;
-                    double viewdepth = 5;
+                    double viewdepth = viewOffset+1;
 
                     if (notPerp)
                     {
                         ElementTransformUtils.RotateElement(doc, marker.Id, axis, -Math.Atan((wallStart.X - wallEnd.X) / (wallStart.Y - wallEnd.Y)));
-                        viewdepth = 7;
+                        viewdepth = viewOffset + 3;
                     }
 
                     //Get Wall Exterior Face

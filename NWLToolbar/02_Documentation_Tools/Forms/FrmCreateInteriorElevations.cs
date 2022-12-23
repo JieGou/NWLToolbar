@@ -25,7 +25,7 @@ namespace NWLToolbar
             }
             foreach (ViewFamilyType vft in vftList)
             {
-                if (vft.FamilyName == "Elevation" && vft.Name.Contains("I"))
+                if (vft.FamilyName == "Elevation" && (vft.Name.Contains("Int") || vft.Name.Contains("INT")))
                     this.comboBox1.Items.Add(vft.FamilyName + ": " + vft.Name);
             }
             this.comboBox1.SelectedIndex = 0;
