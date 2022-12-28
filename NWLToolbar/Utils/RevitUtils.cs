@@ -24,6 +24,10 @@ namespace NWLToolbar.Utils
         {
             return r.get_Parameter(BuiltInParameter.ROOM_NAME).AsValueString().ToString();
         }
+        public static string GetNumName(this Room r)
+        {
+            return $"{r.Number} - {r.GetName()}";
+        }
         public static double GetHeight(this Ceiling clg)
         {
             return clg.get_Parameter(BuiltInParameter.CEILING_HEIGHTABOVELEVEL_PARAM).AsDouble();
@@ -31,6 +35,12 @@ namespace NWLToolbar.Utils
         public static IEnumerable<T> DistinctBy<T, TKey>(this IEnumerable<T> items, Func<T, TKey> property)
         {
             return items.GroupBy(property).Select(x => x.First());
+        }
+        public static bool IsEnclosed(this Room room)
+        {
+            var isEnclosed = room.Area > 0;
+
+            return isEnclosed;
         }
     }
 }

@@ -58,6 +58,13 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="02_Documentation_Tools\Forms\FrmRenumberSheets.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="02_Documentation_Tools\Forms\FrmRenumberSheets.Designer.cs">
+      <DependentUpon>FrmRenumberSheets.cs</DependentUpon>
+    </Compile>
+    <Compile Include="02_Documentation_Tools\RenumberSheets.cs" />
     <Compile Include="02_Documentation_Tools\AlignSheetToOrigin .cs" />
     <Compile Include="02_Documentation_Tools\AlignNotesAndResize.cs" />
     <Compile Include="02_Documentation_Tools\AlignNotes.cs" />
@@ -121,11 +128,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="NWLToolbar.addin" />
+    <EmbeddedResource Include="Resources\16x16\Create_Interior_Elevations_16x16.png" />
+    <EmbeddedResource Include="Resources\32x32\Create_Interior_Elevations_32x32.png" />
+    <EmbeddedResource Include="02_Documentation_Tools\Forms\FrmRenumberSheets.resx">
+      <DependentUpon>FrmRenumberSheets.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\32x32\aA_32x32.png" />
     <EmbeddedResource Include="Resources\32x32\Align_Notes_32x32.png" />
     <EmbeddedResource Include="Resources\32x32\Align_Sheets_32x32.png" />
     <EmbeddedResource Include="Resources\32x32\Model_Clean-Up_32x32.png" />
-    <EmbeddedResource Include="Resources\32x32\Create_Interior_Elevations_32x32.png" />
     <EmbeddedResource Include="Resources\32x32\Curtain_Wall_Elevations_32x32.png" />
     <EmbeddedResource Include="Resources\32x32\Dimension_32x32.png" />
     <EmbeddedResource Include="Resources\32x32\Renumber_Views_32x32.png" />
@@ -146,7 +157,6 @@
     <EmbeddedResource Include="Resources\16x16\Renumber_Views_16x16.png" />
     <EmbeddedResource Include="Resources\16x16\Dimension_16x16.png" />
     <EmbeddedResource Include="Resources\16x16\Curtain_Wall_Elevations_16x16.png" />
-    <EmbeddedResource Include="Resources\16x16\Create_Interior_Elevations_16x16.png" />
     <EmbeddedResource Include="Resources\16x16\Model_Clean-Up_16x16.png" />
     <EmbeddedResource Include="Resources\16x16\Align_Sheets_16x16.png" />
     <EmbeddedResource Include="Resources\16x16\Align_Notes_16x16.png" />

@@ -11,6 +11,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Architecture;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
+using NWLToolbar.Utils;
 
 #endregion
 
@@ -31,40 +32,38 @@ namespace NWLToolbar
             Document doc = uidoc.Document;
 
             //Get all rooms
-            FilteredElementCollector roomCollector = new FilteredElementCollector(doc)
+            List<Room> roomCollector = new FilteredElementCollector(doc)
                 .OfCategory(BuiltInCategory.OST_Rooms)
-                .WhereElementIsNotElementType();
+                .WhereElementIsNotElementType()
+                .Cast<Room>()
+                .Where(x => x.IsEnclosed())
+                .OrderBy(x => x.Number)
+                .ToList();
 
-            FilteredElementCollector tbCollector = new FilteredElementCollector(doc)
+            List<FamilySymbol> tbCollector = new FilteredElementCollector(doc)
                 .OfCategory(BuiltInCategory.OST_TitleBlocks)
-                .WhereElementIsElementType();
+                .WhereElementIsElementType()
+                .Cast<FamilySymbol>()
+                .ToList();
 
-            List<Room> roomList = new List<Room>();
-            List<string> roomListName = new List<string>();
-            List<Room> selectedRoomList = new List<Room>();          
-            List<FamilySymbol> tbList = new List<FamilySymbol>();
+            List<View> allViews = new FilteredElementCollector(doc)
+                .OfCategory(BuiltInCategory.OST_Views)
+                .WhereElementIsNotElementType()
+                .Cast<View>()
+                .Where(x => x.ViewType.ToString() == "Elevation" || x.IsTemplate == false)
+                .ToList();
 
-            foreach (Room e in roomCollector)
-            {
-                bool isPlaced = e.Location != null;
-                if (isPlaced == true)
-                {
-                    roomList.Add(e);
-                    roomListName.Add(e.Number + " - " + getRoomName(e));
-                }
-            }
-            foreach(FamilySymbol tb in tbCollector)
-            {
-                tbList.Add(tb);
-            }
+            //Variables
+            List<Room> selectedRoomList = new List<Room>();
+            ElementId tbId = null;
+            double SheetsToCreate;
 
             //Dialog Box Settings
-            FrmPlaceElevationsOnSheets curForm = new FrmPlaceElevationsOnSheets(roomListName, tbList);
+            FrmPlaceElevationsOnSheets curForm = new FrmPlaceElevationsOnSheets(roomCollector, tbCollector);
             curForm.Width = 700;
             curForm.Height = 900;
             curForm.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-
-            ElementId tbId = null;
+            
             //Open Dialog Box & Add Selection to list
             if (curForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -75,43 +74,30 @@ namespace NWLToolbar
                     if (fs.FamilyName + ": " + fs.Name == curForm.GetSelectedTitleBlock())
                         tbId = fs.Id;
                 }
-                
+
+                Dictionary<string, Room> roomDict = roomCollector.ToDictionary(x => x.GetNumName());
+
                 foreach (string s in selectedViews)
                 {
-                    foreach (Room i in roomList)
-                    {
-                        if (s == i.Number + " - " + getRoomName(i))
-                        {
-                            selectedRoomList.Add(i);
-                        }
-                    }
+                    if (roomDict.ContainsKey(s))
+                        selectedRoomList.Add(roomDict[s]);
                 }
             }
             
-            double SheetsToCreate = Math.Ceiling(selectedRoomList.Count() / 4d);
-
-            //Getting all views
-            FilteredElementCollector allViews = new FilteredElementCollector(doc)
-                .OfCategory(BuiltInCategory.OST_Views)
-                .WhereElementIsNotElementType();
-
-            //All plan views as elements
-            IList<View> elevationViews = new List<View>();           
-
-            foreach (View e in allViews)
-            {
-                string cat = e.ViewType.ToString();
-                bool isTemplate = e.IsTemplate;
-                if (cat == "Elevation" && isTemplate == false)
-                {
-                    elevationViews.Add(e);                   
-                }
-            }
+            SheetsToCreate = Math.Ceiling(selectedRoomList.Count() / 4d);
+            
+            //Transaction Start
             Transaction t = new Transaction(doc);
             t.Start("Place Elevations On Sheets");
 
+            //Create Viewsheet and place Views
             for (int i = 0; i < SheetsToCreate; i++)
             {
+                //Create Sheets
+                ViewSheet curSheet = ViewSheet.Create(doc, tbId);
+                curSheet.Name = "INTERIOR ELEVATIONS";
+
+                //Variables
                 IList<View> curElevations = new List<View>();
                 IList<View> subList0 = new List<View>();
                 IList<View> subList1 = new List<View>();
@@ -126,48 +112,51 @@ namespace NWLToolbar
                 Room curRoom2 = null;
                 Room curRoom3 = null;
 
+                //Finds if How many rooms will be placed on sheet
                 if (selectedRoomList.Count - sPoint > 1)                
                     curRoom1 = selectedRoomList[sPoint + 1];                
                 if (selectedRoomList.Count - sPoint > 2)
                     curRoom2 = selectedRoomList[sPoint + 2];                
                 if (selectedRoomList.Count - sPoint > 3)                
                     curRoom3 = selectedRoomList[sPoint + 3];                
-
-                foreach (View e in elevationViews)
-                {
-                    if (e.Name.Contains(curRoom0.Number + " - " + getRoomName(curRoom0)))
+                
+                //Populates Sublists to ensure room elevation order
+                foreach (View e in allViews)
+                {                    
+                    if (e.Name.Contains(curRoom0.GetNumName()))
                     {
                         subList0.Add(e);
                     }
                     if (curIndex > 1)
                     {
-                        if (e.Name.Contains(curRoom1.Number + " - " + getRoomName(curRoom1)))
+                        if (e.Name.Contains(curRoom1.GetNumName()))
                         {
                             subList1.Add(e);
                         }                        
                     }
                     if (curIndex > 2)
                     {
-                        if (e.Name.Contains(curRoom2.Number + " - " + getRoomName(curRoom2)))
+                        if (e.Name.Contains(curRoom2.GetNumName()))
                         {
                             subList2.Add(e);
                         }                        
                     }
                     if (curIndex > 3)
                     {
-                        if (e.Name.Contains(curRoom3.Number + " - " + getRoomName(curRoom3)))
+                        if (e.Name.Contains(curRoom3.GetNumName()))
                         {
                             subList3.Add(e);
                         }                        
                     }
                 }
 
-                curElevations = subList0.Concat(subList1).Concat(subList2).Concat(subList3).ToList();               
+                //Combines lists
+                curElevations = subList0.Concat(subList1).Concat(subList2).Concat(subList3).ToList();
 
-                int curViewPlaced = 0;
-                ViewSheet curSheet = ViewSheet.Create(doc, tbId);
-                curSheet.Name = "INTERIOR ELEVATIONS";
+                //Tracks Which view has been placed
+                int curViewPlaced = 0;                
 
+                //Creates viewport and moves it to its proper location based on list order
                 foreach (View v in curElevations)
                 {                    
                     XYZ curPoint = new XYZ();
@@ -190,6 +179,7 @@ namespace NWLToolbar
             return Result.Succeeded;
         }
 
+        //Calculates lower left placement point per view
         private XYZ GetStartingPoint(int curViewPlaced)
         {
             XYZ boxBottomLeft = new XYZ(0.146874999999995, 0.0531250000000337, 0);
@@ -202,11 +192,5 @@ namespace NWLToolbar
 
             return new XYZ(boxBottomLeft.X + sizeX * remainder, boxBottomLeft.Y + sizeY * whole, 0);            
         }
-
-        private string getRoomName(Room i)
-        {
-            return i.get_Parameter(BuiltInParameter.ROOM_NAME).AsValueString().ToString();
-        }
     }
-
 }

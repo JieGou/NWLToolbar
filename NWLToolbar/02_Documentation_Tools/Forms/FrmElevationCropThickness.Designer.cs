@@ -160,7 +160,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(500, 250);
             this.Name = "FrmElevationCropThickness";
-            this.Text = "Create Tilt Up Elevations";
+            this.Text = "Elevation Crop Thickness";
             this.Load += new System.EventHandler(this.FrmAlignPlans_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -10,18 +10,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Architecture;
+using NWLToolbar.Utils;
 
 namespace NWLToolbar
 {
     public partial class FrmPlaceElevationsOnSheets : System.Windows.Forms.Form
     {
-        public FrmPlaceElevationsOnSheets(List<string> roomName, List<FamilySymbol> tbList)
+        public FrmPlaceElevationsOnSheets(List<Room> room, List<FamilySymbol> tbList)
         {
             InitializeComponent();
 
-            foreach (string s in roomName)
+            foreach (Room r in room)
             {
-                this.RoomList.Items.Add(s);                               
+                this.RoomList.Items.Add(r.GetNumName());                               
             }
             foreach (FamilySymbol s in tbList)
             {

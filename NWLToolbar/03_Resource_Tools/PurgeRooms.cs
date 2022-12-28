@@ -11,6 +11,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Architecture;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
+using NWLToolbar.Utils;
 
 #endregion
 
@@ -31,22 +32,33 @@ namespace NWLToolbar
             Document doc = uidoc.Document;
 
             //Filtered Eelement Collector (Collect Active Selection)            
-            FilteredElementCollector allRooms = new FilteredElementCollector(doc)
-                .OfCategory(BuiltInCategory.OST_Rooms);
-                
-
+            List<Room> allRooms = new FilteredElementCollector(doc)
+                .OfClass(typeof(SpatialElement))
+                .OfType<Room>()
+                .Where(x => !x.IsEnclosed())
+                .ToList();
+            
             //Variables
+            int count = allRooms.Count;
+
+            //Transaction start
             Transaction t = new Transaction(doc);
             t.Start("Purge Rooms");
 
             foreach (Room r in allRooms)
             {
-                if (r.Location == null)
-                    doc.Delete(r.Id);
-            }
+                doc.Delete(r.Id);
+            }           
 
             t.Commit();
-            t.Dispose();            
+            t.Dispose();
+
+            if (count > 1)
+                TaskDialog.Show("Deleted", $"{count} Rooms were deleted");
+            else if (count == 1)
+                TaskDialog.Show("Deleted", $"{count} Room was deleted");
+            else
+                TaskDialog.Show("Deleted", "No Rooms were deleted");
 
             return Result.Succeeded;
         }

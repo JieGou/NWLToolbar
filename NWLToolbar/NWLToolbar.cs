@@ -24,10 +24,11 @@ namespace NWLToolbar
             application.CreateRibbonTab(tabName1);
 
             //Ribbon Sections
-            RibbonPanel toolsPanel = application.CreateRibbonPanel(tabName1, "Modeling");
+            //RibbonPanel ModelPanel = application.CreateRibbonPanel(tabName1, "Modeling");
             RibbonPanel documentationPanel = application.CreateRibbonPanel(tabName1, "Documentation");
             RibbonPanel dimensionsPanel = application.CreateRibbonPanel(tabName1, "Dimensions");
-            RibbonPanel resourcesPanel = application.CreateRibbonPanel(tabName1, "Resources");            
+            RibbonPanel resourcesPanel = application.CreateRibbonPanel(tabName1, "Resources");
+            RibbonPanel betaPanel = application.CreateRibbonPanel(tabName1, "Beta");
 
             string curAssembly = System.Reflection.Assembly.GetExecutingAssembly().Location;
             string curAssemblyPath = System.IO.Path.GetDirectoryName(curAssembly);
@@ -49,12 +50,18 @@ namespace NWLToolbar
             PushButtonData pbd14 = new PushButtonData("Create Tilt Up Elevation By Selection", "Create Tilt-Up" + "\r" + "Elevations by Selection", curAssembly, "NWLToolbar.CreateTiltUpElevationsByWalls");
             PushButtonData pbd15 = new PushButtonData("Thicken Elevation Crop", "Thicken\rElevation Crop", curAssembly, "NWLToolbar.ElevationCropThickness");
             PushButtonData pbd16 = new PushButtonData("Purge Rooms", "Purge Rooms", curAssembly, "NWLToolbar.PurgeRooms");
+            PushButtonData pbd17 = new PushButtonData("Renumber Sheets", "Renumber Sheets", curAssembly, "NWLToolbar.RenumberSheets");
+            
 
             //Pulldown Buttons
             PulldownButtonData pdbd1 = new PulldownButtonData("Align Notes Drop Down", "Align Notes");
-            PulldownButtonData pdbd2 = new PulldownButtonData("Align Sheets Drop Down", "Align Sheets");
+            //PulldownButtonData pdbd2 = new PulldownButtonData("Align Sheets Drop Down", "Align Sheets");
             PulldownButtonData pdbd3 = new PulldownButtonData("Create Tilt Up Elevations Drop Down", "Create Tilt-Up\rElevations");
             PulldownButtonData pdbd4 = new PulldownButtonData("File Clean up Dropdown", "File\rClean-Up");
+            PulldownButtonData pdbd5 = new PulldownButtonData("Sheet Tools", "Sheet Tools");
+            PulldownButtonData pdbd6 = new PulldownButtonData("Capitalization Tools", "Capitalization\rTools");
+            PulldownButtonData pdbd7 = new PulldownButtonData("Beta Tools", "beta Tools");
+
 
             //Images
             pbd1.LargeImage = BitMapToImageSource(Resources.aA_32x32);
@@ -90,16 +97,21 @@ namespace NWLToolbar
             pbd15.Image = BitMapToImageSource(Resources.Thicken_Elevations_Crop_16x16);
             pbd16.LargeImage = BitMapToImageSource(Resources.Purge_Unplaced_Rooms_32x32);
             pbd16.Image = BitMapToImageSource(Resources.Purge_Unplaced_Rooms_16x16);
-            
+            pbd17.LargeImage = BitMapToImageSource(Resources.Renumber_Views_32x32);
+            pbd17.Image = BitMapToImageSource(Resources.Renumber_Views_16x16);
 
             pdbd1.LargeImage = BitMapToImageSource(Resources.Align_Notes_32x32);
             pdbd1.Image = BitMapToImageSource(Resources.Align_Notes_16x16);
-            pdbd2.LargeImage = BitMapToImageSource(Resources.Align_Sheets_32x32);
-            pdbd2.Image = BitMapToImageSource(Resources.Align_Sheets_16x16);
+            //pdbd2.LargeImage = BitMapToImageSource(Resources.Align_Sheets_32x32);
+            //pdbd2.Image = BitMapToImageSource(Resources.Align_Sheets_16x16);
             pdbd3.LargeImage = BitMapToImageSource(Resources.Tilt_Up_Elevations_32x32);
             pdbd3.Image = BitMapToImageSource(Resources.Tilt_Up_Elevations_16x16);
             pdbd4.LargeImage = BitMapToImageSource(Resources.Model_Clean_Up_32x32);
             pdbd4.Image = BitMapToImageSource(Resources.Model_Clean_Up_16x16);
+            pdbd5.LargeImage = BitMapToImageSource(Resources.Renumber_Views_32x32);
+            pdbd5.Image = BitMapToImageSource(Resources.Renumber_Views_16x16);
+            pdbd6.LargeImage = BitMapToImageSource(Resources.aA_32x32);
+            pdbd6.Image = BitMapToImageSource(Resources.aA_16x16);
 
             //ToolTips
             pbd1.ToolTip = "Changes all sheet names to uppercase.";
@@ -118,53 +130,72 @@ namespace NWLToolbar
             pbd14.ToolTip = "Creates Tilt-Up Elevations based on a selection of walls";
             pbd15.ToolTip = "Thickens the Crop Region of selected elevation type";
             pbd16.ToolTip = "Purges un-placed rooms from the project";
+            pbd17.ToolTip = "Renumbers selected sheets";
 
             pdbd4.ToolTip = "Varying tools to assist in cleaning the file";
 
+            //Align Notes Dropdown
             IList<PushButtonData> alignNotesList = new List<PushButtonData>();
             alignNotesList.Add(pbd5);
             alignNotesList.Add(pbd7);
 
-            IList<PushButtonData> alignSheetsList = new List<PushButtonData>();
-            alignSheetsList.Add(pbd9);
-            alignSheetsList.Add(pbd8);
+            //Sheet Tools Dropdown
+            IList<PushButtonData> SheetToolsList = new List<PushButtonData>();
+            SheetToolsList.Add(pbd6);
+            SheetToolsList.Add(pbd17);            
 
+            //Tilt Elevations Dropdown
             IList<PushButtonData> tiltList = new List<PushButtonData>();
             tiltList.Add(pbd13);
             tiltList.Add(pbd14);
 
+            //Clean-Up Tools Dropdown
             IList<PushButtonData> cleanUpList = new List<PushButtonData>();
             cleanUpList.Add(pbd16);
 
+            //Capitilazation Tools
+            IList<PushButtonData> capitalizationList = new List<PushButtonData>();
+            capitalizationList.Add(pbd1);
+
+            //Beta Tools
+            IList<PushButtonData> betaList = new List<PushButtonData>();
+            betaList.Add(pbd8); //align sheets
+            betaList.Add(pbd9); //align all sheets
+            betaList.Add(pbd10); //align plans
+
             //Tools Section
-            PushButton pb1 = (PushButton)toolsPanel.AddItem(pbd1);
-            PulldownButton pdb1 = (PulldownButton)toolsPanel.AddItem(pdbd1);
-                foreach (PushButtonData pbd in alignSheetsList)
-                    pdb1.AddPushButton(pbd);
-            PushButton pb6 = (PushButton)toolsPanel.AddItem(pbd6);
-            PulldownButton pdb2 = (PulldownButton)toolsPanel.AddItem(pdbd2);
-                foreach (PushButtonData pbd in alignSheetsList)
-                    pdb2.AddPushButton(pbd);
-            PushButton pb10 = (PushButton)toolsPanel.AddItem(pbd10);
 
             //Documentation Section
+            PulldownButton pdb1 = (PulldownButton)documentationPanel.AddItem(pdbd1);
+                foreach (PushButtonData pbd in alignNotesList)
+                    pdb1.AddPushButton(pbd);
+            PulldownButton pdb5 = (PulldownButton)documentationPanel.AddItem(pdbd5);
+                foreach (PushButtonData pbd in SheetToolsList)
+                    pdb5.AddPushButton(pbd);
             PushButton pb11 = (PushButton)documentationPanel.AddItem(pbd11);
             PushButton pb12 = (PushButton)documentationPanel.AddItem(pbd12);            
             PulldownButton pdb3 = (PulldownButton)documentationPanel.AddItem(pdbd3);
                 foreach (PushButtonData pbd in tiltList)
                     pdb3.AddPushButton(pbd);
-            PushButton pb15 = (PushButton)documentationPanel.AddItem(pbd15);
-
+            PushButton pb15 = (PushButton)documentationPanel.AddItem(pbd15);            
+            PulldownButton pdb6 = (PulldownButton)documentationPanel.AddItem(pdbd6);
+                foreach (PushButtonData pbd in capitalizationList)
+                    pdb6.AddPushButton(pbd);
 
             //Dimensions Section
             PushButton pb3 = (PushButton)dimensionsPanel.AddItem(pbd3);
 
             //Resources Section
-            PulldownButton pdb4 = (PulldownButton)documentationPanel.AddItem(pdbd4);
+            PulldownButton pdb4 = (PulldownButton)resourcesPanel.AddItem(pdbd4);
                 foreach (PushButtonData pbd in cleanUpList)
                     pdb4.AddPushButton(pbd);
             PushButton pb4 = (PushButton)resourcesPanel.AddItem(pbd4);
-            PushButton pb2 = (PushButton)resourcesPanel.AddItem(pbd2); 
+            PushButton pb2 = (PushButton)resourcesPanel.AddItem(pbd2);
+
+            //Beta Section
+            PulldownButton pdb7 = (PulldownButton)betaPanel.AddItem(pdbd7);
+            foreach (PushButtonData pbd in betaList)
+                pdb7.AddPushButton(pbd);
 
         }       
 
