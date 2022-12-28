@@ -54,13 +54,13 @@ namespace NWLToolbar
             
 
             //Pulldown Buttons
-            PulldownButtonData pdbd1 = new PulldownButtonData("Align Notes Drop Down", "Align Notes");
-            //PulldownButtonData pdbd2 = new PulldownButtonData("Align Sheets Drop Down", "Align Sheets");
+            PulldownButtonData pdbd1 = new PulldownButtonData("Align Notes Drop Down", "  Align  \r Notes  ");
+            PulldownButtonData pdbd2 = new PulldownButtonData("Place Views on Sheet", "Place Views\rOn Sheets");
             PulldownButtonData pdbd3 = new PulldownButtonData("Create Tilt Up Elevations Drop Down", "Create Tilt-Up\rElevations");
             PulldownButtonData pdbd4 = new PulldownButtonData("File Clean up Dropdown", "File\rClean-Up");
-            PulldownButtonData pdbd5 = new PulldownButtonData("Sheet Tools", "Sheet Tools");
-            PulldownButtonData pdbd6 = new PulldownButtonData("Capitalization Tools", "Capitalization\rTools");
-            PulldownButtonData pdbd7 = new PulldownButtonData("Beta Tools", "beta Tools");
+            PulldownButtonData pdbd5 = new PulldownButtonData("Sheet Tools", "  Sheet  \r  Tools  ");
+            PulldownButtonData pdbd6 = new PulldownButtonData("CapitalizationTools", "Capitalization\rTools");
+            PulldownButtonData pdbd7 = new PulldownButtonData("Beta Tools", "beta\rTools");
 
 
             //Images
@@ -102,8 +102,8 @@ namespace NWLToolbar
 
             pdbd1.LargeImage = BitMapToImageSource(Resources.Align_Notes_32x32);
             pdbd1.Image = BitMapToImageSource(Resources.Align_Notes_16x16);
-            //pdbd2.LargeImage = BitMapToImageSource(Resources.Align_Sheets_32x32);
-            //pdbd2.Image = BitMapToImageSource(Resources.Align_Sheets_16x16);
+            pdbd2.LargeImage = BitMapToImageSource(Resources.Interior_Elevations_On_Sheets_32x32);
+            pdbd2.Image = BitMapToImageSource(Resources.Interior_Elevations_On_Sheets_16x16);
             pdbd3.LargeImage = BitMapToImageSource(Resources.Tilt_Up_Elevations_32x32);
             pdbd3.Image = BitMapToImageSource(Resources.Tilt_Up_Elevations_16x16);
             pdbd4.LargeImage = BitMapToImageSource(Resources.Model_Clean_Up_32x32);
@@ -163,6 +163,10 @@ namespace NWLToolbar
             betaList.Add(pbd9); //align all sheets
             betaList.Add(pbd10); //align plans
 
+            //place Views Dropdown
+            IList<PushButtonData> placeViewsList = new List<PushButtonData>();
+            placeViewsList.Add(pbd12);
+
             //Tools Section
 
             //Documentation Section
@@ -173,7 +177,9 @@ namespace NWLToolbar
                 foreach (PushButtonData pbd in SheetToolsList)
                     pdb5.AddPushButton(pbd);
             PushButton pb11 = (PushButton)documentationPanel.AddItem(pbd11);
-            PushButton pb12 = (PushButton)documentationPanel.AddItem(pbd12);            
+            PulldownButton pdb2 = (PulldownButton)documentationPanel.AddItem(pdbd2);
+            foreach (PushButtonData pbd in placeViewsList)
+                pdb2.AddPushButton(pbd);
             PulldownButton pdb3 = (PulldownButton)documentationPanel.AddItem(pdbd3);
                 foreach (PushButtonData pbd in tiltList)
                     pdb3.AddPushButton(pbd);

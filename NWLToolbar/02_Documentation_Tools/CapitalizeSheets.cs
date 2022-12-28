@@ -39,14 +39,9 @@ namespace NWLToolbar
             t.Start("Capitalize Sheets");
 
             //Search For Sheets & Capitalize
-            foreach (Element i in sheetCollector)
-            {
-               Parameter e = i.get_Parameter(BuiltInParameter.SHEET_NAME);
-               
-               string v = e.AsValueString();
-               
-               i.Name = v.ToUpper();  
-                
+            foreach (ViewSheet i in sheetCollector)
+            {               
+               i.Name = i.Name.ToUpper();                
             }
 
             //Finish Transaction
