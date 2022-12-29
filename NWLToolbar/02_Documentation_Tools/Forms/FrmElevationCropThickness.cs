@@ -10,22 +10,26 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autodesk.Revit.DB;
+using NWLToolbar.Utils;
 
 namespace NWLToolbar
 {
     public partial class FrmElevationCropThickness : System.Windows.Forms.Form
     {
+        private List<ViewFamilyType> viewFamilyList;
         public FrmElevationCropThickness(List<ViewFamilyType> vftList)
         {
             InitializeComponent();
 
-            for (int i = 0; i < 8; i++)
+            viewFamilyList = vftList;
+
+            for (int i = 1; i < 8; i++)
                 this.Thickness.Items.Add(i);
             
             foreach (ViewFamilyType vft in vftList)
             {
                 if (vft.FamilyName == "Elevation")
-                    this.comboBox1.Items.Add(vft.FamilyName + ": " + vft.Name);
+                    this.comboBox1.Items.Add(vft.GetName());
             }
             
             this.Thickness.SelectedIndex = 4;
@@ -51,11 +55,12 @@ namespace NWLToolbar
         {
             this.Close();
         }
-        
-        public string GetSelectedElevationType()
+
+        public ViewFamilyType GetSelectedElevationType()
         {
-            string selectedElevation = null;
-            return selectedElevation = this.comboBox1.SelectedItem.ToString();
+            Dictionary<string, ViewFamilyType> vftDictionary = viewFamilyList.ToDictionary(x => x.GetName());
+
+            return vftDictionary[this.comboBox1.SelectedItem.ToString()];
         }
         public int GetThickness()
         {

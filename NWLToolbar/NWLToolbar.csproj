@@ -102,11 +102,11 @@
     <Compile Include="02_Documentation_Tools\Forms\FrmPlaceElevationsOnSheets.Designer.cs">
       <DependentUpon>FrmPlaceElevationsOnSheets.cs</DependentUpon>
     </Compile>
-    <Compile Include="02_Documentation_Tools\Forms\FrmCreateInteriorElevations.cs">
+    <Compile Include="02_Documentation_Tools\Forms\FrmSelectRoomAndElevationType.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="02_Documentation_Tools\Forms\FrmCreateInteriorElevations.Designer.cs">
-      <DependentUpon>FrmCreateInteriorElevations.cs</DependentUpon>
+    <Compile Include="02_Documentation_Tools\Forms\FrmSelectRoomAndElevationType.Designer.cs">
+      <DependentUpon>FrmSelectRoomAndElevationType.cs</DependentUpon>
     </Compile>
     <Compile Include="02_Documentation_Tools\Forms\FrmAlignPlans.cs">
       <SubType>Form</SubType>
@@ -185,8 +185,8 @@
     <EmbeddedResource Include="02_Documentation_Tools\Forms\FrmPlaceElevationsOnSheets.resx">
       <DependentUpon>FrmPlaceElevationsOnSheets.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="02_Documentation_Tools\Forms\FrmCreateInteriorElevations.resx">
-      <DependentUpon>FrmCreateInteriorElevations.cs</DependentUpon>
+    <EmbeddedResource Include="02_Documentation_Tools\Forms\FrmSelectRoomAndElevationType.resx">
+      <DependentUpon>FrmSelectRoomAndElevationType.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="02_Documentation_Tools\Forms\FrmAlignPlans.resx">
       <DependentUpon>FrmAlignPlans.cs</DependentUpon>

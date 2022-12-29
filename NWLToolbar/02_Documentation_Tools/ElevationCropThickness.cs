@@ -54,11 +54,7 @@ namespace NWLToolbar
             //Open Dialog Box & Add Selection to list
             if (curForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                foreach (ViewFamilyType vf in vftList)
-                {
-                    if (vf.FamilyName + ": " + vf.Name == curForm.GetSelectedElevationType())
-                        viewType = vf.Id;
-                }
+                viewType = curForm.GetSelectedElevationType().Id;
                 thickness = curForm.GetThickness();
             }
 

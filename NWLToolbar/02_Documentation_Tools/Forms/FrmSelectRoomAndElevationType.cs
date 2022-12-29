@@ -10,23 +10,30 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Architecture;
+using NWLToolbar.Utils;
 
 namespace NWLToolbar
 {
-    public partial class FrmCreateInteriorElevations : System.Windows.Forms.Form
+    public partial class FrmSelectRoomAndElevationType : System.Windows.Forms.Form
     {
-        public FrmCreateInteriorElevations(List<string> roomName, List<ViewFamilyType> vftList)
+        private List<Room> formList;
+        private List<ViewFamilyType> viewFamilyList;
+        public FrmSelectRoomAndElevationType(List<Room> room, List<ViewFamilyType> vftList)
         {
             InitializeComponent();
 
-            foreach (string s in roomName)
+            formList = room;
+            viewFamilyList = vftList;
+
+            foreach (Room r in room)
             {
-                this.RoomList.Items.Add(s);
+                this.RoomList.Items.Add(r.GetNumName());
             }
             foreach (ViewFamilyType vft in vftList)
             {
                 if (vft.FamilyName == "Elevation" && (vft.Name.Contains("Int") || vft.Name.Contains("INT")))
-                    this.comboBox1.Items.Add(vft.FamilyName + ": " + vft.Name);
+                    this.comboBox1.Items.Add(vft.GetName());
             }
             this.comboBox1.SelectedIndex = 0;
         }
@@ -50,19 +57,22 @@ namespace NWLToolbar
         {
             this.Close();
         }
-        public List<string> GetSelectedRooms()
+        public List<Room> GetSelectedRooms()
         {
-            List<string> selectedRooms = new List<string>();
+            Dictionary<string, Room> roomDictionary = formList.ToDictionary(x => x.GetNumName());
+
+            List<Room> selectedRooms = new List<Room>();
 
             foreach (string s in this.RoomList.CheckedItems)
-                selectedRooms.Add(s);
+                selectedRooms.Add(roomDictionary[s]);
                 
             return selectedRooms;
         }
-        public string GetSelectedElevationType()
+        public ViewFamilyType GetSelectedElevationType()
         {
-            string selectedElevation = null;
-            return selectedElevation = this.comboBox1.SelectedItem.ToString();
+            Dictionary<string, ViewFamilyType> vftDictionary = viewFamilyList.ToDictionary(x => x.GetName());
+            
+            return vftDictionary[this.comboBox1.SelectedItem.ToString()];
         }
 
         private void NWLWebsite_Click(object sender, EventArgs e)

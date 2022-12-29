@@ -168,8 +168,9 @@ namespace NWLToolbar
 
             //place Views Dropdown
             IList<PushButtonData> placeViewsList = new List<PushButtonData>();
+            placeViewsList.Add(pbd18); //Place Views on Sheets
             placeViewsList.Add(pbd12);
-            placeViewsList.Add(pbd18);
+            
 
             //Tools Section
 

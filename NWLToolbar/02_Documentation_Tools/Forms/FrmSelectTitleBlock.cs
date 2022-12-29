@@ -17,7 +17,8 @@ namespace NWLToolbar
 {
     public partial class FrmSelectTitleBlock : System.Windows.Forms.Form
     {
-        List<FamilySymbol> formList;
+        private List<FamilySymbol> formList;
+
         public FrmSelectTitleBlock(List<FamilySymbol> tbList)
         {
             InitializeComponent();

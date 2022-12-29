@@ -20,7 +20,7 @@ namespace NWLToolbar
     [Transaction(TransactionMode.Manual)]
     public class PlaceViewsOnSheets : IExternalCommand
     {
-        
+        List<View> allViews;
         public Result Execute(
           ExternalCommandData commandData,
           ref string message,
@@ -37,11 +37,19 @@ namespace NWLToolbar
                 .Cast<FamilySymbol>()
                 .ToList();
 
-            List<View> allViews = new FilteredElementCollector(doc, uidoc.Selection.GetElementIds())
-                .OfCategory(BuiltInCategory.OST_Views)
-                .WhereElementIsNotElementType()
-                .Cast<View>()                
-                .ToList();
+            try
+            {
+                allViews = new FilteredElementCollector(doc, uidoc.Selection.GetElementIds())
+                    .OfCategory(BuiltInCategory.OST_Views)
+                    .WhereElementIsNotElementType()
+                    .Cast<View>()
+                    .ToList();
+            }
+            catch
+            {
+                TaskDialog.Show("Error", "Please select Views first before runing tool.");
+                goto failed;
+            }            
 
             //Variables            
             ElementId tbId = null;
@@ -109,6 +117,8 @@ namespace NWLToolbar
 
             t.Commit();
             t.Dispose();
+
+            failed:
 
             return Result.Succeeded;
         }

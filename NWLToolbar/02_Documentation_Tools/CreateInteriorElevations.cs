@@ -39,12 +39,12 @@ namespace NWLToolbar
             Application app = uiapp.Application;
             Document doc = uidoc.Document;
 
-            //Get all rooms
+            //Collectors
             roomCollector = new FilteredElementCollector(doc)
                 .OfCategory(BuiltInCategory.OST_Rooms)                
                 .WhereElementIsNotElementType()
                 .Cast<Room>()
-                .Where(x => x.Area > 0)
+                .Where(x => x.Area > 0 && x.Location != null)
                 .OrderBy(x => x.Number).ToList();
 
             vftList = new FilteredElementCollector(doc)
@@ -68,47 +68,21 @@ namespace NWLToolbar
                 .OrderByDescending(x => x.GetHeight())
                 .ToList();
 
-            List<Room> roomList = new List<Room>();
-            List<string> roomListName = new List<string>();
+            //Variables
             List<Room> selectedRoomList = new List<Room>();           
             ElementId markerId = null;
-
-            foreach (Room e in roomCollector)
-            {                
-                bool isPlaced = e.Location != null;
-                if (isPlaced == true)
-                {
-                    roomList.Add(e);
-                    roomListName.Add(e.Number + " - " + e.GetName());
-                }
-            }
             
             //Dialog Box Settings
-            FrmCreateInteriorElevations curForm = new FrmCreateInteriorElevations(roomListName, vftList);
+            FrmSelectRoomAndElevationType curForm = new FrmSelectRoomAndElevationType(roomCollector, vftList);
             curForm.Width = 700;
             curForm.Height = 900;
             curForm.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
            
             //Open Dialog Box & Add Selection to list
             if (curForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                List<string> selectedViews = curForm.GetSelectedRooms();
-                foreach (ViewFamilyType vf in vftList)
-                {
-                    if (vf.FamilyName + ": " + vf.Name == curForm.GetSelectedElevationType())
-                        markerId = vf.Id;
-                }
-
-                foreach (string s in selectedViews)
-                {
-                    foreach (Room i in roomList)
-                    {
-                        if (s == i.Number + " - " + i.GetName())
-                        {
-                            selectedRoomList.Add(i);
-                        }
-                    }
-                }
+            {               
+                markerId = curForm.GetSelectedElevationType().Id;
+                selectedRoomList = curForm.GetSelectedRooms();               
             }            
 
             //Needed to grab room boundry
@@ -223,7 +197,7 @@ namespace NWLToolbar
                     }
                 }
                 if (!clgFound)
-                    errorRooms.Add($"{r.Number} - {r.GetName()}");
+                    errorRooms.Add(r.GetNumName());
             }           
 
             t.Commit();
