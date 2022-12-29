@@ -31,11 +31,8 @@ namespace NWLToolbar
             Document doc = uidoc.Document;
 
             //Get ViewSheets
-            List<ViewSheet> sheetCollector = new FilteredElementCollector(doc)
-                                .OfClass(typeof(ViewSheet))
-                                .WhereElementIsNotElementType()
-                                .Cast<ViewSheet>()
-                                .ToList();
+            List<ViewSheet> sheetCollector;
+
             try
             {
                 sheetCollector = new FilteredElementCollector(doc, uidoc.Selection.GetElementIds())
@@ -49,8 +46,7 @@ namespace NWLToolbar
             {
                 TaskDialog.Show("Error", "Please select sheets first before runing tool.");
                 goto failed;
-            }
-            
+            }            
 
             //Variables
             string sLetter = null;

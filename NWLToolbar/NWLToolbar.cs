@@ -42,7 +42,7 @@ namespace NWLToolbar
             PushButtonData pbd6 = new PushButtonData("Renumber Views on Sheet", "Renumber Views" + "\r" + "On Sheet", curAssembly, "NWLToolbar.RenumberViewsOnSheet");
             PushButtonData pbd7 = new PushButtonData("Align Notes & Resize Text", "Align Notes W/ Detail Line & Resize", curAssembly, "NWLToolbar.AlignNotesAndResize");
             PushButtonData pbd8 = new PushButtonData("Align All Sheets To Origin", "Align All Sheets" + "\r" + "To Origin", curAssembly, "NWLToolbar.AlignAllSheetsToOrigin");
-            PushButtonData pbd9 = new PushButtonData("Align Sheet To Origin", "Align Sheet" + "\r" + "To Origin", curAssembly, "NWLToolbar.AlignSheetToOrigin");
+            PushButtonData pbd9 = new PushButtonData("Align Sheet To Origin", "Align Sheet\rTo Origin", curAssembly, "NWLToolbar.AlignSheetToOrigin");
             PushButtonData pbd10 = new PushButtonData("AlignPlans", "Align Plans", curAssembly, "NWLToolbar.AlignPlans");
             PushButtonData pbd11 = new PushButtonData("Create Interior Elevation", "Create" + "\r" + "Interior Elevations", curAssembly, "NWLToolbar.CreateInteriorElevations");
             PushButtonData pbd12 = new PushButtonData("Place Elevations On Sheets", "Place Elevations" + "\r" + "On Sheets", curAssembly, "NWLToolbar.PlaceElevationsOnSheets");
@@ -51,10 +51,10 @@ namespace NWLToolbar
             PushButtonData pbd15 = new PushButtonData("Thicken Elevation Crop", "Thicken\rElevation Crop", curAssembly, "NWLToolbar.ElevationCropThickness");
             PushButtonData pbd16 = new PushButtonData("Purge Rooms", "Purge Rooms", curAssembly, "NWLToolbar.PurgeRooms");
             PushButtonData pbd17 = new PushButtonData("Renumber Sheets", "Renumber Sheets", curAssembly, "NWLToolbar.RenumberSheets");
-            
+            PushButtonData pbd18 = new PushButtonData("Place Views On Sheets", "Place Views" + "\r" + "On Sheets", curAssembly, "NWLToolbar.PlaceViewsOnSheets");
 
             //Pulldown Buttons
-            PulldownButtonData pdbd1 = new PulldownButtonData("Align Notes Drop Down", "  Align  \r Notes  ");
+            PulldownButtonData pdbd1 = new PulldownButtonData("Align Notes Drop Down", "  Align  \r  Notes  ");
             PulldownButtonData pdbd2 = new PulldownButtonData("Place Views on Sheet", "Place Views\rOn Sheets");
             PulldownButtonData pdbd3 = new PulldownButtonData("Create Tilt Up Elevations Drop Down", "Create Tilt-Up\rElevations");
             PulldownButtonData pdbd4 = new PulldownButtonData("File Clean up Dropdown", "File\rClean-Up");
@@ -99,6 +99,8 @@ namespace NWLToolbar
             pbd16.Image = BitMapToImageSource(Resources.Purge_Unplaced_Rooms_16x16);
             pbd17.LargeImage = BitMapToImageSource(Resources.Renumber_Views_32x32);
             pbd17.Image = BitMapToImageSource(Resources.Renumber_Views_16x16);
+            pbd18.LargeImage = BitMapToImageSource(Resources.Interior_Elevations_On_Sheets_32x32);
+            pbd18.Image = BitMapToImageSource(Resources.Interior_Elevations_On_Sheets_16x16);
 
             pdbd1.LargeImage = BitMapToImageSource(Resources.Align_Notes_32x32);
             pdbd1.Image = BitMapToImageSource(Resources.Align_Notes_16x16);
@@ -131,6 +133,7 @@ namespace NWLToolbar
             pbd15.ToolTip = "Thickens the Crop Region of selected elevation type";
             pbd16.ToolTip = "Purges un-placed rooms from the project";
             pbd17.ToolTip = "Renumbers selected sheets";
+            pbd18.ToolTip = "Places Selected Views on sheets";
 
             pdbd4.ToolTip = "Varying tools to assist in cleaning the file";
 
@@ -166,6 +169,7 @@ namespace NWLToolbar
             //place Views Dropdown
             IList<PushButtonData> placeViewsList = new List<PushButtonData>();
             placeViewsList.Add(pbd12);
+            placeViewsList.Add(pbd18);
 
             //Tools Section
 
@@ -207,9 +211,7 @@ namespace NWLToolbar
 
         public Result OnStartup(UIControlledApplication a)
         {
-
             AddRibbonPanel(a);
-
             return Result.Succeeded;
         }
         public Result OnShutdown(UIControlledApplication a)

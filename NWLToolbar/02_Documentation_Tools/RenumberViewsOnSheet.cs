@@ -10,6 +10,7 @@ using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
+using NWLToolbar.Utils;
 
 #endregion
 
@@ -50,120 +51,112 @@ namespace NWLToolbar
             Transaction t = new Transaction(doc);
             t.Start("Set Detail Numbers");
 
-                //Reset Sheet Origin
-                foreach (Element tb in tbCollector)
-                {
-                    LocationPoint inverse = tb.Location as LocationPoint;
-                    tb.Location.Move(new XYZ(-inverse.Point.X, -inverse.Point.Y, -inverse.Point.Z));
-                }
+            //Reset Sheet Origin
+            foreach (Element tb in tbCollector)
+            {
+                LocationPoint inverse = tb.Location as LocationPoint;
+                tb.Location.Move(new XYZ(-inverse.Point.X, -inverse.Point.Y, -inverse.Point.Z));
+            }
                                            
 
-                //Set Detail Numbers to Arbitrary Number
-                foreach (Element vp in viewportCollector)
-                {
-                    arbitrarySet++;
-                    Parameter number = vp.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER);
-                    number.Set(arbitrarySet.ToString());
-                }
-                arbitrarySet = 1000;                
-                            
+            //Set Detail Numbers to Arbitrary Number
+            foreach (Element vp in viewportCollector)
+            {
+                arbitrarySet++;
+                Parameter number = vp.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER);
+                number.Set(arbitrarySet.ToString());
+            }
+            arbitrarySet = 1000;
+
+
+            //Variables
+            string horNumber;
+            string vertLetter;
+
+            List<string> rename = new List<string>();
+
+            int failedAttempts = 0;
+            int curViewport = 1;
+            //Set Detail Numbers to Number Based On Location
+            foreach (Viewport vp in viewportCollector)
+            {                    
+                    
+                //Find ViewTitleHead Location
+                XYZ max = vp.GetLabelOutline().MaximumPoint;
+                XYZ min = vp.GetLabelOutline().MinimumPoint;
+                XYZ headLocation = new XYZ(min.X, min.Y, 0)-boxOrigin;    
+                double xLocation = (headLocation.X/boxWidth.X);
+                double yLocation = (headLocation.Y/boxHeight.Y);
+
+                if (xLocation > 0)
+                    horNumber = (Math.Floor(xLocation)+1).ToString();
+                else
+                    horNumber = $"Null{curViewport}";
+
+                if (yLocation > 0)
+                    vertLetter = Char.ConvertFromUtf32(Convert.ToChar("A") + Convert.ToInt32(Math.Floor(yLocation))).ToString();
+                else
+                    vertLetter = "Null";
+
+                //Get Updated Detail Numbers
+                List<Viewport> updatedViewportCollector = new FilteredElementCollector(doc, doc.ActiveView.Id)
+                        .OfCategory(BuiltInCategory.OST_Viewports)
+                        .WhereElementIsNotElementType()
+                        .Cast<Viewport>()
+                        .ToList();
 
                 //Variables
-                string horNumber = "";
-                string vertLetter = "";
+                string newDetailNumber = vertLetter+horNumber;                
+                List<string> newNameList = new List<string>();
+                newNameList.Add(newDetailNumber);                
+                List<string> names = new List<string>();
 
-                int failedAttempts = 0;
+                Dictionary<string, Viewport> values = updatedViewportCollector.ToDictionary(x => x.GetDetailNumber());                   
 
-                //Set Detail Numbers to Number Based On Location
-                foreach (Viewport vp in viewportCollector)
+                //If Duplicate Value Then Append Letter
+                if (values.ContainsKey(newDetailNumber))
                 {
-                    
-                    
-                    //Find ViewTitleHead Location
-                    XYZ max = vp.GetLabelOutline().MaximumPoint;
-                    XYZ min = vp.GetLabelOutline().MinimumPoint;
-                    XYZ headLocation = new XYZ(min.X, min.Y, 0)-boxOrigin;    
-                    double xLocation = (headLocation.X/boxWidth.X);
-                    double yLocation = (headLocation.Y/boxHeight.Y);
-                        
-                        //Set Number
-                        if (xLocation >= 5)
-                            horNumber = "6";
-                        else if (xLocation >= 4.0)
-                            horNumber = "5";
-                        else if (xLocation >= 3.0)
-                            horNumber = "4";
-                        else if (xLocation >= 2.0)
-                            horNumber = "3";
-                        else if (xLocation >= 1.0)
-                            horNumber = "2";
-                        else if (xLocation >= 0.0)
-                            horNumber = "1";
-                        else
-                            horNumber = "Null";
+                    rename.Add(newDetailNumber);
+                    failedAttempts++;
+                    if (failedAttempts > 0)
+                        newDetailNumber = vertLetter + horNumber + Char.ConvertFromUtf32(Convert.ToChar("b")+(failedAttempts-1)).ToString();                   
 
-                        //Set Letter
-                        if (yLocation >= 4.0)
-                            vertLetter = "E";
-                        else if (yLocation >= 3.0)
-                            vertLetter = "D";
-                        else if (yLocation >= 2.0)
-                            vertLetter = "C";
-                        else if (yLocation >= 1.0)
-                            vertLetter = "B";
-                        else if (yLocation >= 0)
-                            vertLetter = "A";
-                        else
-                            vertLetter = "Null";
-
-                    //Get Updated Detail Numbers
-                    FilteredElementCollector updatedViewportCollector = new FilteredElementCollector(doc, doc.ActiveView.Id)
-                    .OfCategory(BuiltInCategory.OST_Viewports)
-                    .WhereElementIsNotElementType();
-
-                    //Variables
-                    string newName = vertLetter+horNumber;                
-                    List<string> newNameList = new List<string>();
-                    newNameList.Add(newName);                
-                    List<string> names = new List<string>();
-
-                    //Add New Detail Numbers to List
-                    foreach (Viewport uvp in updatedViewportCollector)
-                    {
-                       names.Add(uvp.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).AsValueString());
-                    }               
-
-                    //If Duplicate Value Then Append Letter
-                    if (names.Contains(newName))
-                    {
-                        failedAttempts++;
-                        if (failedAttempts == 1)
-                            newName = vertLetter + horNumber + "b";
-                        else if (failedAttempts == 2)
-                            newName = vertLetter + horNumber + "c";
-                        else if (failedAttempts == 3)
-                            newName = vertLetter + horNumber + "d";
-                        else if (failedAttempts == 4)
-                            newName = vertLetter + horNumber + "e";
-                        else if (failedAttempts == 5)
-                            newName = vertLetter + horNumber + "f";
-                        else if (failedAttempts == 6)
-                            newName = vertLetter + horNumber + "g";
-
-                        Parameter number = vp.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER);
-                        number.Set(newName);
-                    }
-                    else
-                    {
-                        failedAttempts = 0;
-                        Parameter number = vp.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER);
-                        number.Set(newName);
-
-                    }
-                
+                    Parameter number = vp.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER);
+                    number.Set(newDetailNumber);
                 }
-                failedAttempts = 0;
-            
+                else
+                {
+                    failedAttempts = 0;
+                    Parameter number = vp.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER);
+                    number.Set(newDetailNumber);
+                }
+                
+            }
+
+            rename = rename.Distinct().ToList();
+
+            List<Viewport> finalViewportCollector = new FilteredElementCollector(doc, doc.ActiveView.Id)
+                        .OfCategory(BuiltInCategory.OST_Viewports)
+                        .WhereElementIsNotElementType()
+                        .Cast<Viewport>()
+                        .ToList();
+
+            Dictionary<string, Viewport> finalValues = finalViewportCollector.ToDictionary(x => x.GetDetailNumber());
+
+            foreach (Viewport vp in finalViewportCollector)
+            {
+                foreach (string s in rename)
+                {
+                    if (s == vp.GetDetailNumber())
+                    { 
+                        Parameter newNum = vp.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER);
+                        newNum.Set(vp.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).AsValueString() + "a");
+                    }
+                }
+            }
+
+            //failedAttempts = 0;
+
             t.Commit();
             t.Dispose();
 

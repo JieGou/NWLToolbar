@@ -52,9 +52,6 @@ namespace NWLToolbar
             TaskDialog.Show("Success", "All Sheets Capitalized");
 
             return Result.Succeeded;
-        }
-
-       
+        }       
     }
-
 }

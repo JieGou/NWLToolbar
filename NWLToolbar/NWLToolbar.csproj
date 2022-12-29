@@ -58,12 +58,19 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="02_Documentation_Tools\Forms\FrmSelectTitleBlock.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="02_Documentation_Tools\Forms\FrmSelectTitleBlock.Designer.cs">
+      <DependentUpon>FrmSelectTitleBlock.cs</DependentUpon>
+    </Compile>
     <Compile Include="02_Documentation_Tools\Forms\FrmRenumberSheets.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="02_Documentation_Tools\Forms\FrmRenumberSheets.Designer.cs">
       <DependentUpon>FrmRenumberSheets.cs</DependentUpon>
     </Compile>
+    <Compile Include="02_Documentation_Tools\PlaceViewsOnSheets.cs" />
     <Compile Include="02_Documentation_Tools\RenumberSheets.cs" />
     <Compile Include="02_Documentation_Tools\AlignSheetToOrigin .cs" />
     <Compile Include="02_Documentation_Tools\AlignNotesAndResize.cs" />
@@ -128,6 +135,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="NWLToolbar.addin" />
+    <EmbeddedResource Include="02_Documentation_Tools\Forms\FrmSelectTitleBlock.resx">
+      <DependentUpon>FrmSelectTitleBlock.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\16x16\Create_Interior_Elevations_16x16.png" />
     <EmbeddedResource Include="Resources\32x32\Create_Interior_Elevations_32x32.png" />
     <EmbeddedResource Include="02_Documentation_Tools\Forms\FrmRenumberSheets.resx">

@@ -33,7 +33,9 @@ namespace NWLToolbar
 
             //Get ViewSheets
             IList<Element> sheetCollector = new FilteredElementCollector(doc, doc.ActiveView.Id)
-                .WhereElementIsNotElementType().Where(x => x.Name != "<Revision Schedule>").ToList();
+                .WhereElementIsNotElementType()
+                .Where(x => x.Name != "<Revision Schedule>")
+                .ToList();
 
             //Start Transaction
             Transaction t = new Transaction(doc);

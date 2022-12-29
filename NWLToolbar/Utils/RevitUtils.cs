@@ -24,9 +24,17 @@ namespace NWLToolbar.Utils
         {
             return r.get_Parameter(BuiltInParameter.ROOM_NAME).AsValueString().ToString();
         }
+        public static string GetName(this FamilySymbol fs)
+        {
+            return $"{fs.FamilyName}: {fs.Name}";
+        }
         public static string GetNumName(this Room r)
         {
             return $"{r.Number} - {r.GetName()}";
+        }
+        public static string GetDetailNumber(this Viewport v)
+        {
+            return v.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).AsValueString();
         }
         public static double GetHeight(this Ceiling clg)
         {

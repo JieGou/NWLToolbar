@@ -30,25 +30,21 @@ namespace NWLToolbar
             Document doc = uidoc.Document;
 
             // Filtered Collecter 
-            FilteredElementCollector vftCollector = new FilteredElementCollector(doc)
+            List<ViewFamilyType> vftList = new FilteredElementCollector(doc)
                 .OfClass(typeof(ViewFamilyType))
-                .WhereElementIsElementType();
+                .WhereElementIsElementType()
+                .Cast<ViewFamilyType>()
+                .ToList();
 
             FilteredElementCollector selectedViews = new FilteredElementCollector(doc)
                 .OfCategory(BuiltInCategory.OST_Views)
                 .WhereElementIsNotElementType();
-
-            List<ViewFamilyType> vftList = new List<ViewFamilyType>();
+            
             ElementId viewType = null;
 
             IList<View> viewsOfType = new List<View>();
 
             int thickness = 0;
-            
-            foreach (ViewFamilyType vft in vftCollector)
-            {
-                vftList.Add(vft);
-            }
 
             FrmElevationCropThickness curForm = new FrmElevationCropThickness(vftList);
             curForm.Width = 700;
