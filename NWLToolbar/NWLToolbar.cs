@@ -34,24 +34,25 @@ namespace NWLToolbar
             string curAssemblyPath = System.IO.Path.GetDirectoryName(curAssembly);
 
             //Push Buttons
-            PushButtonData pbd1 = new PushButtonData("Sheets to Uppercase", "Sheets Names" + "\r" + "To Uppercase", curAssembly, "NWLToolbar.CapitalizeSheets");
-            PushButtonData pbd2 = new PushButtonData("Teams Link", "BIM Tools" + "\r" + "& Resources", curAssembly, "NWLToolbar.TeamsLink");
-            PushButtonData pbd3 = new PushButtonData("Overridden Dims", "Select Overridden" + "\r" + "Dimensions", curAssembly, "NWLToolbar.SelectOverriddenDimensions");
-            PushButtonData pbd4 = new PushButtonData("Element History", "Element" + "\r" + "History", curAssembly, "NWLToolbar.ElementHistory");
+            PushButtonData pbd1 = new PushButtonData("Sheets to Uppercase", "Sheets Names\rTo Uppercase", curAssembly, "NWLToolbar.CapitalizeSheets");
+            PushButtonData pbd2 = new PushButtonData("Teams Link", "BIM Tools\r& Resources", curAssembly, "NWLToolbar.TeamsLink");
+            PushButtonData pbd3 = new PushButtonData("Overridden Dims", "Select Overridden\rDimensions", curAssembly, "NWLToolbar.SelectOverriddenDimensions");
+            PushButtonData pbd4 = new PushButtonData("Element History", "Element\rHistory", curAssembly, "NWLToolbar.ElementHistory");
             PushButtonData pbd5 = new PushButtonData("Align Notes", "Align Notes W/ Detail Line", curAssembly, "NWLToolbar.AlignNotes");
-            PushButtonData pbd6 = new PushButtonData("Renumber Views on Sheet", "Renumber Views" + "\r" + "On Sheet", curAssembly, "NWLToolbar.RenumberViewsOnSheet");
+            PushButtonData pbd6 = new PushButtonData("Renumber Views on Sheet", "Renumber Views\rOn Sheet", curAssembly, "NWLToolbar.RenumberViewsOnSheet");
             PushButtonData pbd7 = new PushButtonData("Align Notes & Resize Text", "Align Notes W/ Detail Line & Resize", curAssembly, "NWLToolbar.AlignNotesAndResize");
-            PushButtonData pbd8 = new PushButtonData("Align All Sheets To Origin", "Align All Sheets" + "\r" + "To Origin", curAssembly, "NWLToolbar.AlignAllSheetsToOrigin");
+            PushButtonData pbd8 = new PushButtonData("Align All Sheets To Origin", "Align All Sheets\rTo Origin", curAssembly, "NWLToolbar.AlignAllSheetsToOrigin");
             PushButtonData pbd9 = new PushButtonData("Align Sheet To Origin", "Align Sheet\rTo Origin", curAssembly, "NWLToolbar.AlignSheetToOrigin");
             PushButtonData pbd10 = new PushButtonData("AlignPlans", "Align Plans", curAssembly, "NWLToolbar.AlignPlans");
-            PushButtonData pbd11 = new PushButtonData("Create Interior Elevation", "Create" + "\r" + "Interior Elevations", curAssembly, "NWLToolbar.CreateInteriorElevations");
-            PushButtonData pbd12 = new PushButtonData("Place Elevations On Sheets", "Place Elevations" + "\r" + "On Sheets", curAssembly, "NWLToolbar.PlaceElevationsOnSheets");
-            PushButtonData pbd13 = new PushButtonData("Create Tilt Up Elevation", "Create Tilt-Up" + "\r" + "Elevations", curAssembly, "NWLToolbar.CreateTiltUpElevations");
-            PushButtonData pbd14 = new PushButtonData("Create Tilt Up Elevation By Selection", "Create Tilt-Up" + "\r" + "Elevations by Selection", curAssembly, "NWLToolbar.CreateTiltUpElevationsByWalls");
+            PushButtonData pbd11 = new PushButtonData("Create Interior Elevation", "Create\rInterior Elevations", curAssembly, "NWLToolbar.CreateInteriorElevations");
+            PushButtonData pbd12 = new PushButtonData("Place Elevations On Sheets", "Place Elevations\rOn Sheets", curAssembly, "NWLToolbar.PlaceElevationsOnSheets");
+            PushButtonData pbd13 = new PushButtonData("Create Tilt Up Elevation", "Create Tilt-Up\rElevations", curAssembly, "NWLToolbar.CreateTiltUpElevations");
+            PushButtonData pbd14 = new PushButtonData("Create Tilt Up Elevation By Selection", "Create Tilt-Up\rElevations by Selection", curAssembly, "NWLToolbar.CreateTiltUpElevationsByWalls");
             PushButtonData pbd15 = new PushButtonData("Thicken Elevation Crop", "Thicken\rElevation Crop", curAssembly, "NWLToolbar.ElevationCropThickness");
             PushButtonData pbd16 = new PushButtonData("Purge Rooms", "Purge Rooms", curAssembly, "NWLToolbar.PurgeRooms");
             PushButtonData pbd17 = new PushButtonData("Renumber Sheets", "Renumber Sheets", curAssembly, "NWLToolbar.RenumberSheets");
             PushButtonData pbd18 = new PushButtonData("Place Views On Sheets", "Place Views" + "\r" + "On Sheets", curAssembly, "NWLToolbar.PlaceViewsOnSheets");
+            PushButtonData pbd19 = new PushButtonData("Re Crop Elevation", "Re Crop\rElevation", curAssembly, "NWLToolbar.ReCropElevation");
 
             //Pulldown Buttons
             PulldownButtonData pdbd1 = new PulldownButtonData("Align Notes Drop Down", "  Align  \r  Notes  ");
@@ -97,21 +98,21 @@ namespace NWLToolbar
             pbd15.Image = BitMapToImageSource(Resources.Thicken_Elevations_Crop_16x16);
             pbd16.LargeImage = BitMapToImageSource(Resources.Purge_Unplaced_Rooms_32x32);
             pbd16.Image = BitMapToImageSource(Resources.Purge_Unplaced_Rooms_16x16);
-            pbd17.LargeImage = BitMapToImageSource(Resources.Renumber_Views_32x32);
-            pbd17.Image = BitMapToImageSource(Resources.Renumber_Views_16x16);
-            pbd18.LargeImage = BitMapToImageSource(Resources.Interior_Elevations_On_Sheets_32x32);
-            pbd18.Image = BitMapToImageSource(Resources.Interior_Elevations_On_Sheets_16x16);
+            pbd17.LargeImage = BitMapToImageSource(Resources.Renumber_Sheets_32x32);
+            pbd17.Image = BitMapToImageSource(Resources.Renumber_Sheets_16x16);
+            pbd18.LargeImage = BitMapToImageSource(Resources.Place_Views_On_Sheets_32x32);
+            pbd18.Image = BitMapToImageSource(Resources.Place_Views_On_Sheets_16x16);
 
             pdbd1.LargeImage = BitMapToImageSource(Resources.Align_Notes_32x32);
             pdbd1.Image = BitMapToImageSource(Resources.Align_Notes_16x16);
-            pdbd2.LargeImage = BitMapToImageSource(Resources.Interior_Elevations_On_Sheets_32x32);
-            pdbd2.Image = BitMapToImageSource(Resources.Interior_Elevations_On_Sheets_16x16);
+            pdbd2.LargeImage = BitMapToImageSource(Resources.Place_Views_On_Sheets_32x32);
+            pdbd2.Image = BitMapToImageSource(Resources.Place_Views_On_Sheets_16x16);
             pdbd3.LargeImage = BitMapToImageSource(Resources.Tilt_Up_Elevations_32x32);
             pdbd3.Image = BitMapToImageSource(Resources.Tilt_Up_Elevations_16x16);
             pdbd4.LargeImage = BitMapToImageSource(Resources.Model_Clean_Up_32x32);
             pdbd4.Image = BitMapToImageSource(Resources.Model_Clean_Up_16x16);
-            pdbd5.LargeImage = BitMapToImageSource(Resources.Renumber_Views_32x32);
-            pdbd5.Image = BitMapToImageSource(Resources.Renumber_Views_16x16);
+            pdbd5.LargeImage = BitMapToImageSource(Resources.Sheets_32x32);
+            pdbd5.Image = BitMapToImageSource(Resources.Sheets_16x16);
             pdbd6.LargeImage = BitMapToImageSource(Resources.aA_32x32);
             pdbd6.Image = BitMapToImageSource(Resources.aA_16x16);
 
@@ -192,6 +193,7 @@ namespace NWLToolbar
             PulldownButton pdb6 = (PulldownButton)documentationPanel.AddItem(pdbd6);
                 foreach (PushButtonData pbd in capitalizationList)
                     pdb6.AddPushButton(pbd);
+            PushButton pb19 = (PushButton)documentationPanel.AddItem(pbd19);
 
             //Dimensions Section
             PushButton pb3 = (PushButton)dimensionsPanel.AddItem(pbd3);

@@ -243,6 +243,26 @@ namespace NWLToolbar.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Place_Views_On_Sheets_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Place_Views_On_Sheets_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Place_Views_On_Sheets_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Place_Views_On_Sheets_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Purge_Unplaced_Rooms_16x16 {
             get {
                 object obj = ResourceManager.GetObject("Purge_Unplaced_Rooms_16x16", resourceCulture);
@@ -263,6 +283,26 @@ namespace NWLToolbar.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Renumber_Sheets_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Renumber_Sheets_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Renumber_Sheets_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Renumber_Sheets_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Renumber_Views_16x16 {
             get {
                 object obj = ResourceManager.GetObject("Renumber_Views_16x16", resourceCulture);
@@ -276,6 +316,26 @@ namespace NWLToolbar.Properties {
         internal static System.Drawing.Bitmap Renumber_Views_32x32 {
             get {
                 object obj = ResourceManager.GetObject("Renumber_Views_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Sheets_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Sheets_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Sheets_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Sheets_32x32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

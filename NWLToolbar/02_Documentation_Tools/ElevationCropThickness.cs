@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Architecture;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 
@@ -57,12 +58,11 @@ namespace NWLToolbar
                 viewType = curForm.GetSelectedElevationType().Id;
                 thickness = curForm.GetThickness();
             }
+            else
+                goto Failed;
 
             foreach (View v in selectedViews)
-            {
-                string a = v.get_Parameter(BuiltInParameter.VIEW_TYPE_SCHEDULES).AsValueString() ;
-                string b = doc.GetElement(viewType).Name;
-
+            {       
                 if (v.get_Parameter(BuiltInParameter.VIEW_TYPE_SCHEDULES).AsValueString() == doc.GetElement(viewType).Name)
                 {
                     viewsOfType.Add(v);
@@ -81,6 +81,8 @@ namespace NWLToolbar
             //Search For Sheets & Capitalize
             foreach (View i in viewsOfType)
             {
+                i.CropBoxActive = true;
+                i.CropBoxVisible = true;
                 IList<ElementId> curDepElem = i.GetDependentElements(elFil);     
                 foreach (ElementId depElem in curDepElem)
                     i.SetElementOverrides(depElem, ovGS);                
@@ -88,7 +90,9 @@ namespace NWLToolbar
 
             //Finish Transaction
             t.Commit();
-            t.Dispose();            
+            t.Dispose();
+
+            Failed:
 
             return Result.Succeeded;
         }

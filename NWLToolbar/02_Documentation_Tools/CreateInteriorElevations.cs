@@ -139,12 +139,13 @@ namespace NWLToolbar
                     ViewSection elevView = marker.CreateElevation(doc, planId, i);
 
                     //custom method to get far clipping
-                    double farClipOffset = GetViewDepth(filteredBoundaries, i, xyz);
+                    double farClipOffset = RevitUtils.GetViewDepth(filteredBoundaries, i, xyz);                    
 
                     //Set elevation name
-                    string elevationName = roomNumber + " - " + roomName + " - " + Char.ConvertFromUtf32('a' + i);
+                    string elevationName = $"{roomNumber} - {roomName} - {Char.ConvertFromUtf32('a' + i)}";
 
                     //Set elevation parameters
+                    elevView.DetailLevel = ViewDetailLevel.Fine;
                     elevView.get_Parameter(BuiltInParameter.VIEWER_BOUND_OFFSET_FAR).Set(farClipOffset);
                     elevView.get_Parameter(BuiltInParameter.VIEW_NAME).Set(elevationName);
                     elevView.Scale = 48;
@@ -207,30 +208,6 @@ namespace NWLToolbar
                 TaskDialog.Show("Error", $"The following rooms could not be cropped to the ceiling. Please manually adjust them.\n\n    {string.Join("\n    ", errorRooms)} ");
 
             return Result.Succeeded;
-        }        
-
-        private double GetViewDepth(IList<BoundarySegment> roomBoundry, double v1, XYZ roomCenter)
-        {            
-            if (v1 == 0)
-            {                
-                double depth = roomBoundry.Min(x => x.GetCurve().GetEndPoint(0).X);                
-                return Math.Abs(roomCenter.X - depth);
-            }
-            if (v1 == 1)
-            {
-                double depth = roomBoundry.Max(x => x.GetCurve().GetEndPoint(0).Y);                
-                return Math.Abs(depth - roomCenter.Y);
-            }
-            else if (v1 == 2)
-            {
-                double depth = roomBoundry.Max(x => x.GetCurve().GetEndPoint(0).X);
-                return Math.Abs(roomCenter.X - depth);
-            }
-            //(v1 == 3)
-            {
-                double depth = roomBoundry.Min(x => x.GetCurve().GetEndPoint(0).Y);
-                return Math.Abs(depth - roomCenter.Y);
-            }             
         }
     }
 }

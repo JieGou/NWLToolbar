@@ -58,6 +58,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="02_Documentation_Tools\ReCropElevation.cs" />
     <Compile Include="02_Documentation_Tools\Forms\FrmSelectTitleBlock.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -135,6 +136,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="NWLToolbar.addin" />
+    <EmbeddedResource Include="Resources\32x32\Sheets_32x32.png" />
+    <EmbeddedResource Include="Resources\16x16\Place_Views_On_Sheets_16x16.png" />
+    <EmbeddedResource Include="Resources\16x16\Sheets_16x16.png" />
+    <EmbeddedResource Include="Resources\16x16\Renumber_Sheets_16x16.png" />
+    <EmbeddedResource Include="Resources\32x32\Renumber_Sheets_32x32.png" />
+    <EmbeddedResource Include="Resources\32x32\Place_Views_On_Sheets_32x32.png" />
     <EmbeddedResource Include="02_Documentation_Tools\Forms\FrmSelectTitleBlock.resx">
       <DependentUpon>FrmSelectTitleBlock.cs</DependentUpon>
     </EmbeddedResource>
