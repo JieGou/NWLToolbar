@@ -123,6 +123,26 @@ namespace NWLToolbar.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Beta_Tools_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Beta_Tools_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Beta_Tools_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Beta_Tools_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Create_Interior_Elevations_16x16 {
             get {
                 object obj = ResourceManager.GetObject("Create_Interior_Elevations_16x16", resourceCulture);
@@ -276,6 +296,26 @@ namespace NWLToolbar.Properties {
         internal static System.Drawing.Bitmap Purge_Unplaced_Rooms_32x32 {
             get {
                 object obj = ResourceManager.GetObject("Purge_Unplaced_Rooms_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Re_Crop_Elevation_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Re_Crop_Elevation_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Re_Crop_Elevation_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Re_Crop_Elevation_32x32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

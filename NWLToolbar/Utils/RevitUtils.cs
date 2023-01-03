@@ -25,6 +25,10 @@ namespace NWLToolbar.Utils
         {
             return r.get_Parameter(BuiltInParameter.ROOM_NAME).AsValueString().ToString();
         }
+        public static Parameter GetNameParam(this Room r)
+        {
+            return r.get_Parameter(BuiltInParameter.ROOM_NAME);
+        }
         public static string GetName(this FamilySymbol fs)
         {
             return $"{fs.FamilyName}: {fs.Name}";

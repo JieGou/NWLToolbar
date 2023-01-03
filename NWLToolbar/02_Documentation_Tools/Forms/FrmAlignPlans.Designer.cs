@@ -75,7 +75,7 @@
             this.OK.Name = "OK";
             this.OK.Size = new System.Drawing.Size(140, 40);
             this.OK.TabIndex = 2;
-            this.OK.Text = "Select Sheets";
+            this.OK.Text = "OK";
             this.OK.UseVisualStyleBackColor = false;
             this.OK.Click += new System.EventHandler(this.OK_Click);
             // 

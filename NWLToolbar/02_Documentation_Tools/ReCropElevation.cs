@@ -53,6 +53,13 @@ namespace NWLToolbar
                 .DistinctBy(x => x.GenLevel.Id.IntegerValue)
                 .ToList();
 
+            List<Level> levels = new FilteredElementCollector(doc)
+                .OfClass(typeof(Level))
+                .WhereElementIsNotElementType()
+                .Cast<Level>()
+                .ToList();
+
+
             ElevationMarker curElevMarker = null;
             XYZ curMarkerXYZ = null;
             ViewPlan curViewPlan = null;
@@ -61,6 +68,7 @@ namespace NWLToolbar
             XYZ direction = curView.ViewDirection;
             XYZ curMax = curView.CropBox.Max;
             XYZ curMin = curView.CropBox.Min;
+            Level curLevel = null;
 
             ElementClassFilter elFil = new ElementClassFilter(typeof(View));
 
@@ -79,25 +87,30 @@ namespace NWLToolbar
 
                 foreach (View m in viewSections)
                 {
-                    if (curView.Name == m.Name)
+                    if (curView.Id == m.Id)
                     {
                         curElevMarker = em;
                         break;
                     }
                 }
             }
+
+            //need to figure out how to get view elevation
+
             Dictionary<ElementId, ViewPlan> viewPlanDict = filteredPlans.ToDictionary(x => x.GenLevel.Id);
 
+            Dictionary<double, Level> levelDict = levels.ToDictionary(x => x.ProjectElevation);            
+
+            curLevel = levelDict[levelDict.Keys.OrderBy(x => Math.Abs(x - curView.get_BoundingBox(curView).Min.Y)).First()];
+
+            curViewPlan = viewPlanDict[curLevel.Id];
+
+            rooms = rooms.Where(x => x.LevelId == curLevel.Id).ToList();
+            
             foreach (Room r in rooms)
-            {
-                curViewPlan = viewPlanDict[r.LevelId];
-                if (curViewPlan != null)
-                    break;
-            }
-            foreach(Room r in rooms)
-            {
+            {                
                 bb = curElevMarker.get_BoundingBox(curViewPlan);
-                curMarkerXYZ = (bb.Max + bb.Min) / 2;
+                curMarkerXYZ = bb.Max;
 
                 if (r.IsPointInRoom(curMarkerXYZ))
                 {
@@ -111,7 +124,7 @@ namespace NWLToolbar
             t.Start("Re-Crop Elevations");
 
             Ceiling selectedClg = null;
-            double roomHeight = curRoom.UnboundedHeight;            
+            double roomHeight = curRoom.UnboundedHeight + curLevel.ProjectElevation;            
             BoundingBoxXYZ tempBox = curView.CropBox;
 
             tempBox.Max = new XYZ(curMax.X, curRoom.Level.ProjectElevation + roomHeight, curMax.Z);
@@ -136,7 +149,7 @@ namespace NWLToolbar
             }
             if (selectedClg != null)
             {
-                roomHeight = selectedClg.GetHeight();
+                roomHeight = selectedClg.GetHeight()+curLevel.ProjectElevation;
             }
 
             //Gets room boundry segments                    
@@ -145,7 +158,7 @@ namespace NWLToolbar
             //custom method to get far clipping
             //double farClipOffset = RevitUtils.GetViewDepth(filteredBoundaries, i, xyz);
             XYZ max = RevitUtils.GetRoomMax(filteredBoundaries, direction, roomHeight);
-            XYZ min = RevitUtils.GetRoomMin(filteredBoundaries, direction, curRoom.Level.ProjectElevation);
+            XYZ min = RevitUtils.GetRoomMin(filteredBoundaries, direction, curLevel.ProjectElevation);
 
             BoundingBoxXYZ newBox = curView.CropBox;
             newBox.Max = max;

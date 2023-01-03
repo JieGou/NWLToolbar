@@ -78,7 +78,7 @@
             this.OK.Name = "OK";
             this.OK.Size = new System.Drawing.Size(140, 40);
             this.OK.TabIndex = 2;
-            this.OK.Text = "Select Rooms";
+            this.OK.Text = "OK";
             this.OK.UseVisualStyleBackColor = false;
             this.OK.Click += new System.EventHandler(this.OK_Click);
             // 
@@ -146,7 +146,7 @@
             this.label2.TabIndex = 6;
             this.label2.Text = "Select Elevation Type:";
             // 
-            // FrmCreateInteriorElevations
+            // FrmSelectRoomAndElevationType
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -163,7 +163,7 @@
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(500, 450);
-            this.Name = "FrmCreateInteriorElevations";
+            this.Name = "FrmSelectRoomAndElevationType";
             this.Text = "Create Interior Elevations";
             this.Load += new System.EventHandler(this.FrmAlignPlans_Load);
             this.ResumeLayout(false);

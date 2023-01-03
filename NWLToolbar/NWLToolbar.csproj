@@ -58,6 +58,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="02_Documentation_Tools\CapitalizeRooms.cs" />
     <Compile Include="02_Documentation_Tools\ReCropElevation.cs" />
     <Compile Include="02_Documentation_Tools\Forms\FrmSelectTitleBlock.cs">
       <SubType>Form</SubType>
@@ -73,7 +74,7 @@
     </Compile>
     <Compile Include="02_Documentation_Tools\PlaceViewsOnSheets.cs" />
     <Compile Include="02_Documentation_Tools\RenumberSheets.cs" />
-    <Compile Include="02_Documentation_Tools\AlignSheetToOrigin .cs" />
+    <Compile Include="04_Beta_Tools\AlignSheetToOrigin .cs" />
     <Compile Include="02_Documentation_Tools\AlignNotesAndResize.cs" />
     <Compile Include="02_Documentation_Tools\AlignNotes.cs" />
     <Compile Include="02_Documentation_Tools\ElevationCropThickness.cs" />
@@ -120,8 +121,8 @@
     <Compile Include="03_Resource_Tools\SelectOverriddenDimensions.cs" />
     <Compile Include="03_Resource_Tools\ElementHistory.cs" />
     <Compile Include="02_Documentation_Tools\RenumberViewsOnSheet.cs" />
-    <Compile Include="02_Documentation_Tools\AlignAllSheetsToOrigin.cs" />
-    <Compile Include="02_Documentation_Tools\AlignPlans.cs" />
+    <Compile Include="04_Beta_Tools\AlignAllSheetsToOrigin.cs" />
+    <Compile Include="04_Beta_Tools\AlignPlans.cs" />
     <Compile Include="02_Documentation_Tools\CreateInteriorElevations.cs" />
     <Compile Include="03_Resource_Tools\TeamsLink.cs" />
     <Compile Include="NWLToolbar.cs" />
@@ -136,6 +137,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="NWLToolbar.addin" />
+    <EmbeddedResource Include="Resources\16x16\Re_Crop_Elevation_16x16.png" />
+    <EmbeddedResource Include="Resources\32x32\Re_Crop_Elevation_32x32.png" />
+    <EmbeddedResource Include="Resources\32x32\Beta_Tools_32x32.png" />
+    <EmbeddedResource Include="Resources\16x16\Beta_Tools_16x16.png" />
     <EmbeddedResource Include="Resources\32x32\Sheets_32x32.png" />
     <EmbeddedResource Include="Resources\16x16\Place_Views_On_Sheets_16x16.png" />
     <EmbeddedResource Include="Resources\16x16\Sheets_16x16.png" />
