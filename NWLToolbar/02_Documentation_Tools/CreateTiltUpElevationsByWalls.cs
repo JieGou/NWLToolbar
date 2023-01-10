@@ -213,16 +213,10 @@ namespace NWLToolbar
             } 
 
             t.Commit();
-            t.Dispose();
-
-            failed:
+            t.Dispose();            
 
             return Result.Succeeded;
         }
-       
-        private string GetWallTypeName(WallType i)
-        {
-            return i.FamilyName + ": " + i.Name;
-        }        
+             
     }
 }

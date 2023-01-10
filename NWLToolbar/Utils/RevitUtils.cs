@@ -25,6 +25,10 @@ namespace NWLToolbar.Utils
         {
             return r.get_Parameter(BuiltInParameter.ROOM_NAME).AsValueString().ToString();
         }
+        public static string GetViewTypeAndName(this ViewPlan plan)
+        {
+            return $"{plan.ViewType}: {plan.Name}";
+        }
         public static Parameter GetNameParam(this Room r)
         {
             return r.get_Parameter(BuiltInParameter.ROOM_NAME);

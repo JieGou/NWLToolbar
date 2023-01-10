@@ -50,7 +50,7 @@ namespace NWLToolbar
                 .WhereElementIsNotElementType()
                 .Cast<ViewPlan>()
                 .Where(x => x.ViewType.ToString() == "FloorPlan" && x.GenLevel != null)
-                .DistinctBy(x => x.GenLevel.Id.IntegerValue)
+                //.DistinctBy(x => x.GenLevel.Id.IntegerValue)
                 .ToList();
 
             List<Level> levels = new FilteredElementCollector(doc)
@@ -97,16 +97,29 @@ namespace NWLToolbar
 
             //need to figure out how to get view elevation
 
-            Dictionary<ElementId, ViewPlan> viewPlanDict = filteredPlans.ToDictionary(x => x.GenLevel.Id);
+            //Dictionary<ElementId, ViewPlan> viewPlanDict = filteredPlans.ToDictionary(x => x.GenLevel.Id);
 
             Dictionary<double, Level> levelDict = levels.ToDictionary(x => x.ProjectElevation);            
 
-            curLevel = levelDict[levelDict.Keys.OrderBy(x => Math.Abs(x - curView.get_BoundingBox(curView).Min.Y)).First()];
+            curLevel = levelDict[levelDict.Keys.OrderBy (x => Math.Abs(x - curView.get_BoundingBox(curView).Min.Y)).First()];
 
-            curViewPlan = viewPlanDict[curLevel.Id];
+            //curViewPlan = viewPlanDict[curLevel.Id];*/
 
             rooms = rooms.Where(x => x.LevelId == curLevel.Id).ToList();
-            
+
+            filteredPlans = filteredPlans.Where(x => x.GenLevel.Id == curLevel.Id).ToList();
+
+            FrmSelectFloorPlan curForm = new FrmSelectFloorPlan(filteredPlans);
+            curForm.Width = 700;
+            curForm.Height = 200;
+            curForm.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+
+            //Open Dialog Box & Add Selection to list
+            if (curForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                curViewPlan = curForm.GetSelectedPlan();
+            }
+
             foreach (Room r in rooms)
             {                
                 bb = curElevMarker.get_BoundingBox(curViewPlan);
@@ -151,6 +164,12 @@ namespace NWLToolbar
             {
                 roomHeight = selectedClg.GetHeight()+curLevel.ProjectElevation;
             }
+
+            tempBox.Max = curMax;
+            tempBox.Min = curMin;
+            curView.CropBox = tempBox;
+
+            doc.Regenerate();
 
             //Gets room boundry segments                    
             var filteredBoundaries = curRoom.GetBoundarySegments(sEBO).ElementAt(0);

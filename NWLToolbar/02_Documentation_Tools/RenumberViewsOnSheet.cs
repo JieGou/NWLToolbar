@@ -5,12 +5,14 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using NWLToolbar.Utils;
+using Application = Autodesk.Revit.ApplicationServices.Application;
 
 #endregion
 
@@ -35,9 +37,12 @@ namespace NWLToolbar
                 .OfCategory(BuiltInCategory.OST_TitleBlocks)
                 .WhereElementIsNotElementType();
 
-            FilteredElementCollector viewportCollector = new FilteredElementCollector(doc, doc.ActiveView.Id)
+            List<Viewport> viewportCollector = new FilteredElementCollector(doc, doc.ActiveView.Id)
                 .OfCategory(BuiltInCategory.OST_Viewports)
-                .WhereElementIsNotElementType();
+                .WhereElementIsNotElementType()
+                .Cast<Viewport>()
+                .Where(x => x.GetLabelOutline().GetDiagonalLength() != 0)                
+                .ToList();
 
 
             //Variables
@@ -60,11 +65,11 @@ namespace NWLToolbar
                                            
 
             //Set Detail Numbers to Arbitrary Number
-            foreach (Element vp in viewportCollector)
+            foreach (Viewport vp in viewportCollector)
             {
                 arbitrarySet++;
                 Parameter number = vp.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER);
-                number.Set(arbitrarySet.ToString());
+                number.Set(arbitrarySet.ToString());                
             }
             arbitrarySet = 1000;
 
@@ -79,17 +84,17 @@ namespace NWLToolbar
             int curViewport = 1;
             //Set Detail Numbers to Number Based On Location
             foreach (Viewport vp in viewportCollector)
-            {                    
-                    
+            {
+
                 //Find ViewTitleHead Location
                 XYZ max = vp.GetLabelOutline().MaximumPoint;
                 XYZ min = vp.GetLabelOutline().MinimumPoint;
-                XYZ headLocation = new XYZ(min.X, min.Y, 0)-boxOrigin;    
-                double xLocation = (headLocation.X/boxWidth.X);
-                double yLocation = (headLocation.Y/boxHeight.Y);
-
+                XYZ headLocation = new XYZ(min.X, min.Y, 0) - boxOrigin;
+                double xLocation = (headLocation.X / boxWidth.X);
+                double yLocation = (headLocation.Y / boxHeight.Y);
+                
                 if (xLocation > 0)
-                    horNumber = (Math.Floor(xLocation)+1).ToString();
+                    horNumber = (Math.Floor(xLocation) + 1).ToString();
                 else
                     horNumber = $"Null{curViewport}";
 
@@ -106,12 +111,12 @@ namespace NWLToolbar
                         .ToList();
 
                 //Variables
-                string newDetailNumber = vertLetter+horNumber;                
+                string newDetailNumber = vertLetter + horNumber;
                 List<string> newNameList = new List<string>();
-                newNameList.Add(newDetailNumber);                
+                newNameList.Add(newDetailNumber);
                 List<string> names = new List<string>();
 
-                Dictionary<string, Viewport> values = updatedViewportCollector.ToDictionary(x => x.GetDetailNumber());                   
+                Dictionary<string, Viewport> values = updatedViewportCollector.ToDictionary(x => x.GetDetailNumber());
 
                 //If Duplicate Value Then Append Letter
                 if (values.ContainsKey(newDetailNumber))
@@ -119,7 +124,7 @@ namespace NWLToolbar
                     rename.Add(newDetailNumber);
                     failedAttempts++;
                     if (failedAttempts > 0)
-                        newDetailNumber = vertLetter + horNumber + Char.ConvertFromUtf32(Convert.ToChar("b")+(failedAttempts-1)).ToString();                   
+                        newDetailNumber = vertLetter + horNumber + Char.ConvertFromUtf32(Convert.ToChar("b") + (failedAttempts - 1)).ToString();
 
                     Parameter number = vp.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER);
                     number.Set(newDetailNumber);
@@ -129,8 +134,7 @@ namespace NWLToolbar
                     failedAttempts = 0;
                     Parameter number = vp.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER);
                     number.Set(newDetailNumber);
-                }
-                
+                }  
             }
 
             rename = rename.Distinct().ToList();
@@ -158,7 +162,7 @@ namespace NWLToolbar
             //failedAttempts = 0;
 
             t.Commit();
-            t.Dispose();
+            t.Dispose();            
 
             return Result.Succeeded;
         }

@@ -163,7 +163,8 @@ namespace NWLToolbar
             //Sheet Tools Dropdown
             IList<PushButtonData> SheetToolsList = new List<PushButtonData>();
             SheetToolsList.Add(pbd6);
-            SheetToolsList.Add(pbd17);            
+            SheetToolsList.Add(pbd17);
+            SheetToolsList.Add(pbd9); //align sheets
 
             //Tilt Elevations Dropdown
             IList<PushButtonData> tiltList = new List<PushButtonData>();
@@ -181,8 +182,7 @@ namespace NWLToolbar
 
             //Beta Tools
             IList<PushButtonData> betaList = new List<PushButtonData>();
-            betaList.Add(pbd8); //align sheets
-            betaList.Add(pbd9); //align all sheets
+            //betaList.Add(pbd8); //align all sheets            
             betaList.Add(pbd10); //align plans
 
             //place Views Dropdown
@@ -220,7 +220,7 @@ namespace NWLToolbar
 
             PulldownButton pdb6 = (PulldownButton)documentationPanel.AddItem(pdbd6); //Capitalization Tools
             foreach (PushButtonData pbd in capitalizationList)
-                pdb6.AddPushButton(pbd);
+                pdb6.AddPushButton(pbd);            
 
             //Dimensions Section
             PushButton pb3 = (PushButton)dimensionsPanel.AddItem(pbd3);              //Overridden Dimensions

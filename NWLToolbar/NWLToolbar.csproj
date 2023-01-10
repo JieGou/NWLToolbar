@@ -59,6 +59,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="02_Documentation_Tools\CapitalizeRooms.cs" />
+    <Compile Include="02_Documentation_Tools\Forms\FrmSelectFloorPlan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="02_Documentation_Tools\Forms\FrmSelectFloorPlan.Designer.cs">
+      <DependentUpon>FrmSelectFloorPlan.cs</DependentUpon>
+    </Compile>
     <Compile Include="02_Documentation_Tools\ReCropElevation.cs" />
     <Compile Include="02_Documentation_Tools\Forms\FrmSelectTitleBlock.cs">
       <SubType>Form</SubType>
@@ -137,6 +143,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="NWLToolbar.addin" />
+    <EmbeddedResource Include="02_Documentation_Tools\Forms\FrmSelectFloorPlan.resx">
+      <DependentUpon>FrmSelectFloorPlan.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\16x16\Re_Crop_Elevation_16x16.png" />
     <EmbeddedResource Include="Resources\32x32\Re_Crop_Elevation_32x32.png" />
     <EmbeddedResource Include="Resources\32x32\Beta_Tools_32x32.png" />
