@@ -32,6 +32,7 @@ namespace NWLToolbar
             Document doc = uidoc.Document;
 
             View curView = doc.ActiveView;
+            
 
             List<Room> rooms = new FilteredElementCollector(doc)
                 .OfClass(typeof(SpatialElement))
@@ -56,7 +57,8 @@ namespace NWLToolbar
             List<Level> levels = new FilteredElementCollector(doc)
                 .OfClass(typeof(Level))
                 .WhereElementIsNotElementType()
-                .Cast<Level>()
+                .Cast<Level>()                
+                .DistinctBy(X => X.ProjectElevation)
                 .ToList();
 
 
@@ -97,17 +99,15 @@ namespace NWLToolbar
 
             //need to figure out how to get view elevation
 
-            //Dictionary<ElementId, ViewPlan> viewPlanDict = filteredPlans.ToDictionary(x => x.GenLevel.Id);
-
             Dictionary<double, Level> levelDict = levels.ToDictionary(x => x.ProjectElevation);            
 
             curLevel = levelDict[levelDict.Keys.OrderBy (x => Math.Abs(x - curView.get_BoundingBox(curView).Min.Y)).First()];
 
             //curViewPlan = viewPlanDict[curLevel.Id];*/
 
-            rooms = rooms.Where(x => x.LevelId == curLevel.Id).ToList();
+            rooms = rooms.Where(x => x.Level.ProjectElevation == curLevel.ProjectElevation).OrderBy(x => x.Number).ToList();
 
-            filteredPlans = filteredPlans.Where(x => x.GenLevel.Id == curLevel.Id).ToList();
+            filteredPlans = filteredPlans.Where(x => x.GenLevel.ProjectElevation == curLevel.ProjectElevation).OrderBy(x => x.Name).ToList();
 
             FrmSelectFloorPlan curForm = new FrmSelectFloorPlan(filteredPlans);
             curForm.Width = 700;
@@ -123,8 +123,8 @@ namespace NWLToolbar
             foreach (Room r in rooms)
             {                
                 bb = curElevMarker.get_BoundingBox(curViewPlan);
-                curMarkerXYZ = bb.Max;
-
+                curMarkerXYZ = (bb.Max + bb.Min) / 2 + new XYZ(0,0,1);                
+               
                 if (r.IsPointInRoom(curMarkerXYZ))
                 {
                     curRoom = r;
@@ -135,6 +135,8 @@ namespace NWLToolbar
             //Transaction Start
             Transaction t = new Transaction(doc);
             t.Start("Re-Crop Elevations");
+
+            curView.GetCropRegionShapeManager().RemoveCropRegionShape();
 
             Ceiling selectedClg = null;
             double roomHeight = curRoom.UnboundedHeight + curLevel.ProjectElevation;            

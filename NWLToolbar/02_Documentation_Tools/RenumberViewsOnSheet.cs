@@ -73,7 +73,6 @@ namespace NWLToolbar
             }
             arbitrarySet = 1000;
 
-
             //Variables
             string horNumber;
             string vertLetter;

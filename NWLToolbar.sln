@@ -5,6 +5,8 @@ VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NWLToolbar", "NWLToolbar\NWLToolbar.csproj", "{45388BA2-290B-4D3F-9DFF-8F7222767434}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "NWL_ToolbarInstaller", "NWL_ToolbarInstaller\NWL_ToolbarInstaller.vdproj", "{CC4B1881-B55D-46B2-898B-3CDACBBFB1F3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,8 @@ Global
 		{45388BA2-290B-4D3F-9DFF-8F7222767434}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45388BA2-290B-4D3F-9DFF-8F7222767434}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45388BA2-290B-4D3F-9DFF-8F7222767434}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC4B1881-B55D-46B2-898B-3CDACBBFB1F3}.Debug|Any CPU.ActiveCfg = Debug
+		{CC4B1881-B55D-46B2-898B-3CDACBBFB1F3}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
