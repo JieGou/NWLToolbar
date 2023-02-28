@@ -18,10 +18,10 @@ namespace NWLToolbar
         public FrmSelectElevationType(List<ViewFamilyType> vftList)
         {
             InitializeComponent();
-            
+
             foreach (ViewFamilyType vft in vftList)
             {
-                if (vft.FamilyName == "Elevation")
+                if (vft.FamilyName == "立面")
                     this.comboBox1.Items.Add(vft.FamilyName + ": " + vft.Name);
             }
             this.comboBox1.SelectedIndex = 0;
@@ -29,12 +29,10 @@ namespace NWLToolbar
 
         private void FrmAlignPlans_Load(object sender, EventArgs e)
         {
-
         }
 
         private void Sheets_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
         }
 
         private void Cancel_Click(object sender, EventArgs e)
@@ -46,7 +44,7 @@ namespace NWLToolbar
         {
             this.Close();
         }
-        
+
         public string GetSelectedElevationType()
         {
             string selectedElevation = null;

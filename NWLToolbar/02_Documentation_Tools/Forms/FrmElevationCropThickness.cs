@@ -17,6 +17,7 @@ namespace NWLToolbar
     public partial class FrmElevationCropThickness : System.Windows.Forms.Form
     {
         private List<ViewFamilyType> viewFamilyList;
+
         public FrmElevationCropThickness(List<ViewFamilyType> vftList)
         {
             InitializeComponent();
@@ -25,25 +26,23 @@ namespace NWLToolbar
 
             for (int i = 1; i < 8; i++)
                 this.Thickness.Items.Add(i);
-            
+
             foreach (ViewFamilyType vft in vftList)
             {
-                if (vft.FamilyName == "Elevation")
+                if (vft.FamilyName == "立面")
                     this.comboBox1.Items.Add(vft.GetName());
             }
-            
+
             this.Thickness.SelectedIndex = 4;
             this.comboBox1.SelectedIndex = 0;
         }
 
         private void FrmAlignPlans_Load(object sender, EventArgs e)
         {
-
         }
 
         private void Sheets_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
         }
 
         private void Cancel_Click(object sender, EventArgs e)
@@ -62,6 +61,7 @@ namespace NWLToolbar
 
             return vftDictionary[this.comboBox1.SelectedItem.ToString()];
         }
+
         public int GetThickness()
         {
             return (int)this.Thickness.SelectedItem;

@@ -1,4 +1,5 @@
 #region Namespaces
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
@@ -20,11 +21,7 @@ namespace NWLToolbar
     [Transaction(TransactionMode.Manual)]
     public class PlaceElevationsOnSheets : IExternalCommand
     {
-        
-        public Result Execute(
-          ExternalCommandData commandData,
-          ref string message,
-          ElementSet elements)
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             UIApplication uiapp = commandData.Application;
             UIDocument uidoc = uiapp.ActiveUIDocument;
@@ -63,12 +60,12 @@ namespace NWLToolbar
             curForm.Width = 700;
             curForm.Height = 900;
             curForm.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            
+
             //Open Dialog Box & Add Selection to list
             if (curForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 List<string> selectedViews = curForm.GetSelectedRooms();
-                
+
                 foreach (FamilySymbol fs in tbCollector)
                 {
                     if (fs.FamilyName + ": " + fs.Name == curForm.GetSelectedTitleBlock())
@@ -83,9 +80,9 @@ namespace NWLToolbar
                         selectedRoomList.Add(roomDict[s]);
                 }
             }
-            
+
             SheetsToCreate = Math.Ceiling(selectedRoomList.Count() / 4d);
-            
+
             //Transaction Start
             Transaction t = new Transaction(doc);
             t.Start("Place Elevations On Sheets");
@@ -113,16 +110,16 @@ namespace NWLToolbar
                 Room curRoom3 = null;
 
                 //Finds if How many rooms will be placed on sheet
-                if (selectedRoomList.Count - sPoint > 1)                
-                    curRoom1 = selectedRoomList[sPoint + 1];                
+                if (selectedRoomList.Count - sPoint > 1)
+                    curRoom1 = selectedRoomList[sPoint + 1];
                 if (selectedRoomList.Count - sPoint > 2)
-                    curRoom2 = selectedRoomList[sPoint + 2];                
-                if (selectedRoomList.Count - sPoint > 3)                
-                    curRoom3 = selectedRoomList[sPoint + 3];                
-                
+                    curRoom2 = selectedRoomList[sPoint + 2];
+                if (selectedRoomList.Count - sPoint > 3)
+                    curRoom3 = selectedRoomList[sPoint + 3];
+
                 //Populates Sublists to ensure room elevation order
                 foreach (View e in allViews)
-                {                    
+                {
                     if (e.Name.Contains(curRoom0.GetNumName()))
                     {
                         subList0.Add(e);
@@ -132,21 +129,21 @@ namespace NWLToolbar
                         if (e.Name.Contains(curRoom1.GetNumName()))
                         {
                             subList1.Add(e);
-                        }                        
+                        }
                     }
                     if (curIndex > 2)
                     {
                         if (e.Name.Contains(curRoom2.GetNumName()))
                         {
                             subList2.Add(e);
-                        }                        
+                        }
                     }
                     if (curIndex > 3)
                     {
                         if (e.Name.Contains(curRoom3.GetNumName()))
                         {
                             subList3.Add(e);
-                        }                        
+                        }
                     }
                 }
 
@@ -154,11 +151,11 @@ namespace NWLToolbar
                 curElevations = subList0.Concat(subList1).Concat(subList2).Concat(subList3).ToList();
 
                 //Tracks Which view has been placed
-                int curViewPlaced = 0;                
+                int curViewPlaced = 0;
 
                 //Creates viewport and moves it to its proper location based on list order
                 foreach (View v in curElevations)
-                {                    
+                {
                     XYZ curPoint = new XYZ();
                     Viewport curViewport = Viewport.Create(doc, curSheet.Id, curElevations[curViewPlaced].Id, curPoint);
 
@@ -171,7 +168,7 @@ namespace NWLToolbar
                     curViewport.SetBoxCenter(newCenter);
                     curViewPlaced++;
                 }
-            }            
+            }
 
             t.Commit();
             t.Dispose();
@@ -188,9 +185,9 @@ namespace NWLToolbar
             double sizeX = boxSize.X / 4;
             double sizeY = boxSize.Y / 4;
             double remainder = curViewPlaced % 4;
-            double whole = Math.Floor(Convert.ToDouble(curViewPlaced)/4);
+            double whole = Math.Floor(Convert.ToDouble(curViewPlaced) / 4);
 
-            return new XYZ(boxBottomLeft.X + sizeX * remainder, boxBottomLeft.Y + sizeY * whole, 0);            
+            return new XYZ(boxBottomLeft.X + sizeX * remainder, boxBottomLeft.Y + sizeY * whole, 0);
         }
     }
 }

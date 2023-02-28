@@ -26,7 +26,7 @@ namespace NWLToolbar
             }
             foreach (ViewFamilyType vft in vftList)
             {
-                if (vft.FamilyName == "Elevation")
+                if (vft.FamilyName == "立面")
                     this.comboBox1.Items.Add(vft.GetName());
             }
             this.comboBox1.SelectedIndex = 0;
@@ -34,12 +34,10 @@ namespace NWLToolbar
 
         private void FrmAlignPlans_Load(object sender, EventArgs e)
         {
-
         }
 
         private void Sheets_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
         }
 
         private void Cancel_Click(object sender, EventArgs e)
@@ -51,15 +49,17 @@ namespace NWLToolbar
         {
             this.Close();
         }
+
         public List<string> GetSelectedWallTypes()
         {
             List<string> selectedWallTypes = new List<string>();
 
             foreach (string s in this.WallTypeList.CheckedItems)
                 selectedWallTypes.Add(s);
-                
+
             return selectedWallTypes;
         }
+
         public string GetSelectedElevationType()
         {
             string selectedElevation = null;
@@ -72,11 +72,11 @@ namespace NWLToolbar
         }
 
         private void SelectAll_Click(object sender, EventArgs e)
-        {            
+        {
             for (int i = 0; i < this.WallTypeList.Items.Count; i++)
             {
-                this.WallTypeList.SetItemChecked(i,true);
+                this.WallTypeList.SetItemChecked(i, true);
             }
-        }       
+        }
     }
 }
