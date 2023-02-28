@@ -1,4 +1,5 @@
-#region Namespaces
+﻿#region Namespaces
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
@@ -28,6 +29,50 @@ namespace NWLToolbar
         private List<ViewPlan> filteredPlans;
         private List<Ceiling> ceilingCollector;
 
+        public static bool SetParameter(Element elem, BuiltInParameter index, ElementId value)
+        {
+            Parameter parameter = GetParameter(elem, index);
+            if (parameter == null)
+            {
+                return false;
+            }
+            if (parameter.IsReadOnly)
+            {
+                return false;
+            }
+            StorageType storageType = parameter.StorageType;
+            return StorageType.ElementId == storageType && parameter.Set(value);
+        }
+
+        public static Parameter GetParameter(Element elem, BuiltInParameter index)
+        {
+            return elem.get_Parameter(index);
+        }
+
+        public static View GetElevationViewTemplate(Document doc, string viewName)
+        {
+            IList<Autodesk.Revit.DB.View> source = FilterElements<View>(doc);
+            List<Autodesk.Revit.DB.View> views = source.ToList<Autodesk.Revit.DB.View>();
+            if (views == null || views.Count < 1) return null;
+            foreach (View view in views)
+            {
+                if (view == null || !view.IsTemplate) continue;
+                if (view.ViewType != ViewType.Elevation) continue;
+                //templateViews.Add(view);
+                if (view.Name == viewName) return view;
+            }
+            return null;
+        }
+
+        public static List<T> FilterElements<T>(Document doc, ElementFilter filter = null) where T : class
+        {
+            FilteredElementCollector filteredElementCollector = new FilteredElementCollector(doc);
+            if (filter != null)
+            {
+                return filteredElementCollector.WherePasses(filter).OfClass(typeof(T)).OfType<T>().ToList<T>();
+            }
+            return filteredElementCollector.OfClass(typeof(T)).OfType<T>().ToList<T>();
+        }
 
         public Result Execute(
           ExternalCommandData commandData,
@@ -41,16 +86,16 @@ namespace NWLToolbar
 
             //Collectors
             roomCollector = new FilteredElementCollector(doc)
-                .OfCategory(BuiltInCategory.OST_Rooms)                
+                .OfCategory(BuiltInCategory.OST_Rooms)
                 .WhereElementIsNotElementType()
                 .Cast<Room>()
                 .Where(x => x.Area > 0 && x.Location != null)
                 .OrderBy(x => x.Number).ToList();
 
             vftList = new FilteredElementCollector(doc)
-                .OfClass(typeof(ViewFamilyType))                
+                .OfClass(typeof(ViewFamilyType))
                 .WhereElementIsElementType()
-                .Cast<ViewFamilyType>()                
+                .Cast<ViewFamilyType>()
                 .ToList();
 
             filteredPlans = new FilteredElementCollector(doc)
@@ -69,21 +114,21 @@ namespace NWLToolbar
                 .ToList();
 
             //Variables
-            List<Room> selectedRoomList = new List<Room>();           
+            List<Room> selectedRoomList = new List<Room>();
             ElementId markerId = null;
-            
+
             //Dialog Box Settings
             FrmSelectRoomAndElevationType curForm = new FrmSelectRoomAndElevationType(roomCollector, vftList);
             curForm.Width = 700;
             curForm.Height = 900;
             curForm.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-           
+
             //Open Dialog Box & Add Selection to list
             if (curForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {               
+            {
                 markerId = curForm.GetSelectedElevationType().Id;
-                selectedRoomList = curForm.GetSelectedRooms();               
-            }            
+                selectedRoomList = curForm.GetSelectedRooms();
+            }
 
             //Needed to grab room boundry
             SpatialElementBoundaryOptions sEBO = new SpatialElementBoundaryOptions();
@@ -92,7 +137,7 @@ namespace NWLToolbar
             Options cOptions = new Options();
             cOptions.DetailLevel = ViewDetailLevel.Fine;
             cOptions.IncludeNonVisibleObjects = true;
-            cOptions.ComputeReferences = true;            
+            cOptions.ComputeReferences = true;
 
             ElementCategoryFilter elFil = new ElementCategoryFilter(BuiltInCategory.OST_Viewers);
             List<string> errorRooms = new List<string>();
@@ -116,36 +161,41 @@ namespace NWLToolbar
                 bool clgFound = false;
 
                 foreach (Ceiling c in ceilingCollector)
-                {                    
-                    XYZ cXYZ = (c.get_Geometry(cOptions).GetBoundingBox().Max + c.get_Geometry(cOptions).GetBoundingBox().Min)/2;                    
+                {
+                    XYZ cXYZ = (c.get_Geometry(cOptions).GetBoundingBox().Max + c.get_Geometry(cOptions).GetBoundingBox().Min) / 2;
                     if (r.IsPointInRoom(cXYZ))
                     {
-                        roomHeight = c.GetHeight();                        
+                        roomHeight = c.GetHeight();
                         clgFound = true;
                         break;
-                    }                    
-                }                
+                    }
+                }
 
                 planId = filteredPlans.Where(x => x.GenLevel.Id == roomLevelId).First().Id;
 
                 //Creates elevation body
-                ElevationMarker marker = ElevationMarker.CreateElevationMarker(doc, markerId, xyz, 1);                
+                ElevationMarker marker = ElevationMarker.CreateElevationMarker(doc, markerId, xyz, 1);
 
+                //获取视图样板
+                View template = GetElevationViewTemplate(doc, "20出图_NS_立面");
                 //Creates each elevation view
                 for (int i = 0; i < 4; i++)
                 {
-                    //Gets room boundry segments                    
-                    var filteredBoundaries = r.GetBoundarySegments(sEBO).ElementAt(0);                    
+                    //Gets room boundry segments
+                    var filteredBoundaries = r.GetBoundarySegments(sEBO).ElementAt(0);
                     ViewSection elevView = marker.CreateElevation(doc, planId, i);
 
+                    //设定视图样板:20出图_NS_⽴⾯
+                    if (template != null) SetParameter(elevView, BuiltInParameter.VIEW_TEMPLATE, template.Id);
+
                     //custom method to get far clipping
-                    double farClipOffset = RevitUtils.GetViewDepth(filteredBoundaries, i, xyz);                    
+                    double farClipOffset = RevitUtils.GetViewDepth(filteredBoundaries, i, xyz);
 
                     //Set elevation name
-                    string elevationName = $"{roomNumber} - {roomName} - {Char.ConvertFromUtf32('a' + i)}";
+                    string elevationName = $"{roomNumber} - {roomName} - {i + 1}";
 
                     //Set elevation parameters
-                    elevView.DetailLevel = ViewDetailLevel.Fine;
+                    //elevView.DetailLevel = ViewDetailLevel.Fine;
                     elevView.get_Parameter(BuiltInParameter.VIEWER_BOUND_OFFSET_FAR).Set(farClipOffset);
                     elevView.get_Parameter(BuiltInParameter.VIEW_NAME).Set(elevationName);
                     elevView.Scale = 48;
@@ -159,8 +209,8 @@ namespace NWLToolbar
                     curbb.Min = curMin;
 
                     doc.Regenerate();
-                    
-                    XYZ newMax = new XYZ(curMax.X, curMin.Y + roomHeight, curMax.Z); 
+
+                    XYZ newMax = new XYZ(curMax.X, curMin.Y + roomHeight, curMax.Z);
                     curbb.Max = newMax;
 
                     elevView.CropBox = curbb;
@@ -179,7 +229,6 @@ namespace NWLToolbar
                         }
                         catch
                         {
-                            
                         }
                         if (selectedClg != null)
                         {
@@ -199,7 +248,7 @@ namespace NWLToolbar
                 }
                 if (!clgFound)
                     errorRooms.Add(r.GetNumName());
-            }           
+            }
 
             t.Commit();
             t.Dispose();

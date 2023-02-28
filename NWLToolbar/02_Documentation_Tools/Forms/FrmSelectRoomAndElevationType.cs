@@ -19,6 +19,7 @@ namespace NWLToolbar
     {
         private List<Room> formList;
         private List<ViewFamilyType> viewFamilyList;
+
         public FrmSelectRoomAndElevationType(List<Room> room, List<ViewFamilyType> vftList)
         {
             InitializeComponent();
@@ -32,7 +33,7 @@ namespace NWLToolbar
             }
             foreach (ViewFamilyType vft in vftList)
             {
-                if (vft.FamilyName == "Elevation" && (vft.Name.Contains("Int") || vft.Name.Contains("INT")))
+                if (vft.FamilyName == "立面" /*&& (vft.Name.Contains("Int") || vft.Name.Contains("INT"))*/)
                     this.comboBox1.Items.Add(vft.GetName());
             }
             this.comboBox1.SelectedIndex = 0;
@@ -40,12 +41,10 @@ namespace NWLToolbar
 
         private void FrmAlignPlans_Load(object sender, EventArgs e)
         {
-
         }
 
         private void Sheets_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
         }
 
         private void Cancel_Click(object sender, EventArgs e)
@@ -57,21 +56,26 @@ namespace NWLToolbar
         {
             this.Close();
         }
+
         public List<Room> GetSelectedRooms()
         {
-            Dictionary<string, Room> roomDictionary = formList.ToDictionary(x => x.GetNumName());
+            Dictionary<string, Room> roomDictionary = formList
+                //.ToDictionary(x => x.GetNumName());//易出现重复键
+                .GroupBy(x => x.GetNumName(), StringComparer.OrdinalIgnoreCase)
+                .ToDictionary(g => g.Key, g => g.Last(), StringComparer.OrdinalIgnoreCase);
 
             List<Room> selectedRooms = new List<Room>();
 
             foreach (string s in this.RoomList.CheckedItems)
                 selectedRooms.Add(roomDictionary[s]);
-                
+
             return selectedRooms;
         }
+
         public ViewFamilyType GetSelectedElevationType()
         {
             Dictionary<string, ViewFamilyType> vftDictionary = viewFamilyList.ToDictionary(x => x.GetName());
-            
+
             return vftDictionary[this.comboBox1.SelectedItem.ToString()];
         }
 
@@ -81,11 +85,11 @@ namespace NWLToolbar
         }
 
         private void SelectAll_Click(object sender, EventArgs e)
-        {            
+        {
             for (int i = 0; i < this.RoomList.Items.Count; i++)
             {
-                this.RoomList.SetItemChecked(i,true);
+                this.RoomList.SetItemChecked(i, true);
             }
-        }        
+        }
     }
 }
