@@ -171,8 +171,10 @@ namespace NWLToolbar
                     }
                 }
 
-                planId = filteredPlans.Where(x => x.GenLevel.Id == roomLevelId).First().Id;
+                planId = filteredPlans.First(x => x.GenLevel.Id == roomLevelId).Id;
 
+                //测试 偏移(-1000,1000,0)
+                //xyz = new XYZ(xyz.X - 1000 / 304.8, xyz.Y + 1000 / 304.8, xyz.Z);
                 //Creates elevation body
                 ElevationMarker marker = ElevationMarker.CreateElevationMarker(doc, markerId, xyz, 1);
 
@@ -196,7 +198,9 @@ namespace NWLToolbar
 
                     //Set elevation parameters
                     //elevView.DetailLevel = ViewDetailLevel.Fine;
-                    elevView.get_Parameter(BuiltInParameter.VIEWER_BOUND_OFFSET_FAR).Set(farClipOffset);
+
+                    //设置远裁剪偏移
+                    elevView.get_Parameter(BuiltInParameter.VIEWER_BOUND_OFFSET_FAR).Set(farClipOffset /*+ 1000 / 304.8*/);
                     elevView.get_Parameter(BuiltInParameter.VIEW_NAME).Set(elevationName);
                     elevView.Scale = 48;
 
