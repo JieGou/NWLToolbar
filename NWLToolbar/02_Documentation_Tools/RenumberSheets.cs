@@ -19,11 +19,8 @@ namespace NWLToolbar
     [Transaction(TransactionMode.Manual)]
     public class RenumberSheets : IExternalCommand
     {
-        
-        public Result Execute(
-          ExternalCommandData commandData,
-          ref string message,
-          ElementSet elements)
+
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             UIApplication uiapp = commandData.Application;
             UIDocument uidoc = uiapp.ActiveUIDocument;
@@ -46,7 +43,7 @@ namespace NWLToolbar
             {
                 TaskDialog.Show("Error", "Please select sheets first before runing tool.");
                 goto failed;
-            }            
+            }
 
             //Variables
             string sLetter = null;
@@ -55,10 +52,12 @@ namespace NWLToolbar
             string sAppended = null;
 
             //Dialog Box Settings
-            FrmRenumberSheets curForm = new FrmRenumberSheets();
-            curForm.Width = 500;
-            curForm.Height = 350;
-            curForm.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            FrmRenumberSheets curForm = new FrmRenumberSheets
+            {
+                Width = 500,
+                Height = 350,
+                StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+            };
 
             //Open Dialog Box & Add Selection to list
             if (curForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -76,9 +75,9 @@ namespace NWLToolbar
             t.Start("Renumber Sheets");
 
             foreach (ViewSheet s in sheetCollector)
-            {                
+            {
                 if (!sAppend)
-                    s.SheetNumber = sLetter + (sNumber + tracker).ToString();                
+                    s.SheetNumber = sLetter + (sNumber + tracker).ToString();
                 else
                     s.SheetNumber = sLetter + sNumber.ToString() + Char.ConvertFromUtf32(Convert.ToChar(sAppended) + tracker);
 
@@ -86,7 +85,7 @@ namespace NWLToolbar
             }
 
             TaskDialog.Show("Notice", "Please close and reopen project browser to see changes.\r\rTo toggle Project Browser, go to:\r\rView > User Interface > Project Browser");
-            
+
             t.Commit();
             t.Dispose();
 
@@ -94,7 +93,7 @@ namespace NWLToolbar
 
             return Result.Succeeded;
         }
-        
+
     }
 
 }

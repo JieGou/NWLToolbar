@@ -64,11 +64,13 @@ namespace NWLToolbar
             }
 
             //Dialog Box Settings
-            FrmSelectElevationType curForm = new FrmSelectElevationType(vftList);
-            curForm.Width = 700;
-            curForm.Height = 200;
-            curForm.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-           
+            FrmSelectElevationType curForm = new FrmSelectElevationType(vftList)
+            {
+                Width = 700,
+                Height = 200,
+                StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+            };
+
             //Open Dialog Box & Add Selection to list
             if (curForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {                

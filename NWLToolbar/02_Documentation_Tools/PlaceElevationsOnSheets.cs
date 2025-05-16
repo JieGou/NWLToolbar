@@ -56,10 +56,12 @@ namespace NWLToolbar
             double SheetsToCreate;
 
             //Dialog Box Settings
-            FrmPlaceElevationsOnSheets curForm = new FrmPlaceElevationsOnSheets(roomCollector, tbCollector);
-            curForm.Width = 700;
-            curForm.Height = 900;
-            curForm.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            FrmPlaceElevationsOnSheets curForm = new FrmPlaceElevationsOnSheets(roomCollector, tbCollector)
+            {
+                Width = 700,
+                Height = 900,
+                StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+            };
 
             //Open Dialog Box & Add Selection to list
             if (curForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)

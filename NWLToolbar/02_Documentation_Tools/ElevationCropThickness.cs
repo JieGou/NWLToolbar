@@ -47,10 +47,12 @@ namespace NWLToolbar
 
             int thickness = 0;
 
-            FrmElevationCropThickness curForm = new FrmElevationCropThickness(vftList);
-            curForm.Width = 700;
-            curForm.Height = 250;
-            curForm.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            FrmElevationCropThickness curForm = new FrmElevationCropThickness(vftList)
+            {
+                Width = 700,
+                Height = 250,
+                StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+            };
 
             //Open Dialog Box & Add Selection to list
             if (curForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)

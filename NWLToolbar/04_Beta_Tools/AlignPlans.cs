@@ -100,10 +100,12 @@ namespace NWLToolbar
             List<Element> selectedElements = new List<Element>();
 
             //Dialog Box Settings
-            FrmAlignPlans curForm = new FrmAlignPlans(planViewNames);
-            curForm.Width = 700;
-            curForm.Height = 900;
-            curForm.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            FrmAlignPlans curForm = new FrmAlignPlans(planViewNames)
+            {
+                Width = 700,
+                Height = 900,
+                StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+            };
 
             //Filter for Viewports
             IList<Type> typeList = new List<Type>();

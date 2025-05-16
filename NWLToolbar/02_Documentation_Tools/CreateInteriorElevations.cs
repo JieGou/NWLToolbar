@@ -74,10 +74,7 @@ namespace NWLToolbar
             return filteredElementCollector.OfClass(typeof(T)).OfType<T>().ToList<T>();
         }
 
-        public Result Execute(
-          ExternalCommandData commandData,
-          ref string message,
-          ElementSet elements)
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             UIApplication uiapp = commandData.Application;
             UIDocument uidoc = uiapp.ActiveUIDocument;
@@ -102,7 +99,7 @@ namespace NWLToolbar
                 .OfClass(typeof(ViewPlan))
                 .WhereElementIsNotElementType()
                 .Cast<ViewPlan>()
-                .Where(x => x.ViewType.ToString() == "FloorPlan" && x.GenLevel != null)
+                .Where(x => x.ViewType == ViewType.FloorPlan && x.GenLevel != null)
                 .DistinctBy(x => x.GenLevel.Id.IntegerValue)
                 .ToList();
 
@@ -118,10 +115,12 @@ namespace NWLToolbar
             ElementId markerId = null;
 
             //Dialog Box Settings
-            FrmSelectRoomAndElevationType curForm = new FrmSelectRoomAndElevationType(roomCollector, vftList);
-            curForm.Width = 700;
-            curForm.Height = 900;
-            curForm.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            var curForm = new FrmSelectRoomAndElevationType(roomCollector, vftList)
+            {
+                Width = 700,
+                Height = 900,
+                StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+            };
 
             //Open Dialog Box & Add Selection to list
             if (curForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -131,13 +130,17 @@ namespace NWLToolbar
             }
 
             //Needed to grab room boundry
-            SpatialElementBoundaryOptions sEBO = new SpatialElementBoundaryOptions();
-            sEBO.SpatialElementBoundaryLocation = SpatialElementBoundaryLocation.CoreBoundary;
+            var sEBO = new SpatialElementBoundaryOptions
+            {
+                SpatialElementBoundaryLocation = SpatialElementBoundaryLocation.CoreBoundary
+            };
 
-            Options cOptions = new Options();
-            cOptions.DetailLevel = ViewDetailLevel.Fine;
-            cOptions.IncludeNonVisibleObjects = true;
-            cOptions.ComputeReferences = true;
+            var cOptions = new Options
+            {
+                DetailLevel = ViewDetailLevel.Fine,
+                IncludeNonVisibleObjects = true,
+                ComputeReferences = true
+            };
 
             ElementCategoryFilter elFil = new ElementCategoryFilter(BuiltInCategory.OST_Viewers);
             List<string> errorRooms = new List<string>();
@@ -151,19 +154,21 @@ namespace NWLToolbar
             {
                 //Room information
                 LocationPoint point = r.Location as LocationPoint;
-                XYZ xyz = point.Point;
+                XYZ roomCenterPt = point.Point;
                 ElementId roomLevelId = r.Level.Id;
                 ElementId planId = null;
                 string roomName = r.GetName();
                 string roomNumber = r.Number;
                 double roomHeight = r.get_Parameter(BuiltInParameter.ROOM_HEIGHT).AsDouble();
                 double roomLevelHeight = (doc.GetElement(roomLevelId) as Level).ProjectElevation;
-                bool clgFound = false;
 
+                //是否找到房间吊顶
+                bool clgFound = false;
                 foreach (Ceiling c in ceilingCollector)
                 {
-                    XYZ cXYZ = (c.get_Geometry(cOptions).GetBoundingBox().Max + c.get_Geometry(cOptions).GetBoundingBox().Min) / 2;
-                    if (r.IsPointInRoom(cXYZ))
+                    BoundingBoxXYZ ceilingBounding = c.get_Geometry(cOptions).GetBoundingBox();
+                    XYZ ceilingCenterPt = (ceilingBounding.Max + ceilingBounding.Min) / 2;
+                    if (r.IsPointInRoom(ceilingCenterPt))
                     {
                         roomHeight = c.GetHeight();
                         clgFound = true;
@@ -176,7 +181,7 @@ namespace NWLToolbar
                 //测试 偏移(-1000,1000,0)
                 //xyz = new XYZ(xyz.X - 1000 / 304.8, xyz.Y + 1000 / 304.8, xyz.Z);
                 //Creates elevation body
-                ElevationMarker marker = ElevationMarker.CreateElevationMarker(doc, markerId, xyz, 1);
+                ElevationMarker marker = ElevationMarker.CreateElevationMarker(doc, markerId, roomCenterPt, 1);
 
                 //获取视图样板
                 View template = GetElevationViewTemplate(doc, "20出图_NS_立面");
@@ -191,7 +196,7 @@ namespace NWLToolbar
                     if (template != null) SetParameter(elevView, BuiltInParameter.VIEW_TEMPLATE, template.Id);
 
                     //custom method to get far clipping
-                    double farClipOffset = RevitUtils.GetViewDepth(filteredBoundaries, i, xyz);
+                    double farClipOffset = RevitUtils.GetViewDepth(filteredBoundaries, i, roomCenterPt);
 
                     //Set elevation name
                     string elevationName = $"{roomNumber} - {roomName} - {i + 1}";

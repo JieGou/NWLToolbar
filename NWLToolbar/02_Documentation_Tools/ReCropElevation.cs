@@ -74,8 +74,10 @@ namespace NWLToolbar
 
             ElementClassFilter elFil = new ElementClassFilter(typeof(View));
 
-            SpatialElementBoundaryOptions sEBO = new SpatialElementBoundaryOptions();
-            sEBO.SpatialElementBoundaryLocation = SpatialElementBoundaryLocation.CoreBoundary;
+            SpatialElementBoundaryOptions sEBO = new SpatialElementBoundaryOptions
+            {
+                SpatialElementBoundaryLocation = SpatialElementBoundaryLocation.CoreBoundary
+            };
 
             foreach (ElevationMarker em in elevMarkers)
             {
@@ -109,10 +111,12 @@ namespace NWLToolbar
 
             filteredPlans = filteredPlans.Where(x => x.GenLevel.ProjectElevation == curLevel.ProjectElevation).OrderBy(x => x.Name).ToList();
 
-            FrmSelectFloorPlan curForm = new FrmSelectFloorPlan(filteredPlans);
-            curForm.Width = 700;
-            curForm.Height = 200;
-            curForm.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            FrmSelectFloorPlan curForm = new FrmSelectFloorPlan(filteredPlans)
+            {
+                Width = 700,
+                Height = 200,
+                StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+            };
 
             //Open Dialog Box & Add Selection to list
             if (curForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)

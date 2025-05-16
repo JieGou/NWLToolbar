@@ -47,10 +47,12 @@ namespace NWLToolbar
             ElementId markerId = null;
 
             //Dialog Box Settings
-            FrmCreateTiltUpElevations curForm = new FrmCreateTiltUpElevations(wallTypeList, vftList);
-            curForm.Width = 700;
-            curForm.Height = 900;
-            curForm.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            var curForm = new FrmCreateTiltUpElevations(wallTypeList, vftList)
+            {
+                Width = 700,
+                Height = 900,
+                StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+            };
 
             //Open Dialog Box & Add Selection to list
             if (curForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -73,7 +75,7 @@ namespace NWLToolbar
                 }
             }
 
-            //Transaction start
+            //创建墙立面
             Transaction t = new Transaction(doc);
             t.Start("Create Tilt-Up Elevations");
 
@@ -93,60 +95,80 @@ namespace NWLToolbar
                     XYZ wallStart = wallCurve.GetEndPoint(0);
                     XYZ wallEnd = wallCurve.GetEndPoint(1);
                     XYZ wallCenter = new XYZ((wallStart.X + wallEnd.X) / 2, (wallStart.Y + wallEnd.Y) / 2, wallStart.Z);
-                    XYZ elevOffset = new XYZ();
-                    int wallDirection = 0;
-                    bool notPerp = false;
+                    XYZ elevOffsetVector = new XYZ();
+
+                    //创建立面的标志序号 0左 1上 2右 3下
+                    int elevationIndex = 0;
+                    //斜墙 非垂直
+                    bool isObliqueWall = false;
                     int viewOffset = 4;
 
+                    //立面符号放置在 前进方向的左边
                     //Sets values based on orientation
-                    if (Math.Abs(wallOrientation.X) == 1)
+                    double wallOrientationX = wallOrientation.X;
+                    double wallOrientationY = wallOrientation.Y;
+                    if (Math.Abs(wallOrientationX) == 1)//与Y轴平行的墙 yAxisAligned
                     {
-                        elevOffset = new XYZ(wallOrientation.X * viewOffset, 0, 0);
-                        wallDirection = wallOrientation.X == 1 ? 0 : 2;
+                        elevOffsetVector = new XYZ(wallOrientationX * viewOffset, 0, 0);
+                        elevationIndex = wallOrientationX == 1 ? 0 : 2;
                     }
-                    else if (Math.Abs(wallOrientation.Y) == 1)
+                    else if (Math.Abs(wallOrientationY) == 1)// 与X轴平等的墙 xAxisAligned
                     {
-                        elevOffset = new XYZ(0, wallOrientation.Y * viewOffset, 0);
-                        wallDirection = wallOrientation.Y == 1 ? 3 : 1;
+                        elevOffsetVector = new XYZ(0, wallOrientationY * viewOffset, 0);
+                        elevationIndex = wallOrientationY == 1 ? 3 : 1;
                     }
-                    else
+                    else//倾斜墙 不与X Y轴平行的
                     {
-                        notPerp = true;
-                        int xFlag = wallOrientation.X < 0 ? -1 : 1;
-                        int yFlag = wallOrientation.Y < 0 ? -1 : 1;
+                        isObliqueWall = true;
+                        int xFlag = wallOrientationX < 0 ? -1 : 1;
+                        int yFlag = wallOrientationY < 0 ? -1 : 1;
 
-                        wallDirection = wallOrientation.X > 0 ? 0 : 2;
-                        elevOffset = new XYZ(viewOffset * xFlag, viewOffset * yFlag, 0);
+                        elevationIndex = wallOrientationX > 0 ? 0 : 2;
+                        elevOffsetVector = new XYZ(viewOffset * xFlag, viewOffset * yFlag, 0);
+                        elevOffsetVector = viewOffset * wallOrientation;
                     }
 
+                    //立面符号放置位置
+                    XYZ elevMarkerOrigin = new XYZ(wallCenter.X + elevOffsetVector.X, wallCenter.Y + elevOffsetVector.Y, wallCenter.Z);
+                    elevMarkerOrigin = wallCenter + elevOffsetVector;
+                    XYZ end = elevMarkerOrigin + XYZ.BasisZ;
                     //Z Axis for rotating elevations in plan
-                    XYZ start = new XYZ(wallCenter.X + elevOffset.X, wallCenter.Y + elevOffset.Y, wallCenter.Z);
-                    XYZ end = new XYZ(wallCenter.X + elevOffset.X, wallCenter.Y + elevOffset.Y, wallCenter.Z + 1);
-                    Line axis = Line.CreateBound(start, end);
+                    Line axis = Line.CreateBound(elevMarkerOrigin, end);
 
                     //Create elevation marker
-                    ElevationMarker marker = ElevationMarker.CreateElevationMarker(doc, markerId, wallCenter + elevOffset, 1);
+                    int scale = 1;
+                    ElevationMarker marker = ElevationMarker.CreateElevationMarker(doc, markerId, elevMarkerOrigin, scale);
 
                     //Create elevation view and apply name
-                    ViewSection elevationView = marker.CreateElevation(doc, uidoc.ActiveView.Id, wallDirection);
-                    elevationView.Name = cw.Name + " - " + cw.Id;
+                    ViewSection elevationView = marker.CreateElevation(doc, uidoc.ActiveView.Id, elevationIndex);
+                    elevationView.Name = cw.Name + " - " + cw.Id + "_墙立面";
                     double viewdepth = viewOffset + 1;
 
-                    if (notPerp)
+                    if (isObliqueWall)
                     {
-                        ElementTransformUtils.RotateElement(doc, marker.Id, axis, -Math.Atan((wallStart.X - wallEnd.X) / (wallStart.Y - wallEnd.Y)));
-                        viewdepth = viewOffset + 3;
+                        double deltaX = wallStart.X - wallEnd.X;
+                        double deltaY = wallStart.Y - wallEnd.Y;
+                        double angle = Math.Atan(deltaX / deltaY);
+                        ElementTransformUtils.RotateElement(doc, marker.Id, axis, -angle);
                     }
+
+                    //设置视图深度
+                    elevationView.get_Parameter(BuiltInParameter.VIEWER_BOUND_OFFSET_FAR).Set(viewdepth);
 
                     //Get Wall Exterior Face
                     IList<Reference> sideFaces = HostObjectUtils.GetSideFaces(cw, ShellLayerType.Exterior);
                     Face cwFace = doc.GetElement(sideFaces[0]).GetGeometryObjectFromReference(sideFaces[0]) as Face;
-                    IList<CurveLoop> cwBoundary = cwFace.GetEdgesAsCurveLoops();
+                    if (cwFace != null)
+                    {
+                        IList<CurveLoop> cwBoundary = cwFace.GetEdgesAsCurveLoops();
 
-                    //Set view crop and other parameters for view
-                    elevationView.get_Parameter(BuiltInParameter.VIEWER_BOUND_OFFSET_FAR).Set(viewdepth);
-                    elevationView.CropBoxActive = true;
-                    elevationView.GetCropRegionShapeManager().SetCropShape(cwBoundary[0]);
+                        if (cwBoundary != null)
+                        {
+                            //设置 立面剪裁
+                            elevationView.CropBoxActive = true;
+                            elevationView.GetCropRegionShapeManager().SetCropShape(cwBoundary[0]);
+                        }
+                    }
                 }
             }
 
